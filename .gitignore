@@ -1,0 +1,79 @@
+# Dependencies
+node_modules/
+vendor/
+bower_components/
+
+# Build outputs
+dist/
+build/
+out/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# IDE and Editor files
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# Package manager locks (optional - uncomment if needed)
+# package-lock.json
+# yarn.lock
+
+# Compiled source
+*.com
+*.class
+*.o
+*.pyc
+*.pyo
+__pycache__/
+
+
+
+# Coverage and test reports
+coverage/
+.nyc_output/
+*.lcov
+
+# Debug
+*.pdb
+
+# Miscellaneous
+*.orig

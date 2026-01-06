@@ -1,0 +1,337 @@
+% Author : Dr. Merlin George, Dept. of CSE, MBCET
+
+\documentclass[10pt,aspectratio=1610]{beamer}
+
+% -------------------- PACKAGES --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{utopia}
+\usetheme{CambridgeUS}
+\usecolortheme{dolphin}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,shadows}
+\usepackage{algorithm2e}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+
+\usepackage[comma]{natbib}
+\usepackage{hyperref}
+\setcitestyle{square}
+
+\beamertemplatenavigationsymbolsempty
+\usefonttheme{serif}
+
+% -------------------- COLORS --------------------
+\definecolor{myNewColorA}{RGB}{10,50,135}
+\definecolor{myNewColorB}{RGB}{25,85,154}
+\definecolor{myNewColorC}{RGB}{183,195,230}
+
+\setbeamercolor*{palette primary}{bg=myNewColorC}
+\setbeamercolor*{palette secondary}{bg=myNewColorB, fg=white}
+\setbeamercolor*{palette tertiary}{bg=myNewColorA, fg=white}
+\setbeamercolor*{titlelike}{fg=myNewColorA}
+\setbeamercolor*{item}{fg=myNewColorA}
+
+% -------------------- REMOVE TOP BAR --------------------
+\setbeamertemplate{headline}{}
+
+% -------------------- FOOTER (TITLE + DATE + SLIDE NO) --------------------
+\defbeamertemplate*{footline}{projectfoot}
+{
+  \leavevmode
+  \hbox{
+  \begin{beamercolorbox}[wd=.55\paperwidth,ht=2.6ex,dp=1ex,center]{title in head/foot}
+    \insertshorttitle
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[wd=.20\paperwidth,ht=2.6ex,dp=1ex,center]{date in head/foot}
+    \insertshortdate
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.6ex,dp=1ex,right]{date in head/foot}
+    \insertframenumber{} / \inserttotalframenumber\hspace{0.8em}
+  \end{beamercolorbox}}
+}
+\setbeamertemplate{footline}[projectfoot]
+
+% -------------------- SHADOWED BLUE TITLE BLOCK --------------------
+\newtcolorbox{titleblock}{
+  enhanced,
+  colback=myNewColorA,
+  colframe=myNewColorA,
+  arc=4mm,
+  boxrule=0pt,
+  left=14pt,
+  right=14pt,
+  top=12pt,
+  bottom=12pt,
+  drop shadow={shadow xshift=2mm, shadow yshift=-2mm, fill=black!35}
+}
+
+% -------------------- METADATA SAFE --------------------
+\title[Patient-Centric Healthcare Using Blockchain]
+{Patient-Centric Healthcare Using Blockchain Technology}
+
+\subtitle[In Venture]{Zeroth Review}
+
+\author[Group Members]{
+\textbf{Group Members}\\[0.3cm]
+\begin{tabular}{l}
+Student Name 1 \hfill (XXXXXXXX)\\
+Student Name 2 \hfill (XXXXXXXX)\\
+Student Name 3 \hfill (XXXXXXXX)\\
+Student Name 4 \hfill (XXXXXXXX)
+\end{tabular}\\[0.3cm]
+\textbf{Project Guide:} Dr. Merlin George\\
+Assistant Professor, Dept. of CSE, MBCET \vspace{1 cm} 
+}
+
+\date[\today]{\today}
+
+% -------------------- DOCUMENT --------------------
+\begin{document}
+
+% ================= TITLE SLIDE =================
+\begin{frame}[plain]
+
+\begin{center}
+\begin{titleblock}
+\centering
+{\Large\color{white}\bfseries\inserttitle}\\[0.3cm]
+{\normalsize\color{white}\centering\insertsubtitle}
+\end{titleblock}
+\end{center}
+
+\vspace{0.2cm}
+
+\begin{center}
+{\normalsize\insertauthor}
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=south]
+at ([yshift=0pt]current page.south)
+{\includegraphics[height=3.5cm]{Images/mbcet.png}};
+\end{tikzpicture}
+
+\end{frame}
+
+% ================= CONTENTS =================
+\begin{frame}{Contents}
+\small
+\begin{itemize}
+\item Abstract
+\item Introduction
+\item Literature Review
+\item Research Gaps
+\item Problem Statement
+\item Objectives
+\item UML Diagram
+\item Use Case Diagram
+\item Data Flow Diagram
+\item Methodology
+\item Datasets
+\item Timeline
+\item Base Paper
+\item Conclusion
+\item References
+\end{itemize}
+\end{frame}
+
+% ================= ABSTRACT =================
+\section[Abstract]{Abstract}
+\begin{frame}{Abstract}
+This work proposes a patient-centric healthcare framework using blockchain
+technology to ensure data security, privacy, and controlled access while
+enhancing interoperability among healthcare providers.
+\end{frame}
+
+% ================= INTRODUCTION =================
+\section[Introduction]{Introduction}
+\begin{frame}{Introduction}
+\begin{itemize}
+\item Growth of electronic health records \cite{redefine2020}
+\item Security and privacy challenges
+\item Limitations of centralized systems
+\item Blockchain as a trusted solution
+\end{itemize}
+\end{frame}
+
+% ================= LITERATURE REVIEW =================
+\section[Literature Review]{Literature Review}
+\begin{frame}{Literature Review}
+\scriptsize
+\begin{tabular}{|c|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+\hline
+Sl.No & Title & Methodology & Results & Pros / Cons\\
+\hline
+1 & Blockchain EHR & Smart Contracts & Secure data & +Security, –Scalability\\
+2 & Decentralized Records & IPFS + BC & Interoperability & +Efficiency, –Latency\\
+3 & Secure Sharing Model & Access Control & Privacy & +Privacy, –Complexity\\
+\hline
+\end{tabular}
+\end{frame}
+
+% ================= RESEARCH GAPS =================
+\begin{frame}{Research Gaps Identified}
+\begin{itemize}
+\item Limited patient ownership \cite{clouddia2019}
+\item Scalability issues \cite{prodia2019}
+\item Poor interoperability \cite{quorum2022}
+\item Lack of unified access control \cite{wiley2022}
+\end{itemize}
+\end{frame}
+
+% ================= PROBLEM STATEMENT =================
+\section[Problem Statement]{Problem Statement}
+\begin{frame}{Problem Statement}
+To design a secure, interoperable, and patient-centric healthcare system
+that addresses privacy and access control challenges.
+\end{frame}
+
+% ================= OBJECTIVES =================
+\section[Objectives]{Objectives}
+\begin{frame}{Objectives}
+\begin{enumerate}
+\item Secure storage of patient health records
+\item Privacy-preserving data sharing
+\item Improved interoperability
+\end{enumerate}
+\end{frame}
+
+% ================= DIAGRAMS =================
+\section[DIAGRAMS]{Diagrams}
+
+\begin{frame}{UML Class Diagram}
+\centering
+\includegraphics[width=0.50\textwidth]{Images/uml.png}\\[0.2cm]
+{\centering\small Figure: UML Class Diagram of the Proposed Patient-Centric Healthcare System\par}
+\end{frame}
+
+\begin{frame}{Use Case Diagram}
+\centering
+\includegraphics[width=0.45\textwidth]{Images/usecase.png}\\[0.2cm]
+{\centering\small Figure: Use Case Diagram Representing Functional Interactions Between Actors and the Healthcare System\par}
+\end{frame}
+
+\begin{frame}{DFD Level 0 – Context Diagram}
+\centering
+\includegraphics[width=0.45\textwidth]{Images/dfd_level0.png}\\[0.2cm]
+{\centering\small Figure: DFD Level 0 (Context Diagram) Showing Overall Interaction of the Healthcare System\par}
+\end{frame}
+
+\begin{frame}{DFD Level 1}
+\centering
+\includegraphics[width=0.50\textwidth]{Images/dfd_level1.png}\\[0.2cm]
+{\centering\small Figure: DFD Level 1 Illustrating Major Processes and Data Flow Within the System\par}
+\end{frame}
+
+\begin{frame}{System Architecture}
+\centering
+\includegraphics[width=0.50\textwidth]{Images/architecture.png}\\[0.2cm]
+{\centering\small Figure: System Architecture Diagram Illustrating the Layered Design of the Proposed Healthcare System\par}
+\end{frame}
+
+% ================= METHODOLOGY =================
+\section[Methodology]{Methodology}
+\begin{frame}{Methodology}
+\begin{itemize}
+\item Requirement analysis
+\item Blockchain architecture design
+\item Smart contract implementation
+\item Testing and validation
+\end{itemize}
+\end{frame}
+
+% ================= DATASETS =================
+\section[Datasets]{Datasets}
+\begin{frame}{Datasets}
+\begin{itemize}
+\item Public healthcare datasets
+\item Synthetic data for testing
+\item No real patient data used
+\end{itemize}
+\end{frame}
+
+% ================= TIMELINE =================
+\section[Timeline]{Timeline}
+
+\begin{frame}{Project Timeline}
+\centering
+\begin{tabular}{|c|p{5cm}|c|c|}
+\hline
+\textbf{Phase} & \textbf{Activity} & \textbf{Start Date} & \textbf{End Date} \\
+\hline
+1 & Literature Review and Problem Definition & Jan 2026 & Jan 2026 \\
+\hline
+2 & System Design and UML & Jan 2026 & Feb 2026 \\
+\hline
+3 & Implementation & Feb 2025 & March 2026 \\
+\hline
+4 & Testing and Evaluation & March 2025 & April 2026 \\
+\hline
+5 & Documentation & April 2026 & April 2026 \\
+\hline
+\end{tabular}
+\end{frame}
+
+% ================= BASE PAPER =================
+\section[Base Paper]{Base Paper}
+
+\begin{frame}{Base Paper \cite{frontier2023}}
+\begin{itemize}
+  \item \textbf{Title:} Health Passport: A Blockchain-Based PHR-Integrated Self-Sovereign Identity System
+  \item \textbf{Authors:} Merlin George, Anu Mary Chacko
+  \item \textbf{Journal:} Frontiers in Blockchain (Elsevier)
+  \item \textbf{Year:} 2023
+  \item \textbf{Key Methodology:}
+    \begin{itemize}
+      \item Blockchain-based Personal Health Record (PHR)
+      \item Self-Sovereign Identity (SSI) model
+      \item Smart contracts for access control
+    \end{itemize}
+  \item \textbf{Implementation Details:}
+    \begin{itemize}
+      \item Prototype implementation using blockchain framework
+      \item Secure identity management and record sharing
+    \end{itemize}
+  \item \textbf{Relevance to Present Work:}
+    \begin{itemize}
+      \item Forms the foundation for patient-centric data ownership
+      \item Extended in this work for interoperability and scalability
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+% ================= CONCLUSION =================
+\section[Conclusion]{Conclusion}
+\begin{frame}{Conclusion}
+\begin{itemize}
+\item Proposed a patient-centric blockchain framework
+\item Enhanced privacy and interoperability
+\item Future scope includes scalability improvement
+\end{itemize}
+\end{frame}
+
+% ================= REFERENCES =================
+\section[References]{References}
+\begin{frame}[allowframebreaks]{References}
+\bibliographystyle{ieeetr}
+\bibliography{references}
+\end{frame}
+
+% ================= THANK YOU =================
+\begin{frame}
+\centering
+\Huge \textcolor{myNewColorA}{Any Questions?}
+\end{frame}
+
+
+\begin{frame}
+\centering
+\Huge \textcolor{myNewColorA}{Thank You}
+\end{frame}
+\end{document}
