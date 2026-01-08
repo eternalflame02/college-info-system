@@ -5,7 +5,7 @@
 \begin{document}
 
 \begin{center}
-    \textbf{\Large Hybrid Retrieval-Based Intelligent College Information Assistant}
+    \textbf{\Large Hybrid Knowledge-Graph-Enhanced Retrieval-Augmented Generation for Academic Information Systems}
     
     \vspace{0.2cm}
     
@@ -14,38 +14,20 @@
 
 \doublespacing
 
-Students often face difficulty in accessing accurate and relevant academic information due to the 
-scattered nature of college websites, where details related to departments, courses, faculty, 
-regulations, and notices are distributed across multiple pages and formats. Conventional keyword-based 
-search mechanisms fail to capture semantic meaning and relational structure present in such academic data.
+Academic information hosted on college websites is largely unstructured, heterogeneous, and distributed across multiple webpages, making precise information retrieval difficult using traditional keyword-based search techniques. While retrieval-augmented generation (RAG) has shown effectiveness in grounding large language model outputs using semantic vector retrieval, purely embedding-based approaches often fail to capture explicit relationships among entities such as departments, courses, and faculty, leading to incomplete or contextually weak responses.
 
-The objective of this mini project is to design and develop a hybrid retrieval-based intelligent college 
-information assistant that provides reliable and context-aware responses grounded in official college 
-website data. Motivated by recent studies on hybrid retrieval and retrieval-augmented generation, the 
-proposed system combines semantic vector-based retrieval with structured knowledge graph reasoning to 
-enhance accuracy and generalization \cite{luo2023hybrid,zhu2025kg2rag}.
-
-The methodology involves scraping and preprocessing unstructured college website content, which is 
-indexed using semantic embeddings in a vector database for efficient similarity-based retrieval. In 
-parallel, a lightweight knowledge graph is constructed to model structured academic relationships such 
-as faculty–course–department associations. A retrieval routing mechanism selects relevant information 
-from either the vector store or the knowledge graph, and the retrieved context is supplied to a large 
-language model for response generation. This hybrid approach improves factual grounding, supports 
-relational queries, and reduces hallucination compared to purely semantic retrieval methods.
+This mini project proposes a hybrid knowledge-graph-enhanced retrieval-augmented generation framework for academic information access. Unstructured institutional content is processed through text cleaning, chunking, and semantic embedding, and indexed in a vector database to support similarity-based retrieval. In parallel, a lightweight knowledge graph is constructed to explicitly represent structured academic entities and their relationships. An intent-aware retrieval mechanism dynamically selects semantic retrieval, graph-based reasoning, or a hybrid of both to construct context for generation. The retrieved evidence is supplied to a large language model to generate grounded responses constrained to institutional knowledge. This design is motivated by recent journal studies demonstrating that integrating knowledge graphs into RAG pipelines improves factual grounding, relational reasoning, and interpretability, while domain-specific RAG systems enhance retrieval reliability in academic settings \cite{kg_rag_springer,rag_edu_elsevier}.
 
 \vspace{0.5cm}
 
 \noindent
 \textbf{Sustainable Development Goals (SDGs):}  
-This mini project supports SDG 4 (Quality Education) by improving access to academic information and 
-SDG 9 (Industry, Innovation and Infrastructure) through the application of intelligent information 
-retrieval systems.
+This mini project supports SDG 4 (Quality Education) by improving structured access to academic information and SDG 9 (Industry, Innovation and Infrastructure) through the application of hybrid intelligent information retrieval systems.
 
 \vspace{0.5cm}
 
 \noindent
-\textbf{Keywords:} Retrieval-Augmented Generation, Hybrid Retrieval, Knowledge Graph, Semantic Search, 
-College Information System
+\textbf{Keywords:} Retrieval-Augmented Generation, Knowledge Graph Integration, Vector Embeddings, Vector Database Indexing, Knowledge-Grounded Generation
 
 \vspace{0.8cm}
 
