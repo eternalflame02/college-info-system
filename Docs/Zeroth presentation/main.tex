@@ -1,5 +1,3 @@
-% Author : Dr. Merlin George, Dept. of CSE, MBCET
-
 \documentclass[10pt,aspectratio=1610]{beamer}
 
 % -------------------- PACKAGES --------------------
@@ -21,6 +19,8 @@
 \usepackage{hyperref}
 \setcitestyle{square}
 
+\usepackage{tabularx}
+
 \beamertemplatenavigationsymbolsempty
 \usefonttheme{serif}
 
@@ -38,7 +38,7 @@
 % -------------------- REMOVE TOP BAR --------------------
 \setbeamertemplate{headline}{}
 
-% -------------------- FOOTER (TITLE + DATE + SLIDE NO) --------------------
+% -------------------- FOOTER --------------------
 \defbeamertemplate*{footline}{projectfoot}
 {
   \leavevmode
@@ -55,7 +55,7 @@
 }
 \setbeamertemplate{footline}[projectfoot]
 
-% -------------------- SHADOWED BLUE TITLE BLOCK --------------------
+% -------------------- TITLE BLOCK --------------------
 \newtcolorbox{titleblock}{
   enhanced,
   colback=myNewColorA,
@@ -69,52 +69,50 @@
   drop shadow={shadow xshift=2mm, shadow yshift=-2mm, fill=black!35}
 }
 
-% -------------------- METADATA SAFE --------------------
-\title[Patient-Centric Healthcare Using Blockchain]
-{Hybrid Knowledge-Graph-Enhanced
-Retrieval-Augmented Generation for Academic
+% -------------------- METADATA --------------------
+\title[Hybrid KG-RAG]
+{Hybrid Knowledge-Graph-Enhanced\\
+Retrieval-Augmented Generation for Academic\\
 Information Systems}
 
-\subtitle[In Venture]{Zeroth Review}
+\subtitle[Zeroth Review]{Zeroth Review}
 
 \author[Group Members]{
 \textbf{Group Members}\\[0.3cm]
 \begin{tabular}{l}
-Julia Mariam John \hfill (B23CS2137)\\
-Nirmel B Joseph \hfill (B23CS2148)\\
-Rohith NS \hfill (B23CS2156)\\
+Julia Mariam John (B23CS2137)\\
+Nirmel B Joseph (B23CS2148)\\
+Rohith NS (B23CS2156)\\
 \end{tabular}\\[0.3cm]
-\textbf{Project Guide:} Mr.Praveen J.S\\
-Assistant Professor, Dept. of CSE, MBCET \vspace{1 cm} 
+\textbf{Project Guide:} Mr. Praveen J. S.\\
+Assistant Professor, Dept. of CSE, MBCET
 }
 
-\date[\today]{\today}
+\date[13 Jan 2026]{13 January 2026}
 
 % -------------------- DOCUMENT --------------------
 \begin{document}
 
-% ================= TITLE SLIDE =================
+% ================= TITLE =================
 \begin{frame}[plain]
-
 \begin{center}
 \begin{titleblock}
-\centering
 {\Large\color{white}\bfseries\inserttitle}\\[0.3cm]
-{\normalsize\color{white}\centering\insertsubtitle}
+{\normalsize\color{white}\insertsubtitle}
 \end{titleblock}
 \end{center}
 
-\vspace{0.2cm}
+\vspace{0.5cm}
 
 \begin{center}
 {\normalsize\insertauthor}
 \end{center}
 
-\begin{tikzpicture}[remember picture,overlay]
-\node[anchor=south]
-at ([yshift=0pt]current page.south)
-{\includegraphics[height=3.5cm]{Images/mbcet.png}};
-\end{tikzpicture}
+\vfill
+
+\begin{center}
+\includegraphics[height=2.8cm]{Images/mbcet.png}
+\end{center}
 
 \end{frame}
 
@@ -130,177 +128,115 @@ at ([yshift=0pt]current page.south)
 \item Objectives
 \item Work Flow Diagram
 \item Methodology
-\item Technology Used
 \item Conclusion
 \item References
 \end{itemize}
 \end{frame}
 
 % ================= ABSTRACT =================
-\section[Abstract]{Abstract}
+\section{Abstract}
 \begin{frame}{Abstract}
-The primary challenge in academic information systems is that data is largely unstructured and distributed across heterogeneous webpages. Traditional keyword searches and basic RAG models struggle to provide precise results because they lack a deep understanding of how entities are related. Our proposed solution integrates vector-based retrieval with a knowledge graph to ensure context-aware and explainable information access. Furthermore, this project aligns with SDG 4 and SDG 9 by advancing educational technology and intelligent infrastructure.
+\small
+Academic data is typically unstructured and fragmented across institutional websites, limiting the effectiveness of keyword-based and embedding-only retrieval systems. Hybrid knowledge-graph-enhanced retrieval-augmented generation improves contextual grounding and relational reasoning by combining semantic vector retrieval with structured knowledge graph inference, supporting SDG~4 and SDG~9 \cite{kg_rag_springer,rag_edu_elsevier}.
 \end{frame}
 
 % ================= INTRODUCTION =================
-\section[Introduction]{Introduction}
+\section{Introduction}
 \begin{frame}{Introduction}
 \begin{itemize}
-\item Growing dependence on online academic information 
-\item Unstructured and fragmented data across institutional websites
-\item Inaccurate or context-poor results from conventional search systems
+\item Growing dependence on online academic information
+\item Institutional data scattered across multiple web sources
+\item Limited relational reasoning in conventional retrieval systems
 \item Need for intelligent, knowledge-driven academic information systems
 \end{itemize}
 \end{frame}
 
 % ================= LITERATURE REVIEW =================
-\section[Literature Review]{Literature Review}
+\section{Literature Review}
 \begin{frame}{Literature Review}
 \scriptsize
-\begin{tabular}{|c|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+\begin{tabularx}{\textwidth}{|c|X|X|X|X|}
 \hline
-Sl.No & Title & Methodology & Results & Pros / Cons\\
+Sl.No & Title & Methodology & Results & Limitations\\
 \hline
-1 & Retrieval-Augmented Generation for Knowledge-Intensive NLP   & Dense Vector Retrieval + LLM & Improved factual grounding & 1. + Reduces hallucination
-– Limited relational reasoning\\
-2 & Knowledge Graph–Enhanced Question Answering & Knowledge Graph Reasoning & Accurate entity-based answers & + Explicit relationship modeling
-– Requires structured data\\
-3 & Domain-Specific Academic QA Systems & Semantic Search + Rule-Based Filtering & Reliable academic information access & + Domain reliability
-– Limited scalability\\
+1 & Knowledge graph-extended RAG for QA \cite{kg_rag_springer} 
+  & KG-guided retrieval + LLM 
+  & Improved multi-hop accuracy 
+  & Requires structured knowledge graph\\
 \hline
-\end{tabular}
+2 & RAG for educational applications \cite{rag_edu_elsevier} 
+  & Semantic retrieval + LLM 
+  & Reduced hallucination 
+  & Dependent on retriever quality\\
+\hline
+\end{tabularx}
 \end{frame}
 
 % ================= RESEARCH GAPS =================
 \begin{frame}{Research Gaps Identified}
 \begin{itemize}
-\item Limited relational reasoning in embedding-based RAG systems 
-\item Insufficient integration of knowledge graphs in academic domains
-\item Lack of intent-aware hybrid retrieval mechanisms 
-\item Absence of academic-domain-specific evaluation benchmarks 
+\item Limited use of knowledge graphs in academic RAG systems
+\item Lack of hybrid vector-graph retrieval pipelines
+\item Insufficient explainability in LLM-based academic QA
 \end{itemize}
 \end{frame}
 
 % ================= PROBLEM STATEMENT =================
-\section[Problem Statement]{Problem Statement}
 \begin{frame}{Problem Statement}
-To design an intelligent academic information system that delivers accurate, context-aware institutional knowledge using hybrid knowledge graph–enhanced retrieval-augmented generation.
+To develop a hybrid knowledge-graph-enhanced retrieval-augmented generation system for accurate and explainable academic information access.
 \end{frame}
 
 % ================= OBJECTIVES =================
 \begin{frame}{Objectives}
 \begin{enumerate}
-    \item To clean and store college data efficiently.
-    \item To build a Knowledge Graph that links teachers, courses, and departments.
-    \item To create an AI that chooses the best way to find an answer.
-    \item To support SDG 4 (Better Education) and SDG 9 (Innovation).
+\item To preprocess and index institutional text using vector embeddings.
+\item To construct a knowledge graph of academic entities for Mar Baselios College of Engineering and Technology.
+\item To integrate hybrid retrieval for query answering.
+\item To improve factual grounding and relational reasoning.
 \end{enumerate}
 \end{frame}
 
-
-
-% ================= DIAGRAMS =================
-\section[DIAGRAMS]{Diagrams}
-
+% ================= WORKFLOW =================
+\section{Diagrams}
 \begin{frame}{Work Flow Diagram}
 \centering
-\includegraphics[width=0.70\textwidth]{wf.png}\\[0.4cm]
-{\centering\small Figure: Work Flow Diagram of Hybrid Knowledge-Graph-Enhanced
-Retrieval-Augmented Generation for Academic
-Information Systems\par}
+\includegraphics[width=0.7\textwidth]{Images/wf.png}
 \end{frame}
-
-
 
 % ================= METHODOLOGY =================
-\section[Methodology]{Methodology}
+\section{Methodology}
 \begin{frame}{Methodology}
 \begin{itemize}
-   \item Clean the text data and divide it into smaller chunks.
-    \item Store the processed text in a Vector Database for quick searching.
-    \item Construct a Knowledge Graph representing academic relationships.
-    \item Use both retrieved text and graph knowledge to generate accurate answers.
+\item Data scraping, cleaning, and chunking
+\item Vector embedding
+\item Knowledge graph construction
+\item Hybrid retrieval and LLM-based answer generation
 \end{itemize}
 \end{frame}
-
-% ================= Technology Used =================
-\section[Technology Used]{Technology Used}
-\begin{frame}{Technology Used}
-\begin{itemize}
-\item Vector Database: Stores information for fast text-based searching.
-
-\item Knowledge Graphs: Maps clear links between teachers, courses, and departments.
-
-\item Retrieval-Augmented Generation (RAG): Uses retrieved facts to help the AI answer accurately.
-
-\item Large Language Models (LLM): Generates natural responses based only on college data.
-
-\item Hybrid Retrieval: Switches between text search and graph logic for the best result.
-
-\item Data Processing Tools: Cleans and prepares website content for the system.
-\end{itemize}
-\end{frame}
-
-% ================= TIMELINE =================
-\section[Timeline]{Timeline}
-
-\begin{frame}{Project Timeline}
-\centering
-\begin{tabular}{|c|p{5cm}|c|c|}
-\hline
-\textbf{Phase} & \textbf{Activity} & \textbf{Duration}\\
-\hline
-1 & Literature Review and Problem Definition & 
-1 Month\\
-\hline
-2 & Research and Data Collection & 1 Month \\
-\hline
-3 & System Development & 2 Month\\
-\hline
-4 & Integration and LLM Grounding & 1 Month \\
-\hline
-5 & Evaluation and Final Reporting & 1 Month \\
-\hline
-\end{tabular}
-\end{frame}
-
-% ================= BASE PAPER =================
 
 % ================= CONCLUSION =================
-\section[Conclusion]{Conclusion}
+\section{Conclusion}
 \begin{frame}{Conclusion}
 \begin{itemize}
-\item We built a hybrid system to fix the limits of traditional academic search.
-
-\item  Our AI understands both general text and complex entity relationships.
-
-\item  The system provides accurate, grounded, and easy-to-verify answers.
-
-\item This project supports SDG 4 and SDG 9 by improving educational tools.
-
-\item Future work includes adding live data like exam dates and library status.
+\item Hybrid KG-RAG improves academic information retrieval
+\item Supports both semantic and relational queries
+\item Provides grounded and explainable responses
+\item Aligned with SDG~4 and SDG~9
 \end{itemize}
 \end{frame}
 
 % ================= REFERENCES =================
-
 \section{References}
-
-\begin{frame}{References I}
-[1] J. Linders and J. M. Tomczak, ``Knowledge graph-extended retrieval augmented generation for question answering,'' \textit{Applied Intelligence}, vol. 55, no. 17, pp. 1102--1118, 2025.\\[2mm]
-[2] Z. Li, Z. Wang, W. Wang, K. Hung, H. Xie, and F. L. Wang, ``Retrieval-augmented generation for educational application: A systematic survey,'' \textit{Computers and Education: Artificial Intelligence}, vol. 8, p. 100417, 2025.
+\begin{frame}{References}
+\scriptsize
+\bibliographystyle{ieeetr}
+\bibliography{references}
 \end{frame}
-
 
 % ================= THANK YOU =================
 \begin{frame}
 \centering
-\Huge \textcolor{myNewColorA}{Any Questions?}
-\end{frame}
-
-
-\begin{frame}
-\centering
 \Huge \textcolor{myNewColorA}{Thank You}
 \end{frame}
+
 \end{document}
