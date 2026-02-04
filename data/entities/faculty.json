@@ -1,0 +1,432 @@
+[
+  {
+    "id": "faculty_prof_raju_k_gopal",
+    "name": "Prof. Raju K Gopal",
+    "aliases": [
+      "Prof. Raju K Gopal",
+      "Raju K Gopal"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/prof-raju-k-gopal/"
+  },
+  {
+    "id": "faculty_mr_g_l_praveen",
+    "name": "Mr. G. L. Praveen",
+    "aliases": [
+      "Mr. G. L. Praveen",
+      "G. L. Praveen"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/mr-g-l-praveen/"
+  },
+  {
+    "id": "faculty_mr_v_s_shibu",
+    "name": "Mr. V. S. Shibu",
+    "aliases": [
+      "Mr. V. S. Shibu",
+      "V. S. Shibu"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/mr-v-s-shibu/"
+  },
+  {
+    "id": "faculty_ms_poorna_br",
+    "name": "Ms. Poorna B.R",
+    "aliases": [
+      "Ms. Poorna B.R",
+      "Poorna B.R"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-poorna-b-r/"
+  },
+  {
+    "id": "faculty_ms_gayathri_k_s",
+    "name": "Ms. Gayathri K. S.",
+    "aliases": [
+      "Ms. Gayathri K. S.",
+      "Gayathri K. S."
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-gayathri-k-s/"
+  },
+  {
+    "id": "faculty_ms_jisha_jose",
+    "name": "Ms. Jisha Jose",
+    "aliases": [
+      "Ms. Jisha Jose",
+      "Jisha Jose"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-jisha-jose/"
+  },
+  {
+    "id": "faculty_ms_sreeja_s_r",
+    "name": "Ms. SREEJA S R",
+    "aliases": [
+      "Ms. SREEJA S R",
+      "SREEJA S R"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-sreeja-s-r/"
+  },
+  {
+    "id": "faculty_dr_jesna_mohan",
+    "name": "Dr. Jesna Mohan",
+    "aliases": [
+      "Dr. Jesna Mohan",
+      "Jesna Mohan"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-jesna-mohan/"
+  },
+  {
+    "id": "faculty_dr_shini_renjith",
+    "name": "Dr. Shini Renjith",
+    "aliases": [
+      "Dr. Shini Renjith",
+      "Shini Renjith"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-shini-renjith/"
+  },
+  {
+    "id": "faculty_ms_krishna_l",
+    "name": "Ms. KRISHNA L",
+    "aliases": [
+      "Ms. KRISHNA L",
+      "KRISHNA L"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-krishna-l/"
+  },
+  {
+    "id": "faculty_ms_vinitha_v_k",
+    "name": "Ms. Vinitha  V K",
+    "aliases": [
+      "Ms. Vinitha  V K",
+      "Vinitha  V K"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-vinitha-v-k/"
+  },
+  {
+    "id": "faculty_mr_shon_j_das",
+    "name": "Mr. Shon J Das",
+    "aliases": [
+      "Mr. Shon J Das",
+      "Shon J Das"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/mr-shon-j-das/"
+  },
+  {
+    "id": "faculty_mr_ramjith_r_p",
+    "name": "Mr. Ramjith R P",
+    "aliases": [
+      "Mr. Ramjith R P",
+      "Ramjith R P"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/mr-ramjith/"
+  },
+  {
+    "id": "faculty_ms_dhanya_l_k",
+    "name": "Ms. Dhanya L K",
+    "aliases": [
+      "Ms. Dhanya L K",
+      "Dhanya L K"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-dhanya-l-k/"
+  },
+  {
+    "id": "faculty_ms_bindhya_p_s",
+    "name": "Ms. Bindhya P S",
+    "aliases": [
+      "Ms. Bindhya P S",
+      "Bindhya P S"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-bindhya-p-s/"
+  },
+  {
+    "id": "faculty_ms_s_asha",
+    "name": "Ms. S. Asha",
+    "aliases": [
+      "Ms. S. Asha",
+      "S. Asha"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-s-asha/"
+  },
+  {
+    "id": "faculty_dr_jisha_john",
+    "name": "Dr. Jisha John",
+    "aliases": [
+      "Dr. Jisha John",
+      "Jisha John"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/dr-jisha-john/"
+  },
+  {
+    "id": "faculty_dr_anne_dickson",
+    "name": "Dr. Anne Dickson",
+    "aliases": [
+      "Dr. Anne Dickson",
+      "Anne Dickson"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-anne-dickson/"
+  },
+  {
+    "id": "faculty_mr_praveen_j_s",
+    "name": "Mr. Praveen J S",
+    "aliases": [
+      "Mr. Praveen J S",
+      "Praveen J S"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/mr-praveen-j-s/"
+  },
+  {
+    "id": "faculty_ms_diana_mathew",
+    "name": "Ms. Diana Mathew",
+    "aliases": [
+      "Ms. Diana Mathew",
+      "Diana Mathew"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-diana-mathew/"
+  },
+  {
+    "id": "faculty_ms_neethi_narayanan",
+    "name": "Ms. Neethi Narayanan",
+    "aliases": [
+      "Ms. Neethi Narayanan",
+      "Neethi Narayanan"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-neethi-narayanan/"
+  },
+  {
+    "id": "faculty_dr_tessy_mathew",
+    "name": "Dr. Tessy Mathew",
+    "aliases": [
+      "Dr. Tessy Mathew",
+      "Tessy Mathew"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/dr-tessy-mathew/"
+  },
+  {
+    "id": "faculty_dr_merlin_george",
+    "name": "Dr. MERLIN GEORGE",
+    "aliases": [
+      "Dr. MERLIN GEORGE",
+      "MERLIN GEORGE"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-merlin-george/"
+  },
+  {
+    "id": "faculty_dr_neena_raj_n_r",
+    "name": "Dr. Neena Raj N R",
+    "aliases": [
+      "Dr. Neena Raj N R",
+      "Neena Raj N R"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/dr-neena-raj-n-r/"
+  },
+  {
+    "id": "faculty_ms_prathibha_s_nair",
+    "name": "Ms. Prathibha S Nair",
+    "aliases": [
+      "Ms. Prathibha S Nair",
+      "Prathibha S Nair"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-prathibha-s-nair/"
+  },
+  {
+    "id": "faculty_dr_priya_mariam_raju",
+    "name": "Dr. Priya Mariam Raju",
+    "aliases": [
+      "Dr. Priya Mariam Raju",
+      "Priya Mariam Raju"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/dr-priya-mariam-raju/"
+  },
+  {
+    "id": "faculty_ms_rini_vijayan",
+    "name": "Ms. RINI VIJAYAN",
+    "aliases": [
+      "Ms. RINI VIJAYAN",
+      "RINI VIJAYAN"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-rini-vijayan/"
+  },
+  {
+    "id": "faculty_ms_renjitha_radhakrishnan",
+    "name": "Ms. RENJITHA RADHAKRISHNAN",
+    "aliases": [
+      "Ms. RENJITHA RADHAKRISHNAN",
+      "RENJITHA RADHAKRISHNAN"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-renjitha-radhakrishnan/"
+  },
+  {
+    "id": "faculty_ms_vijitha_robinson",
+    "name": "Ms. Vijitha Robinson",
+    "aliases": [
+      "Ms. Vijitha Robinson",
+      "Vijitha Robinson"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-vijitha-robinson/"
+  },
+  {
+    "id": "faculty_ms_indu_v",
+    "name": "Ms. Indu V",
+    "aliases": [
+      "Ms. Indu V",
+      "Indu V"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-indu-v-2/"
+  },
+  {
+    "id": "faculty_ms_anjali_s",
+    "name": "Ms. Anjali S",
+    "aliases": [
+      "Ms. Anjali S",
+      "Anjali S"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-anjali-s/"
+  },
+  {
+    "id": "faculty_ms_deepthi_k_moorthy",
+    "name": "Ms. DEEPTHI K MOORTHY",
+    "aliases": [
+      "Ms. DEEPTHI K MOORTHY",
+      "DEEPTHI K MOORTHY"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-deepthi-k-moorthy/"
+  },
+  {
+    "id": "faculty_ms_lino_zachariah",
+    "name": "Ms. Lino Zachariah",
+    "aliases": [
+      "Ms. Lino Zachariah",
+      "Lino Zachariah"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-lino-zachariah/"
+  },
+  {
+    "id": "faculty_ms_gauri_shree_vk",
+    "name": "Ms. GAURI SHREE V.K",
+    "aliases": [
+      "Ms. GAURI SHREE V.K",
+      "GAURI SHREE V.K"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-gauri-shree-v-k/"
+  },
+  {
+    "id": "faculty_msanjali_devi_a_j",
+    "name": "Ms.ANJALI DEVI A J",
+    "aliases": [
+      "Ms.ANJALI DEVI A J",
+      "ANJALI DEVI A J"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-anjali-devi-a-j/"
+  },
+  {
+    "id": "faculty_ms_jayalekshmi_j",
+    "name": "Ms. Jayalekshmi J",
+    "aliases": [
+      "Ms. Jayalekshmi J",
+      "Jayalekshmi J"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-jayalekshmi-j/"
+  },
+  {
+    "id": "faculty_mr_binu_jose_a",
+    "name": "Mr. Binu Jose A.",
+    "aliases": [
+      "Mr. Binu Jose A.",
+      "Binu Jose A."
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/mr-binu-jose-a/"
+  },
+  {
+    "id": "faculty_ms_linu_mole_k_c",
+    "name": "Ms. Linu Mole K C",
+    "aliases": [
+      "Ms. Linu Mole K C",
+      "Linu Mole K C"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-linu-mole-k-c-2/"
+  },
+  {
+    "id": "faculty_ms_naicy_m_john",
+    "name": "Ms. Naicy M John",
+    "aliases": [
+      "Ms. Naicy M John",
+      "Naicy M John"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/name/"
+  },
+  {
+    "id": "faculty_ms_priyag",
+    "name": "Ms Priya.G",
+    "aliases": [
+      "Ms Priya.G",
+      "Priya.G"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-priya-g/"
+  },
+  {
+    "id": "faculty_ms_rejani_l",
+    "name": "Ms. Rejani L",
+    "aliases": [
+      "Ms. Rejani L",
+      "Rejani L"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-rejani-l/"
+  },
+  {
+    "id": "faculty_ms_vichithra_v_r",
+    "name": "Ms. Vichithra V R",
+    "aliases": [
+      "Ms. Vichithra V R",
+      "Vichithra V R"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-vichithra-v-r/"
+  },
+  {
+    "id": "faculty_ms_sherly_wilson_r",
+    "name": "Ms. Sherly Wilson R",
+    "aliases": [
+      "Ms. Sherly Wilson R",
+      "Sherly Wilson R"
+    ],
+    "type": "faculty",
+    "url": "https://mbcet.ac.in/faculty/ms-sherly-wilson-r/"
+  }
+]

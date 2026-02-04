@@ -1,0 +1,23 @@
+# Web Scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+
+# Markdown
+markdown-it-py>=3.0.0
+markdownify>=0.12.0
+
+# PDF Processing
+pypdf>=4.0.0
+pdfplumber>=0.11.0
+pdf2image>=1.17.0
+pytesseract>=0.3.10
+Pillow>=10.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+tqdm>=4.66.0
+
+# Testing
+pytest>=8.0.0

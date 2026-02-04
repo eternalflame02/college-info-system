@@ -1,0 +1,2 @@
+# This file ensures the data directory structure is tracked by git
+# The actual data files are gitignored as they can be regenerated

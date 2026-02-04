@@ -1,0 +1,27 @@
+---
+title: "Dr. Tessy Mathew"
+source_url: "https://mbcet.ac.in/faculty/dr-tessy-mathew"
+source_type: html
+scraped_at: "2026-02-05T02:46:14.878112"
+---
+
+# Dr. Tessy Mathew
+
+Professor
+
+|  |  |
+| --- | --- |
+| Employee Code / ID No. | 10206008 |
+| Qualifications | PhD |
+| Orcid ID | <https://orcid.org/0000-0001-9835-3100> |
+| Industry / R & D Experience | 3.6 years |
+| Email ID | [[email protected]](/cdn-cgi/l/email-protection#384c5d4b4b411655594c505d4f78555a5b5d4c16595b165156) |
+| Alternate E-mail ID | [[email protected]](/cdn-cgi/l/email-protection#fd89988e8e909c8995988abd9a909c9491d39e9290) |
+| Mobile No (Optional) / Intercom Extension No. | 141 |
+| Areas of Interest / Current Research | Artificial Intelligence,DataScience ,Machine Learning,Cellular Automata |
+| Research,  Consultancy, Publication | Research Publication Journals  Replication in Two-Dimensional Cellular Automaton with Linear Rules.  US Rao, L Jeganathan, T Mathew, Journal of Cellular Automata ,2020  U. Srinivasa Rao L. Jeganathan ,Tessy Mathew,   has published a paper titled “Error Bounds for Darboux Integral of Continuous Functions with Supremum Norm Using Cellular Automaton” in International Journal of Control Theory and Applications ISSN : 0974-5572, Volume 9, 2017  Tessy Mathew, L.Jeganathan, Srinivasa Rao ,Cellular Automata model for new investors for safe investment based on expert recommendation”, International Journal of Economics and Business Research-2017  Tessy Mathew, L.Jeganathan, Srinivasa Rao, Cellular Automata for decision making in stock trading- Journal of Computational Econometrics -2015  Conferences  Detection and Recognition of License Plate Using CNN and LSTM  A Anson, T Mathew Advances in Communication Systems and Networks, 701-721,2020  Jayalekshmi and Tessy Mathew has published a paper  ” Multimodal Sentimental Analysis-A study on classification Techniques for Multimodal Sentimental Analysis” in International Journal of Innovative Research in Computer and Communication Engineering (IJIRCCE) Vol. 4, Issue 9, September 2016.  An efficient image categorization approach using deep belief network  S Skaria, T Mathew, C Anjali International Conference on Networks & Advances in Computational Technologies,MBCET 2017  Ms. Tessy Mathew and Bini B S, “Study of Clustering Approach for Stock Market Prediction”,  National Conference on Innovation in Communication and Network ICONET’15, March 31 2015  Bini B S, Ms. Tessy Mathew, “Clustering and Regression Techniques For Stock Prediction”, ICETEST 2015  Koshy George, Ms. Tessy Mathew, “Big Database Stores – A review on various big data datastores”, ICGCIoT 2015  Anjana Ramesh, Binu G Nair, Poornima V and Ms. Tessy Mathew, “Predictive Analytics of Breast Cancer”, MBCET Journal of Research, Vol. 4, Issue 2, Nov 2015  Ms. Tessy Mathew,Mr.L.Jeganathan and Ms.Elizebeth Sherly “NSE Stock Index prediction using NARX and SVM Techniques”, International Conference on Advances in Computing, Communication and Information Science, 2014  Ms. Tessy Mathew,Mr.L.Jeganathan ,Vijaya ,Kalyani DesikanAn Ensembled Neural Network Classifier for Vehicle Classification using ILD, Published in Communications in Computer a Information Science series(CCIS) volume 0270 |
+| Ph.D Research Guidance ( Research Scholar, E-mail ID, Research Topic/ Tentative Thesis Tittle) | KTU Research Guide |
+| Academic / Professional Outreach Activities | Delivered sessions on 6 day online AICTE sponsored STTP on topics “Advanced RNN for video Analysis“ organized by  Marian Engineering College during 26th  to 31st  July 2021 , 9th to 14th Aug 2021 and 23rd to 28th Aug 2021 Delivered an expert lecture on the topic “Artificial Intelligence and Influence of Mathematics” in the webinar on Recent Recent trends in applied Mathematics conducted by dept of Mathematics, KumbalathuSankupillai Memorial Ddewaswom Board College Sasthamkotta May 2021  Delivered sessions on AICTE sponsored STTP on “Recent Advances and research domains in machine learning” organised by Department of CSE,LBS Institute of Technology for Women during 02.01.2021  Delivered sessions on 6 day online AICTE sponsored STTP on “High Performance Computing and Deep Learning for Image, Text Analysis” at MBCET during 22.02.2021 to 27.02.2021  Delivered sessions on IET sponsored Faculty Development Program on Performance Improvement in Smart Grid using Artificial Intelligence Techniques at MBCET during Nov 2020 |
+| Membership in Professional bodies/ organizations | Computer Society of India |
+| Community Outreach Activities | — |
+| Awards / Distinctions / Rank / Other Achievements if any | KTU Syllabus Revision Member(KTU 2019 Scheme)  Coordinator-AICTE Sponsored High Performance Computing and Deep Learning for Image, Text Analysis” at MBCET ,2021  Judge CSI INAPP  Project 2021  Doctoral Committee member (KTU)Colloborative project with SCTIMSTFunded Projects guidedAutomated Detecteion of Liver Cancer using deeplearning -Kerala State Council for Science, Technology and Environment Project  Identifying tesing idiolects using transformers- CERD fundedProject  Indoor navigation aid for the visually challenged -Center for Disability Studies-CEDS  Travelling aid for Visually challenged people -Center for Disability Studies-CEDS  Weather Prediction using Deep neural Network -Sponsoring agency-MBCET  Prostate Segmentation of MRI using CNN -Sponsoring agency-MBCET |
