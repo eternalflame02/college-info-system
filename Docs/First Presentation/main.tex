@@ -1,0 +1,340 @@
+\documentclass[10pt,aspectratio=1610]{beamer}
+
+% -------------------- PACKAGES --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{utopia}
+\usetheme{CambridgeUS}
+\usecolortheme{dolphin}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,shadows}
+\usepackage{algorithm2e}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+
+\usepackage[comma]{natbib}
+\usepackage{hyperref}
+\setcitestyle{square}
+
+\usepackage{tabularx}
+
+\beamertemplatenavigationsymbolsempty
+\usefonttheme{serif}
+
+% -------------------- COLORS --------------------
+\definecolor{myNewColorA}{RGB}{10,50,135}
+\definecolor{myNewColorB}{RGB}{25,85,154}
+\definecolor{myNewColorC}{RGB}{183,195,230}
+
+\setbeamercolor*{palette primary}{bg=myNewColorC}
+\setbeamercolor*{palette secondary}{bg=myNewColorB, fg=white}
+\setbeamercolor*{palette tertiary}{bg=myNewColorA, fg=white}
+\setbeamercolor*{titlelike}{fg=myNewColorA}
+\setbeamercolor*{item}{fg=myNewColorA}
+
+% -------------------- REMOVE TOP BAR --------------------
+\setbeamertemplate{headline}{}
+
+% -------------------- FOOTER --------------------
+\defbeamertemplate*{footline}{projectfoot}
+{
+  \leavevmode
+  \hbox{
+  \begin{beamercolorbox}[wd=.55\paperwidth,ht=2.6ex,dp=1ex,center]{title in head/foot}
+    \insertshorttitle
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[wd=.20\paperwidth,ht=2.6ex,dp=1ex,center]{date in head/foot}
+    \insertshortdate
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.6ex,dp=1ex,right]{date in head/foot}
+    \insertframenumber{} / \inserttotalframenumber\hspace{0.8em}
+  \end{beamercolorbox}}
+}
+\setbeamertemplate{footline}[projectfoot]
+
+% -------------------- TITLE BLOCK --------------------
+\newtcolorbox{titleblock}{
+  enhanced,
+  colback=myNewColorA,
+  colframe=myNewColorA,
+  arc=4mm,
+  boxrule=0pt,
+  left=14pt,
+  right=14pt,
+  top=12pt,
+  bottom=12pt,
+  drop shadow={shadow xshift=2mm, shadow yshift=-2mm, fill=black!35}
+}
+
+% -------------------- METADATA --------------------
+\title[Hybrid KG-RAG]
+{Hybrid Knowledge-Graph-Enhanced\\
+Retrieval-Augmented Generation for Academic\\
+Information Systems}
+
+\subtitle[First Review]{First Review}
+
+\author[Group Members]{
+\textbf{Group Members}\\[0.3cm]
+\begin{tabular}{l}
+Julia Mariam John (B23CS2137)\\
+Nirmel B Joseph (B23CS2148)\\
+Rohith NS (B23CS2156)\\
+\end{tabular}\\[0.3cm]
+\textbf{Project Guide:} Mr. Praveen J. S.\\
+Assistant Professor, Dept. of CSE, MBCET
+}
+
+\date[5 Feb 2026]{5 February 2026}
+
+% -------------------- DOCUMENT --------------------
+\begin{document}
+
+% ================= TITLE =================
+\begin{frame}[plain]
+\begin{center}
+\begin{titleblock}
+{\Large\color{white}\bfseries\inserttitle}\\[0.3cm]
+{\normalsize\color{white}\insertsubtitle}
+\end{titleblock}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{center}
+{\normalsize\insertauthor}
+\end{center}
+
+\vfill
+
+\begin{center}
+\includegraphics[height=2.8cm]{Images/mbcet.png}
+\end{center}
+
+\end{frame}
+
+% ================= CONTENTS =================
+\begin{frame}{Contents}
+\small
+\begin{itemize}
+\item Abstract
+\item Introduction
+\item Literature Review
+\item Research Gaps
+\item Problem Statement
+\item Objectives
+\item Feasibility Study
+\item System Architecture
+\item Data Flow Diagram-0
+\item Data Flow Diagram-1
+\item Use Case Diagram
+\item Class Diagram
+\item Sequence Diagram
+\item End User Feedback
+\item Methodology
+\item Conclusion
+\item References
+\end{itemize}
+\end{frame}
+
+% ================= ABSTRACT =================
+\section{Abstract}
+\begin{frame}{Abstract}
+\small
+Academic data is typically unstructured and fragmented across institutional websites, limiting the effectiveness of keyword-based and embedding-only retrieval systems. Hybrid knowledge-graph-enhanced retrieval-augmented generation improves contextual grounding and relational reasoning by combining semantic vector retrieval with structured knowledge graph inference, supporting SDG~4 and SDG~9 \cite{kg_rag_springer,rag_edu_elsevier}.
+\end{frame}
+
+% ================= INTRODUCTION =================
+\section{Introduction}
+\begin{frame}{Introduction}
+\begin{itemize}
+\item Growing dependence on online academic information
+\item Institutional data scattered across multiple web sources
+\item Limited relational reasoning in conventional retrieval systems
+\item Need for intelligent, knowledge-driven academic information systems
+\end{itemize}
+\end{frame}
+
+% ================= LITERATURE REVIEW =================
+\section{Literature Review}
+\begin{frame}{Literature Review}
+\scriptsize
+\begin{tabularx}{\textwidth}{|c|X|X|X|X|}
+\hline
+Sl.No & Title & Methodology & Results & Limitations\\
+\hline
+1 & Knowledge graph-extended RAG for QA \cite{kg_rag_springer} 
+  & KG-guided retrieval + LLM 
+  & Improved multi-hop accuracy 
+  & Requires structured knowledge graph\\
+\hline
+2 & RAG for educational applications \cite{rag_edu_elsevier} 
+  & Semantic retrieval + LLM 
+  & Reduced hallucination 
+  & Dependent on retriever quality\\
+\hline
+\end{tabularx}
+\end{frame}
+
+% ================= RESEARCH GAPS =================
+\begin{frame}{Research Gaps Identified}
+\begin{itemize}
+\item Limited use of knowledge graphs in academic RAG systems
+\item Lack of hybrid vector-graph retrieval pipelines
+\item Insufficient explainability in LLM-based academic QA
+\end{itemize}
+\end{frame}
+
+% ================= PROBLEM STATEMENT =================
+\begin{frame}{Problem Statement}
+To develop a hybrid knowledge-graph-enhanced retrieval-augmented generation system for accurate and explainable academic information access.
+\end{frame}
+
+% ================= OBJECTIVES =================
+\begin{frame}{Objectives}
+\begin{enumerate}
+\item To preprocess and index institutional text using vector embeddings.
+\item To construct a knowledge graph of academic entities for Mar Baselios College of Engineering and Technology.
+\item To integrate hybrid retrieval for query answering.
+\item To improve factual grounding and relational reasoning.
+\end{enumerate}
+\end{frame}
+
+%==================FEASIBILITY STYDY============
+
+\begin{frame}
+\frametitle{Feasibility Study}
+
+\textbf{Technical Feasibility}
+\begin{itemize}
+    \item Uses existing academic data from institutional websites
+    \item Integrates proven RAG models with knowledge graph techniques
+    \item Supports semantic and relationship-based information retrieval
+    \item Can be deployed using standard cloud or local server infrastructure
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Economic Feasibility}
+\begin{itemize}
+    \item Relies on open-source NLP, vector databases, and graph frameworks
+    \item No requirement for specialized hardware
+    \item Low development and deployment cost
+    \item Minimal maintenance cost after implementation
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Operational Feasibility}
+\begin{itemize}
+    \item Provides an easy-to-use chatbot interface for users
+    \item Reduces manual effort for administrative staff
+    \item Requires minimal user training
+    \item Suitable for continuous operation on academic websites
+\end{itemize}
+
+\end{frame}
+
+% ================= System Architecture =================
+\section{Diagrams}
+\begin{frame}{System Architecture}
+\centering
+\includegraphics[width=0.88\textwidth]{MINI_PROJECT_PRESENTATION_TEMPLATE/Images/System Architecture.png}
+\end{frame}
+
+% ================= DFD-0 =================
+
+\section{Diagrams}
+\begin{frame}{Data Flow Diagram-0}
+\centering
+\includegraphics[width=1.0\textwidth]{MINI_PROJECT_PRESENTATION_TEMPLATE/Images/DFD0.png}
+\end{frame}
+
+% ================= DFD-1 =================
+
+\section{Diagrams}
+\begin{frame}{Data Flow Diagram-1}
+\centering
+\includegraphics[width=1.0\textwidth]{MINI_PROJECT_PRESENTATION_TEMPLATE/Images/DFD1.png}
+\end{frame}
+
+% ================= Use case diagram =================
+
+\section{Diagrams}
+\begin{frame}{Use Case Diagram}
+\centering
+\includegraphics[width=0.8\textwidth]{MINI_PROJECT_PRESENTATION_TEMPLATE/Images/use_case.drawio.png}
+\end{frame}
+
+% ================= Class Diagram =================
+
+\section{Diagrams}
+\begin{frame}{Class Diagram}
+\centering
+\includegraphics[width=0.53\textwidth]{MINI_PROJECT_PRESENTATION_TEMPLATE/Images/class_diagram.png}
+\end{frame}
+
+% ================= Sequence Diagram =================
+
+\section{Diagrams}
+\begin{frame}{Sequence Diagram}
+\centering
+\includegraphics[width=1.0\textwidth]{MINI_PROJECT_PRESENTATION_TEMPLATE/Images/sequence_diagram.png}
+\end{frame}
+
+%===================== End User Feedback==============
+
+\begin{frame}
+\frametitle{End User Feedback}
+
+\begin{itemize}
+    \item Users mainly visit the college website for exam schedules, syllabus, and academic calendar.
+    \item Many users find it difficult to locate information due to scattered content and complex navigation.
+    \item Common issues include too many clicks and lack of centralized academic information.
+    \item Most users believe a chatbot would help in faster and easier information access.
+    \item Users prefer the chatbot to provide exam-related, academic, and department-specific information.
+\end{itemize}
+
+\end{frame}
+
+
+% ================= METHODOLOGY =================
+\section{Methodology}
+\begin{frame}{Methodology}
+\begin{itemize}
+\item Data scraping, cleaning, and chunking
+\item Vector embedding
+\item Knowledge graph construction
+\item Hybrid retrieval and LLM-based answer generation
+\end{itemize}
+\end{frame}
+
+% ================= CONCLUSION =================
+\section{Conclusion}
+\begin{frame}{Conclusion}
+\begin{itemize}
+\item Hybrid KG-RAG improves academic information retrieval
+\item Supports both semantic and relational queries
+\item Provides grounded and explainable responses
+\item Aligned with SDG~4 and SDG~9
+\end{itemize}
+\end{frame}
+
+% ================= REFERENCES =================
+\section{References}
+\begin{frame}{References}
+\scriptsize
+\bibliographystyle{ieeetr}
+\bibliography{references}
+\end{frame}
+
+% ================= THANK YOU =================
+\begin{frame}
+\centering
+\Huge \textcolor{myNewColorA}{Thank You}
+\end{frame}
+
+\end{document}
