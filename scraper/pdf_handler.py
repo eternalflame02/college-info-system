@@ -162,57 +162,306 @@ class PDFHandler:
         total_words = sum(len(text.split()) for _, text in pages)
         return total_words >= min_words
 
-    def _table_to_markdown(self, table: List[List[str]]) -> str:
+    def _clean_cell(self, cell) -> str:
+        """Clean a cell value: handle None, normalize whitespace, escape pipes."""
+        cell_str = str(cell) if cell is not None else ""
+        cell_str = ' '.join(cell_str.split())  # Normalize whitespace
+        cell_str = cell_str.replace('|', '\\|')  # Escape pipes
+        return cell_str
+
+    def _rows_to_markdown(self, rows: List[List[str]], header_row: int = 0) -> str:
         """
-        Convert a table (list of rows) to Markdown table format.
+        Convert a list of rows to Markdown table format.
         
         Args:
-            table: List of rows, each row is a list of cell values
+            rows: List of rows, each row is a list of cell values
+            header_row: Index of the header row (default: 0)
             
         Returns:
             Markdown table string
         """
-        if not table or len(table) < 1:
+        if not rows or len(rows) < 1:
             return ""
         
-        # Clean cell values
-        cleaned_table = []
-        for row in table:
-            cleaned_row = []
-            for cell in row:
-                # Handle None and clean whitespace
-                cell_str = str(cell) if cell is not None else ""
-                cell_str = ' '.join(cell_str.split())  # Normalize whitespace
-                cell_str = cell_str.replace('|', '\\|')  # Escape pipes
-                cleaned_row.append(cell_str)
-            cleaned_table.append(cleaned_row)
+        # Clean all cells
+        cleaned = [[self._clean_cell(c) for c in row] for row in rows]
         
-        if not cleaned_table:
-            return ""
+        # Determine column count (max across rows)
+        max_cols = max(len(row) for row in cleaned)
         
-        # Determine column count (max across all rows)
-        max_cols = max(len(row) for row in cleaned_table)
-        
-        # Pad rows to have consistent column count
-        for row in cleaned_table:
+        # Pad rows to consistent column count
+        for row in cleaned:
             while len(row) < max_cols:
                 row.append("")
         
-        # Build markdown table
         lines = []
-        
-        # Header row
-        header = cleaned_table[0]
+        header = cleaned[header_row]
         lines.append('| ' + ' | '.join(header) + ' |')
-        
-        # Separator row
         lines.append('| ' + ' | '.join(['---'] * max_cols) + ' |')
-        
-        # Data rows
-        for row in cleaned_table[1:]:
-            lines.append('| ' + ' | '.join(row) + ' |')
+        for i, row in enumerate(cleaned):
+            if i != header_row:
+                lines.append('| ' + ' | '.join(row) + ' |')
         
         return '\n'.join(lines)
+
+    def _table_to_markdown(self, table: List[List[str]]) -> str:
+        """Convert a table (list of rows) to Markdown table format."""
+        return self._rows_to_markdown(table, header_row=0)
+
+    def _is_timetable_pdf(self, pdf_path: Path) -> bool:
+        """Check if a PDF is a timetable based on filename."""
+        name = pdf_path.stem.lower()
+        return 'tt_' in name or 'time' in name or 'timetable' in name
+
+    def _extract_timetable_markdown(self, pdf_path: Path) -> Optional[str]:
+        """
+        Specialized extraction for timetable PDFs.
+        
+        Timetable PDFs have a complex layout with merged cells that pdfplumber
+        extracts as a single large table. This method splits it into 3 logical
+        sections:
+        1. Schedule Grid (Day x Period)
+        2. Course Legend (Slot, Category, Course Code, etc.)
+        3. Advisor Info (Sl.No, Title, Name)
+        
+        Returns:
+            Formatted Markdown string or None if extraction fails
+        """
+        if not PDFPLUMBER_AVAILABLE:
+            return None
+        
+        try:
+            with pdfplumber.open(str(pdf_path)) as pdf:
+                page = pdf.pages[0]
+                tables = page.extract_tables()
+                
+                if not tables:
+                    logger.warning(f"No tables found in timetable PDF: {pdf_path}")
+                    return None
+                
+                raw_table = tables[0]
+                if not raw_table:
+                    return None
+                
+                # Clean all rows
+                cleaned_rows = []
+                for row in raw_table:
+                    cleaned = [self._clean_cell(c) for c in row]
+                    cleaned_rows.append(cleaned)
+                
+                # --- Parse the table into logical sections ---
+                # Find key section boundaries by scanning row content
+                schedule_rows = []
+                course_rows = []
+                advisor_rows = []
+                metadata_header = ""
+                footer_text = ""
+                
+                section = 'header'  # header -> schedule -> note -> course -> advisor -> footer
+                
+                for row in cleaned_rows:
+                    joined = ' '.join(row).strip()
+                    
+                    # Skip entirely empty rows
+                    if not joined:
+                        continue
+                    
+                    # Detect header/metadata (college name, department, etc.)
+                    if 'MAR BASELIOS' in joined.upper() or 'DEPARTMENT' in joined.upper():
+                        if 'Academic Year' in joined or 'DEPARTMENT' in joined:
+                            metadata_header = joined
+                            continue
+                    
+                    # Detect schedule grid rows (Time headers and day rows)
+                    first_cell = row[0].strip() if row[0] else ""
+                    if first_cell.startswith('Time') or first_cell.startswith('Day'):
+                        schedule_rows.append(row)
+                        section = 'schedule'
+                        continue
+                    if first_cell in ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'):
+                        schedule_rows.append(row)
+                        section = 'schedule'
+                        continue
+                    
+                    # Detect the note about periods 1 and 8
+                    if 'Periods 1 an' in joined or 'Honours/Minors' in joined:
+                        section = 'note'
+                        continue
+                    
+                    # Detect course legend section
+                    if first_cell == 'Slot' and 'Category' in joined:
+                        course_rows.append(row)
+                        section = 'course'
+                        continue
+                    if section == 'course' and first_cell in ('A','B','C','D','E','F','G','H','S','T','M','R/M','R',''):
+                        # Check if this is still a course row (has meaningful content)
+                        non_empty = sum(1 for c in row if c.strip())
+                        if non_empty >= 2 and first_cell != '':
+                            course_rows.append(row)
+                            continue
+                        elif first_cell == '' and non_empty >= 3:
+                            course_rows.append(row)
+                            continue
+                    
+                    # Detect advisor section
+                    if first_cell == 'Sl.No' or (first_cell.isdigit() and 'Advisor' in joined):
+                        advisor_rows.append(row)
+                        section = 'advisor'
+                        continue
+                    if section == 'advisor' and first_cell.isdigit():
+                        advisor_rows.append(row)
+                        continue
+                    
+                    # Detect footer (Published on, Prepared by)
+                    if 'Published on' in joined or 'Prepared by' in joined or 'HoD' in joined:
+                        footer_text = joined
+                        continue
+                
+                # --- Build clean markdown ---
+                lines = []
+                
+                # Extract metadata from the header blob
+                if metadata_header:
+                    # Parse out key fields
+                    meta = metadata_header
+                    semester = ""
+                    room = ""
+                    year = ""
+                    dates = ""
+                    
+                    import re
+                    sem_match = re.search(r'Semester:\s*([\w\-\s]+?)(?:\s*Room|$)', meta)
+                    if sem_match:
+                        semester = sem_match.group(1).strip()
+                    room_match = re.search(r'Room\s*No:\s*(\S+)', meta)
+                    if room_match:
+                        room = room_match.group(1).strip()
+                    year_match = re.search(r'Academic Year:\s*([\d\-]+\s*\w+\s*SEMESTER)', meta)
+                    if year_match:
+                        year = year_match.group(1).strip()
+                    start_match = re.search(r'Start date:\s*([\d/]+)', meta)
+                    end_match = re.search(r'End date:\s*([\d/]+)', meta)
+                    if start_match and end_match:
+                        dates = f"{start_match.group(1)} to {end_match.group(1)}"
+                    
+                    lines.append("**MAR BASELIOS COLLEGE OF ENGINEERING AND TECHNOLOGY (AUTONOMOUS)**")
+                    lines.append("**Department of Computer Science and Engineering**")
+                    lines.append("")
+                    if year:
+                        lines.append(f"**Academic Year:** {year}")
+                    if semester:
+                        lines.append(f"**Semester:** {semester}")
+                    if room:
+                        lines.append(f"**Room No:** {room}")
+                    if dates:
+                        lines.append(f"**Duration:** {dates}")
+                    lines.append("")
+                
+                # Schedule Grid Section
+                if schedule_rows:
+                    lines.append("## Class Schedule")
+                    lines.append("")
+                    
+                    # Build a clean schedule table
+                    # Find the time header row and day rows
+                    time_headers = []
+                    day_rows = []
+                    
+                    for row in schedule_rows:
+                        first = row[0].strip()
+                        if first.startswith('Time') or first.startswith('Day'):
+                            time_headers.append(row)
+                        else:
+                            day_rows.append(row)
+                    
+                    # Use the first time header as column headers
+                    if time_headers:
+                        # Build a simplified schedule table
+                        # Columns: Day, Period 2, Period 3, Period 4, LUNCH, Period 5, Period 6, Period 7
+                        header = time_headers[0]
+                        
+                        # Build the full table with header + day rows
+                        all_rows = [header] + day_rows
+                        md_table = self._rows_to_markdown(all_rows, header_row=0)
+                        lines.append(md_table)
+                    else:
+                        md_table = self._rows_to_markdown(schedule_rows, header_row=0)
+                        lines.append(md_table)
+                    
+                    lines.append("")
+                    lines.append("*Periods 1 and 8 are used for Honours/Minors/Remedial/Extra Classes*")
+                    lines.append("")
+                
+                # Course Legend Section
+                if course_rows:
+                    lines.append("## Course Details")
+                    lines.append("")
+                    
+                    # Find meaningful columns from the header
+                    # Typical columns: Slot, Category, Course Code, Course Name, TT code, Faculty Name, Remarks
+                    # But pdfplumber splits them across 14 columns with many empty ones
+                    
+                    # Compact the rows: remove columns that are always empty
+                    if course_rows:
+                        num_cols = max(len(r) for r in course_rows)
+                        # Check which columns have any content
+                        col_has_content = [False] * num_cols
+                        for row in course_rows:
+                            for j, cell in enumerate(row):
+                                if cell.strip():
+                                    col_has_content[j] = True
+                        
+                        # Keep only columns that have content
+                        compacted = []
+                        for row in course_rows:
+                            new_row = []
+                            for j, cell in enumerate(row):
+                                if j < len(col_has_content) and col_has_content[j]:
+                                    new_row.append(cell)
+                            compacted.append(new_row)
+                        
+                        md_table = self._rows_to_markdown(compacted, header_row=0)
+                        lines.append(md_table)
+                    lines.append("")
+                
+                # Advisor Section  
+                if advisor_rows:
+                    lines.append("## Class Advisors")
+                    lines.append("")
+                    
+                    # Compact advisor rows too
+                    if advisor_rows:
+                        num_cols = max(len(r) for r in advisor_rows)
+                        col_has_content = [False] * num_cols
+                        for row in advisor_rows:
+                            for j, cell in enumerate(row):
+                                if cell.strip():
+                                    col_has_content[j] = True
+                        
+                        compacted = []
+                        for row in advisor_rows:
+                            new_row = []
+                            for j, cell in enumerate(row):
+                                if j < len(col_has_content) and col_has_content[j]:
+                                    new_row.append(cell)
+                            compacted.append(new_row)
+                        
+                        md_table = self._rows_to_markdown(compacted, header_row=0)
+                        lines.append(md_table)
+                    lines.append("")
+                
+                # Footer
+                if footer_text:
+                    lines.append(f"*{footer_text}*")
+                    lines.append("")
+                
+                return '\n'.join(lines)
+                
+        except Exception as e:
+            logger.error(f"Timetable extraction failed for {pdf_path}: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
 
     def _extract_with_pdfplumber(self, pdf_path: Path) -> List[Dict[str, Any]]:
         """
@@ -279,6 +528,38 @@ class PDFHandler:
         output_dir.mkdir(parents=True, exist_ok=True)
         
         logger.info(f"Converting PDF to Markdown: {pdf_path}")
+        
+        # Check if this is a timetable PDF — use specialized extraction
+        if self._is_timetable_pdf(pdf_path) and PDFPLUMBER_AVAILABLE and not force_ocr:
+            logger.info(f"Detected timetable PDF, using specialized extraction: {pdf_path.name}")
+            tt_md = self._extract_timetable_markdown(pdf_path)
+            if tt_md:
+                # Build complete markdown with frontmatter
+                markdown_lines = []
+                markdown_lines.append("---")
+                markdown_lines.append(f'title: "{pdf_path.stem}"')
+                markdown_lines.append(f'source_file: "{pdf_path.name}"')
+                markdown_lines.append("source_type: pdf")
+                markdown_lines.append("---")
+                markdown_lines.append("")
+                markdown_lines.append(f"# {pdf_path.stem}")
+                markdown_lines.append("")
+                markdown_lines.append("<!-- page: 1 -->")
+                markdown_lines.append("")
+                markdown_lines.append(tt_md)
+                
+                output_filename = pdf_path.stem + ".md"
+                output_path = output_dir / output_filename
+                try:
+                    content = '\n'.join(markdown_lines)
+                    output_path.write_text(content, encoding='utf-8')
+                    logger.info(f"Saved timetable Markdown: {output_path}")
+                    return output_path
+                except Exception as e:
+                    logger.error(f"Failed to save timetable {output_path}: {e}")
+                    # Fall through to regular extraction
+            else:
+                logger.warning(f"Timetable extraction returned no content, falling back to regular: {pdf_path.name}")
         
         # Try pdfplumber first for better table extraction
         pdfplumber_data = []
@@ -362,8 +643,9 @@ class PDFHandler:
                         markdown_lines.append(table_md)
                         markdown_lines.append("")
                     
-                    # Add remaining text
-                    if text:
+                    # Only add remaining text if no tables were found
+                    # (when tables exist, the text is usually a duplicate)
+                    if text and not tables:
                         paragraphs = text.split('\n\n')
                         for para in paragraphs:
                             cleaned = ' '.join(para.split())
