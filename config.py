@@ -105,6 +105,28 @@ FACULTY_NAME_PATTERN = (
     r"[A-Z][a-z]+(\s+[A-Z]\.?\s*)*(\s+[A-Z][a-z]+)+"
 )
 
+# ========== Embedding & RAG Configuration ==========
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "google/embeddinggemma-300m")
+EMBEDDING_DIMENSIONS = 768
+EMBEDDING_BATCH_SIZE = int(os.getenv("EMBEDDING_BATCH_SIZE", "64"))
+HF_TOKEN = os.getenv("HF_TOKEN", "")
+
+# ========== ChromaDB Configuration ==========
+CHROMADB_DIR = PROJECT_ROOT / "chroma_db"
+CHROMADB_COLLECTION = "mbcet_cse_knowledge"
+
+# ========== Embedding Cache ==========
+EMBEDDING_CACHE_DIR = DATA_DIR / "embeddings"
+EMBEDDING_CACHE_FILE = EMBEDDING_CACHE_DIR / "embedding_cache.npz"
+
+# ========== Validation ==========
+VALIDATION_DIR = DATA_DIR / "validation"
+INGESTION_REPORT_FILE = VALIDATION_DIR / "chromadb_ingestion_report.json"
+VALIDATION_REPORT_FILE = VALIDATION_DIR / "chromadb_validation_report.json"
+
+# ========== Logging ==========
+INGESTION_LOG_FILE = LOGS_DIR / "chromadb_ingestion.log"
+
 
 def ensure_directories():
     """Create all required directories if they don't exist."""
@@ -117,6 +139,8 @@ def ensure_directories():
         ENTITIES_DIR,
         CHUNKS_DIR,
         LOGS_DIR,
+        EMBEDDING_CACHE_DIR,
+        VALIDATION_DIR,
     ]
     for directory in directories:
         directory.mkdir(parents=True, exist_ok=True)
@@ -124,3 +148,4 @@ def ensure_directories():
 
 # Create directories on import
 ensure_directories()
+

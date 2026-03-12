@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """
-MBCET CSE Semantic Chunking Pipeline
+MBCET CSE Semantic Chunking & RAG Pipeline
 
-Main CLI entry point for scraping, chunking, and entity extraction.
+Main CLI entry point for scraping, chunking, entity extraction,
+embedding generation, and retrieval.
 
 Usage:
     python main.py --stage scrape    # Run web scraper
     python main.py --stage chunk     # Run semantic chunker
     python main.py --stage entities  # Build entity registry
+    python main.py --stage embed     # Embed chunks & ingest into ChromaDB
+    python main.py --stage embed --force  # Force re-embedding
+    python main.py --stage query --text "Who is the HOD?"
     python main.py --stage all       # Run complete pipeline
 """
 
@@ -143,16 +147,35 @@ def run_chunk_stage():
         print("    python main.py --stage scrape")
 
 
-def run_all_stages():
+def run_embed_stage(force: bool = False):
+    """Run the embedding & ChromaDB ingestion stage."""
+    print("\n" + "=" * 50)
+    print("🧠 Starting Embedding & Ingestion Stage")
+    print("=" * 50)
+
+    from rag_ingestion import run_ingestion_pipeline
+
+    run_ingestion_pipeline(force_reembed=force)
+
+
+def run_query_stage(query_text: str):
+    """Run a query against the ChromaDB knowledge base."""
+    from rag_ingestion import run_query
+
+    run_query(query_text)
+
+
+def run_all_stages(force: bool = False):
     """Run complete pipeline."""
     print("\n" + "=" * 50)
     print("🚀 Running Complete Pipeline")
     print("=" * 50)
-    
+
     run_scrape_stage()
     run_entities_stage()
     run_chunk_stage()
-    
+    run_embed_stage(force=force)
+
     print("\n" + "=" * 50)
     print("🎉 Complete pipeline finished!")
     print("=" * 50)
@@ -160,36 +183,52 @@ def run_all_stages():
 
 def main():
     parser = argparse.ArgumentParser(
-        description="MBCET CSE Semantic Chunking Pipeline",
+        description="MBCET CSE Semantic Chunking & RAG Pipeline",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
     python main.py --stage scrape    # Scrape MBCET website
     python main.py --stage entities  # Build entity registry
     python main.py --stage chunk     # Run semantic chunker
+    python main.py --stage embed     # Embed chunks & ingest into ChromaDB
+    python main.py --stage embed --force  # Force re-embedding
+    python main.py --stage query --text "Who is the HOD?"
     python main.py --stage all       # Run complete pipeline
         """
     )
-    
+
     parser.add_argument(
         '--stage',
-        choices=['scrape', 'entities', 'chunk', 'all'],
+        choices=['scrape', 'entities', 'chunk', 'embed', 'query', 'all'],
         required=True,
         help='Pipeline stage to run'
     )
-    
+
     parser.add_argument(
         '-v', '--verbose',
         action='store_true',
         help='Enable verbose logging'
     )
-    
+
+    parser.add_argument(
+        '--force',
+        action='store_true',
+        help='Force re-embedding (deletes cache and recreates ChromaDB collection)'
+    )
+
+    parser.add_argument(
+        '--text',
+        type=str,
+        default=None,
+        help='Query text for --stage query'
+    )
+
     args = parser.parse_args()
-    
+
     # Setup
     setup_logging(args.verbose)
     config.ensure_directories()
-    
+
     # Run selected stage
     if args.stage == 'scrape':
         run_scrape_stage()
@@ -197,8 +236,16 @@ Examples:
         run_entities_stage()
     elif args.stage == 'chunk':
         run_chunk_stage()
+    elif args.stage == 'embed':
+        run_embed_stage(force=args.force)
+    elif args.stage == 'query':
+        if not args.text:
+            print("❌ --text is required for query stage")
+            print("   Example: python main.py --stage query --text \"Who is the HOD?\"")
+            sys.exit(1)
+        run_query_stage(args.text)
     elif args.stage == 'all':
-        run_all_stages()
+        run_all_stages(force=args.force)
     else:
         parser.print_help()
         sys.exit(1)

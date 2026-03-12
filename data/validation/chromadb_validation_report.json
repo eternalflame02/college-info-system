@@ -1,0 +1,71 @@
+{
+  "validation_timestamp": "2026-03-12T06:22:13Z",
+  "collection_health": {
+    "expected_count": 2060,
+    "actual_count": 2060,
+    "status": "PASS"
+  },
+  "content_type_validation": {
+    "table": {
+      "expected": 1829,
+      "actual": 1829,
+      "status": "PASS"
+    },
+    "profile": {
+      "expected": 101,
+      "actual": 101,
+      "status": "PASS"
+    },
+    "list": {
+      "expected": 11,
+      "actual": 11,
+      "status": "PASS"
+    },
+    "section": {
+      "expected": 69,
+      "actual": 69,
+      "status": "PASS"
+    },
+    "regulation": {
+      "expected": 50,
+      "actual": 50,
+      "status": "PASS"
+    }
+  },
+  "sample_query_tests": [
+    {
+      "query": "Who is the head of CSE department?",
+      "status": "FAIL",
+      "error": "No results returned"
+    },
+    {
+      "query": "What courses are in Semester 3?",
+      "expected_content_type": "table",
+      "top_result_content_type": "table",
+      "top_result_distance": 0.776,
+      "results_count": 4,
+      "query_time_ms": 22326.98,
+      "status": "PASS"
+    },
+    {
+      "query": "R2023 regulations",
+      "status": "FAIL",
+      "error": "No results returned"
+    },
+    {
+      "query": "Database management systems syllabus",
+      "status": "FAIL",
+      "error": "No results returned"
+    },
+    {
+      "query": "faculty specializing in machine learning",
+      "status": "FAIL",
+      "error": "No results returned"
+    }
+  ],
+  "performance_metrics": {
+    "average_query_time_ms": 28369.22,
+    "min_query_time_ms": 22326.98,
+    "max_query_time_ms": 40757.19
+  }
+}
