@@ -1,9 +1,25 @@
 import json
 import logging
 from pathlib import Path
-from typing import List, Dict
+from typing import Dict, List
 
 logger = logging.getLogger(__name__)
+
+
+def _load_json(path: Path):
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _oxford_join(parts: List[str]) -> str:
+    if not parts:
+        return ""
+    if len(parts) == 1:
+        return parts[0]
+    if len(parts) == 2:
+        return f"{parts[0]} and {parts[1]}"
+    return ", ".join(parts[:-1]) + f", and {parts[-1]}"
+
 
 def generate_knowledge_graph_documents(data_dir: Path) -> List[Dict]:
     """
@@ -19,55 +35,79 @@ def generate_knowledge_graph_documents(data_dir: Path) -> List[Dict]:
         return []
         
     try:
-        with open(faculty_path, 'r', encoding='utf-8') as f:
-            faculty_list = json.load(f)
-            faculty_map = {f.get('id'): f for f in faculty_list}
+        faculty_list = _load_json(faculty_path)
+        faculty_map = {item.get("id"): item for item in faculty_list}
             
-        with open(courses_path, 'r', encoding='utf-8') as f:
-            courses_list = json.load(f)
-            courses_map = {c.get('id'): c for c in courses_list}
+        courses_list = _load_json(courses_path)
+        courses_map = {item.get("id"): item for item in courses_list}
             
-        with open(assignments_path, 'r', encoding='utf-8') as f:
-            assignments = json.load(f)
+        assignments = _load_json(assignments_path)
     except Exception as e:
         logger.warning(f"Error loading entity registries for Knowledge Graph: {e}")
         return []
         
     documents = []
-    
+
     for fac_id, course_ids in assignments.items():
         if fac_id not in faculty_map:
             logger.warning(f"Faculty ID '{fac_id}' in teaching_assignments not found in faculty.json")
             continue
-            
-        fac_name = faculty_map[fac_id].get('name', 'Unknown')
-        
+
+        faculty = faculty_map[fac_id]
+        fac_name = faculty.get("name", "Unknown")
+        fac_email = faculty.get("email")
+        fac_designation = faculty.get("designation")
+
+        valid_courses = []
         for course_id in course_ids:
             if course_id not in courses_map:
                 logger.warning(f"Course ID '{course_id}' in teaching_assignments not found in courses.json")
                 continue
-                
-            course_name = courses_map[course_id].get('name', 'Unknown')
-            course_code = courses_map[course_id].get('code', course_id)
-            
-            # Synthetic sentence mapping everything together securely and implicitly.
-            # E.g. Dr. Jisha John teaches course CS0U20A (Artificial Intelligence).
-            text = f"[Context: Knowledge Graph] {fac_name} teaches {course_name} ({course_code}). The instructor for {course_code} {course_name} is {fac_name}. The subject {course_name} is taught by {fac_name}."
-            
-            doc = {
-                "id": f"kg_{fac_id}_{course_id}",
-                "text": text,
-                "metadata": {
-                    "source_file": "teaching_assignments.json",
-                    "content_type": "knowledge_graph",
-                    "main_topic": "Teaching Assignment",
-                    "faculty_id": fac_id,
+
+            course_entity = courses_map[course_id]
+            valid_courses.append(
+                {
                     "course_id": course_id,
-                    "faculty_name": fac_name,
-                    "course_name": course_name
+                    "course_name": course_entity.get("name", "Unknown"),
+                    "course_code": course_entity.get("code", course_id),
                 }
-            }
-            documents.append(doc)
-            
+            )
+
+        if not valid_courses:
+            continue
+
+        course_text_parts = [
+            f"{course['course_code']} ({course['course_name']})"
+            for course in valid_courses
+        ]
+        course_text = _oxford_join(course_text_parts)
+
+        role_text = fac_designation if fac_designation else "faculty member"
+        email_text = f" Contact email: {fac_email}." if fac_email else ""
+
+        text = (
+            f"[Context: Knowledge Graph] {fac_name} is a {role_text} in the CSE department."
+            f" {fac_name} teaches {course_text}."
+            f" The instructor for {course_text} is {fac_name}.{email_text}"
+        )
+
+        doc = {
+            "id": f"kg_{fac_id}",
+            "text": text,
+            "metadata": {
+                "source_file": "data/entities/teaching_assignments.json",
+                "content_type": "knowledge_graph",
+                "main_topic": "Teaching Assignment",
+                "faculty_id": fac_id,
+                "faculty_name": fac_name,
+                "faculty_designation": fac_designation or "",
+                "faculty_email": fac_email or "",
+                "course_ids": [course["course_id"] for course in valid_courses],
+                "course_codes": [course["course_code"] for course in valid_courses],
+                "course_names": [course["course_name"] for course in valid_courses],
+            },
+        }
+        documents.append(doc)
+
     logger.info(f"Generated {len(documents)} synthetic Knowledge Graph documents.")
     return documents

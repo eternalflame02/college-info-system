@@ -78,6 +78,7 @@ MAX_TABLE_ROWS_PER_CHUNK = 50
 FACULTY_FILE = ENTITIES_DIR / "faculty.json"
 COURSES_FILE = ENTITIES_DIR / "courses.json"
 PROGRAMS_FILE = ENTITIES_DIR / "programs.json"
+TEACHING_ASSIGNMENTS_FILE = ENTITIES_DIR / "teaching_assignments.json"
 
 # ========== Output Files ==========
 CHUNKS_FILE = CHUNKS_DIR / "chunks.json"

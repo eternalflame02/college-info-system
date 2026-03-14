@@ -9,7 +9,7 @@ import logging
 import json
 from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Optional, Tuple
+from typing import Any, List, Dict, Optional, Tuple
 
 from markdown_it import MarkdownIt
 
@@ -19,6 +19,56 @@ from chunker.entity_registry import EntityRegistry, find_entity_refs, load_entit
 from chunker.content_classifier import classify_content
 
 logger = logging.getLogger(__name__)
+
+
+def _safe_load_json(path: Path, default: Any):
+    """Load JSON with safe fallback."""
+    if not path.exists():
+        return default
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        logger.warning(f"Failed to load JSON from {path}: {e}")
+        return default
+
+
+def load_teaching_assignments() -> Dict[str, List[str]]:
+    """Load faculty->course mapping from teaching assignments file."""
+    raw = _safe_load_json(config.TEACHING_ASSIGNMENTS_FILE, default={})
+    if not isinstance(raw, dict):
+        logger.warning("teaching_assignments.json is not a JSON object. Ignoring it.")
+        return {}
+
+    assignments: Dict[str, List[str]] = {}
+    for faculty_id, course_ids in raw.items():
+        if not isinstance(course_ids, list):
+            continue
+        cleaned = [cid for cid in course_ids if isinstance(cid, str) and cid.strip()]
+        if cleaned:
+            assignments[faculty_id] = cleaned
+    return assignments
+
+
+def build_reverse_assignments(assignments: Dict[str, List[str]]) -> Dict[str, List[str]]:
+    """Build course->faculty mapping from faculty->course assignments."""
+    reverse: Dict[str, List[str]] = {}
+    for faculty_id, course_ids in assignments.items():
+        for course_id in course_ids:
+            reverse.setdefault(course_id, []).append(faculty_id)
+    return reverse
+
+
+def load_entities_map(path: Path) -> Dict[str, Dict[str, Any]]:
+    """Load entity list file into id->entity map."""
+    data = _safe_load_json(path, default=[])
+    if not isinstance(data, list):
+        return {}
+    mapped: Dict[str, Dict[str, Any]] = {}
+    for item in data:
+        if isinstance(item, dict) and item.get("id"):
+            mapped[item["id"]] = item
+    return mapped
 
 
 # ============================================================
@@ -155,9 +205,19 @@ class MarkdownChunker:
     Parse and chunk Markdown files according to semantic rules.
     """
 
-    def __init__(self, entity_registry: Optional[EntityRegistry] = None):
+    def __init__(
+        self,
+        entity_registry: Optional[EntityRegistry] = None,
+        teaching_assignments: Optional[Dict[str, List[str]]] = None,
+        faculty_by_id: Optional[Dict[str, Dict[str, Any]]] = None,
+        course_by_id: Optional[Dict[str, Dict[str, Any]]] = None,
+    ):
         self.md = MarkdownIt()
         self.entity_registry = entity_registry
+        self.teaching_assignments = teaching_assignments or {}
+        self.reverse_assignments = build_reverse_assignments(self.teaching_assignments)
+        self.faculty_by_id = faculty_by_id or {}
+        self.course_by_id = course_by_id or {}
         
         # Heading stack for hierarchy tracking
         self.heading_stack: List[Tuple[int, str]] = []  # (level, text)
@@ -166,6 +226,53 @@ class MarkdownChunker:
         self.min_words = config.MIN_CHUNK_WORDS
         self.max_words = config.MAX_CHUNK_WORDS
         self.soft_limit = config.SOFT_LIMIT_WORDS
+
+    def _build_relational_metadata(
+        self,
+        content_type: str,
+        entity_refs: List[str],
+    ) -> Dict[str, str]:
+        """Build flat relational metadata for faculty-course linking."""
+        metadata: Dict[str, str] = {}
+
+        faculty_ids = sorted({e for e in entity_refs if e.startswith("faculty_")})
+        course_ids = sorted({e for e in entity_refs if e.startswith("course_")})
+
+        if content_type == "profile" and faculty_ids:
+            assigned_course_ids = {
+                cid
+                for fid in faculty_ids
+                for cid in self.teaching_assignments.get(fid, [])
+            }
+            if assigned_course_ids:
+                assigned_course_ids_sorted = sorted(assigned_course_ids)
+                assigned_course_codes = sorted(
+                    {
+                        self.course_by_id.get(cid, {}).get("code", cid)
+                        for cid in assigned_course_ids_sorted
+                    }
+                )
+                metadata["related_course_ids"] = ",".join(assigned_course_ids_sorted)
+                metadata["related_course_codes"] = ",".join(assigned_course_codes)
+
+        if course_ids:
+            related_faculty_ids = {
+                fid
+                for cid in course_ids
+                for fid in self.reverse_assignments.get(cid, [])
+            }
+            if related_faculty_ids:
+                related_faculty_ids_sorted = sorted(related_faculty_ids)
+                related_faculty_names = sorted(
+                    {
+                        self.faculty_by_id.get(fid, {}).get("name", fid)
+                        for fid in related_faculty_ids_sorted
+                    }
+                )
+                metadata["related_faculty_ids"] = ",".join(related_faculty_ids_sorted)
+                metadata["related_faculty_names"] = ",".join(related_faculty_names)
+
+        return metadata
         
     def _get_section_hierarchy(self) -> List[str]:
         """Get current section hierarchy as list of titles."""
@@ -559,6 +666,8 @@ class MarkdownChunker:
             source_file = str(filepath.relative_to(config.PROJECT_ROOT))
         except ValueError:
             source_file = str(filepath)
+
+        relational_metadata = self._build_relational_metadata(content_type, entity_refs)
         
         return Chunk(
             chunk_id=chunk_id,
@@ -570,7 +679,8 @@ class MarkdownChunker:
             entity_refs=entity_refs,
             page_range=page_range,
             word_count=word_count,
-            hash=text_hash
+            hash=text_hash,
+            metadata=relational_metadata,
         )
 
 
@@ -585,6 +695,9 @@ class SemanticChunkingPipeline:
 
     def __init__(self):
         self.entity_registry: Optional[Dict] = None
+        self.teaching_assignments: Dict[str, List[str]] = {}
+        self.faculty_by_id: Dict[str, Dict[str, Any]] = {}
+        self.course_by_id: Dict[str, Dict[str, Any]] = {}
         self.seen_hashes: Dict[str, str] = {}  # hash -> chunk_id
         self.chunks: List[Chunk] = []
         self.report = ChunkReport()
@@ -617,6 +730,14 @@ class SemanticChunkingPipeline:
         self.entity_registry = load_entity_registry()
         logger.info(f"Loaded {len(self.entity_registry)} entity entries")
 
+        self.teaching_assignments = load_teaching_assignments()
+        self.faculty_by_id = load_entities_map(config.FACULTY_FILE)
+        self.course_by_id = load_entities_map(config.COURSES_FILE)
+        logger.info(
+            "Loaded %d teaching-assignment rows for relational metadata",
+            len(self.teaching_assignments),
+        )
+
     def find_markdown_files(self) -> List[Path]:
         """Find all Markdown files to process."""
         files = []
@@ -635,7 +756,11 @@ class SemanticChunkingPipeline:
         """Process a single Markdown file."""
         logger.info(f"Processing: {filepath}")
         
-        chunker = MarkdownChunker()
+        chunker = MarkdownChunker(
+            teaching_assignments=self.teaching_assignments,
+            faculty_by_id=self.faculty_by_id,
+            course_by_id=self.course_by_id,
+        )
         try:
             chunks = chunker.chunk_file(filepath, self.entity_registry)
         except Exception as e:
