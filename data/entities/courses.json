@@ -1,1 +1,5254 @@
-[]
+[
+  {
+    "id": "course_ma0u10a",
+    "type": "course",
+    "name": "Linear Algebra and Calculus",
+    "code": "MA0U10A",
+    "aliases": [
+      "MA0U10A",
+      "Linear Algebra and Calculus",
+      "MA0U10A Linear Algebra and Calculus",
+      "Linear Algebra and Calculus (MA0U10A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_ph0u10a",
+    "type": "course",
+    "name": "Engineering Physics A",
+    "code": "PH0U10A",
+    "aliases": [
+      "PH0U10A",
+      "Engineering Physics A",
+      "PH0U10A Engineering Physics A",
+      "Engineering Physics A (PH0U10A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cy0u10a",
+    "type": "course",
+    "name": "Engineering Chemistry",
+    "code": "CY0U10A",
+    "aliases": [
+      "CY0U10A",
+      "Engineering Chemistry",
+      "CY0U10A Engineering Chemistry",
+      "Engineering Chemistry (CY0U10A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_es0u10a",
+    "type": "course",
+    "name": "Engineering Mechanics",
+    "code": "ES0U10A",
+    "aliases": [
+      "ES0U10A",
+      "Engineering Mechanics",
+      "ES0U10A Engineering Mechanics",
+      "Engineering Mechanics (ES0U10A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_es0u10b",
+    "type": "course",
+    "name": "Engineering Graphics",
+    "code": "ES0U10B",
+    "aliases": [
+      "ES0U10B",
+      "Engineering Graphics",
+      "ES0U10B Engineering Graphics",
+      "Engineering Graphics (ES0U10B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_es0u10c",
+    "type": "course",
+    "name": "Basics of Civil and Mechanical Engineering",
+    "code": "ES0U10C",
+    "aliases": [
+      "ES0U10C",
+      "Basics of Civil and Mechanical Engineering",
+      "ES0U10C Basics of Civil and Mechanical Engineering",
+      "Basics of Civil and Mechanical Engineering (ES0U10C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_es0u10d",
+    "type": "course",
+    "name": "Basics of Electrical and Electronics Engineering",
+    "code": "ES0U10D",
+    "aliases": [
+      "ES0U10D",
+      "Basics of Electrical and Electronics Engineering",
+      "ES0U10D Basics of Electrical and Electronics Engineering",
+      "Basics of Electrical and Electronics Engineering (ES0U10D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_hs0u10a",
+    "type": "course",
+    "name": "Life Skills",
+    "code": "HS0U10A",
+    "aliases": [
+      "HS0U10A",
+      "Life Skills",
+      "HS0U10A Life Skills",
+      "Life Skills (HS0U10A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_ph0u18a",
+    "type": "course",
+    "name": "Engineering Physics Lab",
+    "code": "PH0U18A",
+    "aliases": [
+      "PH0U18A",
+      "Engineering Physics Lab",
+      "PH0U18A Engineering Physics Lab",
+      "Engineering Physics Lab (PH0U18A)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_cy0u18a",
+    "type": "course",
+    "name": "Engineering Chemistry Lab",
+    "code": "CY0U18A",
+    "aliases": [
+      "CY0U18A",
+      "Engineering Chemistry Lab",
+      "CY0U18A Engineering Chemistry Lab",
+      "Engineering Chemistry Lab (CY0U18A)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_es0u18a",
+    "type": "course",
+    "name": "Civil and Mechanical Workshop",
+    "code": "ES0U18A",
+    "aliases": [
+      "ES0U18A",
+      "Civil and Mechanical Workshop",
+      "ES0U18A Civil and Mechanical Workshop",
+      "Civil and Mechanical Workshop (ES0U18A)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_es0u18b",
+    "type": "course",
+    "name": "Electrical and Electronics Workshop",
+    "code": "ES0U18B",
+    "aliases": [
+      "ES0U18B",
+      "Electrical and Electronics Workshop",
+      "ES0U18B Electrical and Electronics Workshop",
+      "Electrical and Electronics Workshop (ES0U18B)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_ma0u10b",
+    "type": "course",
+    "name": "Vector Calculus, Differential Equations and Transforms",
+    "code": "MA0U10B",
+    "aliases": [
+      "MA0U10B",
+      "Vector Calculus, Differential Equations and Transforms",
+      "MA0U10B Vector Calculus, Differential Equations and Transforms",
+      "Vector Calculus, Differential Equations and Transforms (MA0U10B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_hs0u10b",
+    "type": "course",
+    "name": "Professional Communication",
+    "code": "HS0U10B",
+    "aliases": [
+      "HS0U10B",
+      "Professional Communication",
+      "HS0U10B Professional Communication",
+      "Professional Communication (HS0U10B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_es0u10e",
+    "type": "course",
+    "name": "Programming in C",
+    "code": "ES0U10E",
+    "aliases": [
+      "ES0U10E",
+      "Programming in C",
+      "ES0U10E Programming in C",
+      "Programming in C (ES0U10E)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_ma0u20b",
+    "type": "course",
+    "name": "Discrete Mathematical Structures",
+    "code": "MA0U20B",
+    "aliases": [
+      "MA0U20B",
+      "Discrete Mathematical Structures",
+      "MA0U20B Discrete Mathematical Structures",
+      "Discrete Mathematical Structures (MA0U20B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u20a",
+    "type": "course",
+    "name": "Data Structures",
+    "code": "CS1U20A",
+    "aliases": [
+      "CS1U20A",
+      "Data Structures",
+      "CS1U20A Data Structures",
+      "Data Structures (CS1U20A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u20b",
+    "type": "course",
+    "name": "Logic System Design",
+    "code": "CS1U20B",
+    "aliases": [
+      "CS1U20B",
+      "Logic System Design",
+      "CS1U20B Logic System Design",
+      "Logic System Design (CS1U20B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u20c",
+    "type": "course",
+    "name": "Object Oriented Programming using Java",
+    "code": "CS1U20C",
+    "aliases": [
+      "CS1U20C",
+      "Object Oriented Programming using Java",
+      "CS1U20C Object Oriented Programming using Java",
+      "Object Oriented Programming using Java (CS1U20C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_es0u20a",
+    "type": "course",
+    "name": "Design and Engineering",
+    "code": "ES0U20A",
+    "aliases": [
+      "ES0U20A",
+      "Design and Engineering",
+      "ES0U20A Design and Engineering",
+      "Design and Engineering (ES0U20A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_hs0u20a",
+    "type": "course",
+    "name": "Professional Ethics",
+    "code": "HS0U20A",
+    "aliases": [
+      "HS0U20A",
+      "Professional Ethics",
+      "HS0U20A Professional Ethics",
+      "Professional Ethics (HS0U20A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_nc0u20a",
+    "type": "course",
+    "name": "Sustainable Engineering",
+    "code": "NC0U20A",
+    "aliases": [
+      "NC0U20A",
+      "Sustainable Engineering",
+      "NC0U20A Sustainable Engineering",
+      "Sustainable Engineering (NC0U20A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u28a",
+    "type": "course",
+    "name": "Data Structures Lab",
+    "code": "CS1U28A",
+    "aliases": [
+      "CS1U28A",
+      "Data Structures Lab",
+      "CS1U28A Data Structures Lab",
+      "Data Structures Lab (CS1U28A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u28b",
+    "type": "course",
+    "name": "Object Oriented Programming Lab (in Java)",
+    "code": "CS1U28B",
+    "aliases": [
+      "CS1U28B",
+      "Object Oriented Programming Lab (in Java)",
+      "CS1U28B Object Oriented Programming Lab (in Java)",
+      "Object Oriented Programming Lab (in Java) (CS1U28B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_ma0u20e",
+    "type": "course",
+    "name": "Graph Theory",
+    "code": "MA0U20E",
+    "aliases": [
+      "MA0U20E",
+      "Graph Theory",
+      "MA0U20E Graph Theory",
+      "Graph Theory (MA0U20E)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u20d",
+    "type": "course",
+    "name": "Computer Organization and Architecture",
+    "code": "CS1U20D",
+    "aliases": [
+      "CS1U20D",
+      "Computer Organization and Architecture",
+      "CS1U20D Computer Organization and Architecture",
+      "Computer Organization and Architecture (CS1U20D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u20e",
+    "type": "course",
+    "name": "Database Management Systems",
+    "code": "CS1U20E",
+    "aliases": [
+      "CS1U20E",
+      "Database Management Systems",
+      "CS1U20E Database Management Systems",
+      "Database Management Systems (CS1U20E)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u20f",
+    "type": "course",
+    "name": "Operating Systems",
+    "code": "CS1U20F",
+    "aliases": [
+      "CS1U20F",
+      "Operating Systems",
+      "CS1U20F Operating Systems",
+      "Operating Systems (CS1U20F)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_nc0u20b",
+    "type": "course",
+    "name": "Constitution of India",
+    "code": "NC0U20B",
+    "aliases": [
+      "NC0U20B",
+      "Constitution of India",
+      "NC0U20B Constitution of India",
+      "Constitution of India (NC0U20B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u28c",
+    "type": "course",
+    "name": "Digital Lab",
+    "code": "CS1U28C",
+    "aliases": [
+      "CS1U28C",
+      "Digital Lab",
+      "CS1U28C Digital Lab",
+      "Digital Lab (CS1U28C)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u28d",
+    "type": "course",
+    "name": "Operating Systems Lab",
+    "code": "CS1U28D",
+    "aliases": [
+      "CS1U28D",
+      "Operating Systems Lab",
+      "CS1U28D Operating Systems Lab",
+      "Operating Systems Lab (CS1U28D)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u30a",
+    "type": "course",
+    "name": "Formal Languages and Automata Theory",
+    "code": "CS1U30A",
+    "aliases": [
+      "CS1U30A",
+      "Formal Languages and Automata Theory",
+      "CS1U30A Formal Languages and Automata Theory",
+      "Formal Languages and Automata Theory (CS1U30A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u30b",
+    "type": "course",
+    "name": "Computer Networks",
+    "code": "CS1U30B",
+    "aliases": [
+      "CS1U30B",
+      "Computer Networks",
+      "CS1U30B Computer Networks",
+      "Computer Networks (CS1U30B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u30c",
+    "type": "course",
+    "name": "System Software",
+    "code": "CS1U30C",
+    "aliases": [
+      "CS1U30C",
+      "System Software",
+      "CS1U30C System Software",
+      "System Software (CS1U30C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u30d",
+    "type": "course",
+    "name": "Microprocessors and Microcontrollers",
+    "code": "CS1U30D",
+    "aliases": [
+      "CS1U30D",
+      "Microprocessors and Microcontrollers",
+      "CS1U30D Microprocessors and Microcontrollers",
+      "Microprocessors and Microcontrollers (CS1U30D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u30e",
+    "type": "course",
+    "name": "Management of Software Systems",
+    "code": "CS1U30E",
+    "aliases": [
+      "CS1U30E",
+      "Management of Software Systems",
+      "CS1U30E Management of Software Systems",
+      "Management of Software Systems (CS1U30E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_nc0u30a",
+    "type": "course",
+    "name": "Disaster Management",
+    "code": "NC0U30A",
+    "aliases": [
+      "NC0U30A",
+      "Disaster Management",
+      "NC0U30A Disaster Management",
+      "Disaster Management (NC0U30A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u38a",
+    "type": "course",
+    "name": "System Software and Microprocessors Lab",
+    "code": "CS1U38A",
+    "aliases": [
+      "CS1U38A",
+      "System Software and Microprocessors Lab",
+      "CS1U38A System Software and Microprocessors Lab",
+      "System Software and Microprocessors Lab (CS1U38A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u38b",
+    "type": "course",
+    "name": "Database Management Systems Lab",
+    "code": "CS1U38B",
+    "aliases": [
+      "CS1U38B",
+      "Database Management Systems Lab",
+      "CS1U38B Database Management Systems Lab",
+      "Database Management Systems Lab (CS1U38B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u30f",
+    "type": "course",
+    "name": "Compiler Design",
+    "code": "CS1U30F",
+    "aliases": [
+      "CS1U30F",
+      "Compiler Design",
+      "CS1U30F Compiler Design",
+      "Compiler Design (CS1U30F)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u30g",
+    "type": "course",
+    "name": "Computer Graphics and Image Processing",
+    "code": "CS1U30G",
+    "aliases": [
+      "CS1U30G",
+      "Computer Graphics and Image Processing",
+      "CS1U30G Computer Graphics and Image Processing",
+      "Computer Graphics and Image Processing (CS1U30G)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u30h",
+    "type": "course",
+    "name": "Algorithm Analysis and Design",
+    "code": "CS1U30H",
+    "aliases": [
+      "CS1U30H",
+      "Algorithm Analysis and Design",
+      "CS1U30H Algorithm Analysis and Design",
+      "Algorithm Analysis and Design (CS1U30H)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1uxxx",
+    "type": "course",
+    "name": "Programme Elective I",
+    "code": "CS1UXXX",
+    "aliases": [
+      "CS1UXXX",
+      "Programme Elective I",
+      "CS1UXXX Programme Elective I",
+      "Programme Elective I (CS1UXXX)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_hs0u30a",
+    "type": "course",
+    "name": "Industrial Economics and Foreign Trade",
+    "code": "HS0U30A",
+    "aliases": [
+      "HS0U30A",
+      "Industrial Economics and Foreign Trade",
+      "HS0U30A Industrial Economics and Foreign Trade",
+      "Industrial Economics and Foreign Trade (HS0U30A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u30i",
+    "type": "course",
+    "name": "Comprehensive Course Work",
+    "code": "CS1U30I",
+    "aliases": [
+      "CS1U30I",
+      "Comprehensive Course Work",
+      "CS1U30I Comprehensive Course Work",
+      "Comprehensive Course Work (CS1U30I)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_cs1u38c",
+    "type": "course",
+    "name": "Networking Lab",
+    "code": "CS1U38C",
+    "aliases": [
+      "CS1U38C",
+      "Networking Lab",
+      "CS1U38C Networking Lab",
+      "Networking Lab (CS1U38C)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u39a",
+    "type": "course",
+    "name": "Mini Project",
+    "code": "CS1U39A",
+    "aliases": [
+      "CS1U39A",
+      "Mini Project",
+      "CS1U39A Mini Project",
+      "Mini Project (CS1U39A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u31a",
+    "type": "course",
+    "name": "Foundations of Machine Learning",
+    "code": "CS1U31A",
+    "aliases": [
+      "CS1U31A",
+      "Foundations of Machine Learning",
+      "CS1U31A Foundations of Machine Learning",
+      "Foundations of Machine Learning (CS1U31A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u31b",
+    "type": "course",
+    "name": "Data Analytics",
+    "code": "CS1U31B",
+    "aliases": [
+      "CS1U31B",
+      "Data Analytics",
+      "CS1U31B Data Analytics",
+      "Data Analytics (CS1U31B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u31c",
+    "type": "course",
+    "name": "Foundations of Security in Computing",
+    "code": "CS1U31C",
+    "aliases": [
+      "CS1U31C",
+      "Foundations of Security in Computing",
+      "CS1U31C Foundations of Security in Computing",
+      "Foundations of Security in Computing (CS1U31C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u31d",
+    "type": "course",
+    "name": "Automated Verification",
+    "code": "CS1U31D",
+    "aliases": [
+      "CS1U31D",
+      "Automated Verification",
+      "CS1U31D Automated Verification",
+      "Automated Verification (CS1U31D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u31e",
+    "type": "course",
+    "name": "Programming in Python",
+    "code": "CS1U31E",
+    "aliases": [
+      "CS1U31E",
+      "Programming in Python",
+      "CS1U31E Programming in Python",
+      "Programming in Python (CS1U31E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u31f",
+    "type": "course",
+    "name": "Advanced Data Communication",
+    "code": "CS1U31F",
+    "aliases": [
+      "CS1U31F",
+      "Advanced Data Communication",
+      "CS1U31F Advanced Data Communication",
+      "Advanced Data Communication (CS1U31F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u31g",
+    "type": "course",
+    "name": "Applied Data Science with Python",
+    "code": "CS1U31G",
+    "aliases": [
+      "CS1U31G",
+      "Applied Data Science with Python",
+      "CS1U31G Applied Data Science with Python",
+      "Applied Data Science with Python (CS1U31G)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u40a",
+    "type": "course",
+    "name": "Artificial Intelligence",
+    "code": "CS1U40A",
+    "aliases": [
+      "CS1U40A",
+      "Artificial Intelligence",
+      "CS1U40A Artificial Intelligence",
+      "Artificial Intelligence (CS1U40A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs0uxxx",
+    "type": "course",
+    "name": "Open Elective",
+    "code": "CS0UXXX",
+    "aliases": [
+      "CS0UXXX",
+      "Open Elective",
+      "CS0UXXX Open Elective",
+      "Open Elective (CS0UXXX)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_nc0u40a",
+    "type": "course",
+    "name": "Industrial Safety Engineering",
+    "code": "NC0U40A",
+    "aliases": [
+      "NC0U40A",
+      "Industrial Safety Engineering",
+      "NC0U40A Industrial Safety Engineering",
+      "Industrial Safety Engineering (NC0U40A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u48a",
+    "type": "course",
+    "name": "Compiler Design Lab",
+    "code": "CS1U48A",
+    "aliases": [
+      "CS1U48A",
+      "Compiler Design Lab",
+      "CS1U48A Compiler Design Lab",
+      "Compiler Design Lab (CS1U48A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u49a",
+    "type": "course",
+    "name": "Seminar",
+    "code": "CS1U49A",
+    "aliases": [
+      "CS1U49A",
+      "Seminar",
+      "CS1U49A Seminar",
+      "Seminar (CS1U49A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u49b",
+    "type": "course",
+    "name": "Project Phase I",
+    "code": "CS1U49B",
+    "aliases": [
+      "CS1U49B",
+      "Project Phase I",
+      "CS1U49B Project Phase I",
+      "Project Phase I (CS1U49B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u41a",
+    "type": "course",
+    "name": "Machine Learning",
+    "code": "CS1U41A",
+    "aliases": [
+      "CS1U41A",
+      "Machine Learning",
+      "CS1U41A Machine Learning",
+      "Machine Learning (CS1U41A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u41b",
+    "type": "course",
+    "name": "Cloud Computing",
+    "code": "CS1U41B",
+    "aliases": [
+      "CS1U41B",
+      "Cloud Computing",
+      "CS1U41B Cloud Computing",
+      "Cloud Computing (CS1U41B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u41c",
+    "type": "course",
+    "name": "Security in Computing",
+    "code": "CS1U41C",
+    "aliases": [
+      "CS1U41C",
+      "Security in Computing",
+      "CS1U41C Security in Computing",
+      "Security in Computing (CS1U41C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u41d",
+    "type": "course",
+    "name": "Model Based Software Development",
+    "code": "CS1U41D",
+    "aliases": [
+      "CS1U41D",
+      "Model Based Software Development",
+      "CS1U41D Model Based Software Development",
+      "Model Based Software Development (CS1U41D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u41e",
+    "type": "course",
+    "name": "Web Programming",
+    "code": "CS1U41E",
+    "aliases": [
+      "CS1U41E",
+      "Web Programming",
+      "CS1U41E Web Programming",
+      "Web Programming (CS1U41E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u41f",
+    "type": "course",
+    "name": "Natural Language Processing",
+    "code": "CS1U41F",
+    "aliases": [
+      "CS1U41F",
+      "Natural Language Processing",
+      "CS1U41F Natural Language Processing",
+      "Natural Language Processing (CS1U41F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs0u41a",
+    "type": "course",
+    "name": "Introduction to Mobile Computing",
+    "code": "CS0U41A",
+    "aliases": [
+      "CS0U41A",
+      "Introduction to Mobile Computing",
+      "CS0U41A Introduction to Mobile Computing",
+      "Introduction to Mobile Computing (CS0U41A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs0u41b",
+    "type": "course",
+    "name": "Introduction to Deep Learning",
+    "code": "CS0U41B",
+    "aliases": [
+      "CS0U41B",
+      "Introduction to Deep Learning",
+      "CS0U41B Introduction to Deep Learning",
+      "Introduction to Deep Learning (CS0U41B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs0u41c",
+    "type": "course",
+    "name": "Computer Graphics",
+    "code": "CS0U41C",
+    "aliases": [
+      "CS0U41C",
+      "Computer Graphics",
+      "CS0U41C Computer Graphics",
+      "Computer Graphics (CS0U41C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs0u41d",
+    "type": "course",
+    "name": "Python for Engineers",
+    "code": "CS0U41D",
+    "aliases": [
+      "CS0U41D",
+      "Python for Engineers",
+      "CS0U41D Python for Engineers",
+      "Python for Engineers (CS0U41D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs0u41e",
+    "type": "course",
+    "name": "Object Oriented Concepts",
+    "code": "CS0U41E",
+    "aliases": [
+      "CS0U41E",
+      "Object Oriented Concepts",
+      "CS0U41E Object Oriented Concepts",
+      "Object Oriented Concepts (CS0U41E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u40b",
+    "type": "course",
+    "name": "Distributed Computing",
+    "code": "CS1U40B",
+    "aliases": [
+      "CS1U40B",
+      "Distributed Computing",
+      "CS1U40B Distributed Computing",
+      "Distributed Computing (CS1U40B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u40c",
+    "type": "course",
+    "name": "Comprehensive Viva Voce",
+    "code": "CS1U40C",
+    "aliases": [
+      "CS1U40C",
+      "Comprehensive Viva Voce",
+      "CS1U40C Comprehensive Viva Voce",
+      "Comprehensive Viva Voce (CS1U40C)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_cs1u49c",
+    "type": "course",
+    "name": "Project Phase II",
+    "code": "CS1U49C",
+    "aliases": [
+      "CS1U49C",
+      "Project Phase II",
+      "CS1U49C Project Phase II",
+      "Project Phase II (CS1U49C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u42a",
+    "type": "course",
+    "name": "Deep Learning",
+    "code": "CS1U42A",
+    "aliases": [
+      "CS1U42A",
+      "Deep Learning",
+      "CS1U42A Deep Learning",
+      "Deep Learning (CS1U42A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u42b",
+    "type": "course",
+    "name": "Programming Paradigms",
+    "code": "CS1U42B",
+    "aliases": [
+      "CS1U42B",
+      "Programming Paradigms",
+      "CS1U42B Programming Paradigms",
+      "Programming Paradigms (CS1U42B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u42c",
+    "type": "course",
+    "name": "Cryptography",
+    "code": "CS1U42C",
+    "aliases": [
+      "CS1U42C",
+      "Cryptography",
+      "CS1U42C Cryptography",
+      "Cryptography (CS1U42C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u42d",
+    "type": "course",
+    "name": "Soft Computing",
+    "code": "CS1U42D",
+    "aliases": [
+      "CS1U42D",
+      "Soft Computing",
+      "CS1U42D Soft Computing",
+      "Soft Computing (CS1U42D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u42e",
+    "type": "course",
+    "name": "Fuzzy Set Theory and Application",
+    "code": "CS1U42E",
+    "aliases": [
+      "CS1U42E",
+      "Fuzzy Set Theory and Application",
+      "CS1U42E Fuzzy Set Theory and Application",
+      "Fuzzy Set Theory and Application (CS1U42E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u42f",
+    "type": "course",
+    "name": "Embedded Systems",
+    "code": "CS1U42F",
+    "aliases": [
+      "CS1U42F",
+      "Embedded Systems",
+      "CS1U42F Embedded Systems",
+      "Embedded Systems (CS1U42F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u42g",
+    "type": "course",
+    "name": "Computer Vision",
+    "code": "CS1U42G",
+    "aliases": [
+      "CS1U42G",
+      "Computer Vision",
+      "CS1U42G Computer Vision",
+      "Computer Vision (CS1U42G)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u43a",
+    "type": "course",
+    "name": "Formal Methods and Tools in Software Engineering",
+    "code": "CS1U43A",
+    "aliases": [
+      "CS1U43A",
+      "Formal Methods and Tools in Software Engineering",
+      "CS1U43A Formal Methods and Tools in Software Engineering",
+      "Formal Methods and Tools in Software Engineering (CS1U43A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u43b",
+    "type": "course",
+    "name": "Client Server Architecture",
+    "code": "CS1U43B",
+    "aliases": [
+      "CS1U43B",
+      "Client Server Architecture",
+      "CS1U43B Client Server Architecture",
+      "Client Server Architecture (CS1U43B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u43c",
+    "type": "course",
+    "name": "Parallel Computing",
+    "code": "CS1U43C",
+    "aliases": [
+      "CS1U43C",
+      "Parallel Computing",
+      "CS1U43C Parallel Computing",
+      "Parallel Computing (CS1U43C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u43d",
+    "type": "course",
+    "name": "Data Compression Techniques",
+    "code": "CS1U43D",
+    "aliases": [
+      "CS1U43D",
+      "Data Compression Techniques",
+      "CS1U43D Data Compression Techniques",
+      "Data Compression Techniques (CS1U43D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u43f",
+    "type": "course",
+    "name": "Data Mining",
+    "code": "CS1U43F",
+    "aliases": [
+      "CS1U43F",
+      "Data Mining",
+      "CS1U43F Data Mining",
+      "Data Mining (CS1U43F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u43g",
+    "type": "course",
+    "name": "Mobile Computing",
+    "code": "CS1U43G",
+    "aliases": [
+      "CS1U43G",
+      "Mobile Computing",
+      "CS1U43G Mobile Computing",
+      "Mobile Computing (CS1U43G)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u44a",
+    "type": "course",
+    "name": "High Performance Computing",
+    "code": "CS1U44A",
+    "aliases": [
+      "CS1U44A",
+      "High Performance Computing",
+      "CS1U44A High Performance Computing",
+      "High Performance Computing (CS1U44A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u44b",
+    "type": "course",
+    "name": "Blockchain Technologies",
+    "code": "CS1U44B",
+    "aliases": [
+      "CS1U44B",
+      "Blockchain Technologies",
+      "CS1U44B Blockchain Technologies",
+      "Blockchain Technologies (CS1U44B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u44c",
+    "type": "course",
+    "name": "Image Processing Technique",
+    "code": "CS1U44C",
+    "aliases": [
+      "CS1U44C",
+      "Image Processing Technique",
+      "CS1U44C Image Processing Technique",
+      "Image Processing Technique (CS1U44C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u44d",
+    "type": "course",
+    "name": "Internet of Things",
+    "code": "CS1U44D",
+    "aliases": [
+      "CS1U44D",
+      "Internet of Things",
+      "CS1U44D Internet of Things",
+      "Internet of Things (CS1U44D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u44e",
+    "type": "course",
+    "name": "Software Testing",
+    "code": "CS1U44E",
+    "aliases": [
+      "CS1U44E",
+      "Software Testing",
+      "CS1U44E Software Testing",
+      "Software Testing (CS1U44E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u44f",
+    "type": "course",
+    "name": "Bioinformatics",
+    "code": "CS1U44F",
+    "aliases": [
+      "CS1U44F",
+      "Bioinformatics",
+      "CS1U44F Bioinformatics",
+      "Bioinformatics (CS1U44F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1u44g",
+    "type": "course",
+    "name": "Computational Linguistics",
+    "code": "CS1U44G",
+    "aliases": [
+      "CS1U44G",
+      "Computational Linguistics",
+      "CS1U44G Computational Linguistics",
+      "Computational Linguistics (CS1U44G)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs0m20a",
+    "type": "course",
+    "name": "Object Oriented Programming",
+    "code": "CS0M20A",
+    "aliases": [
+      "CS0M20A",
+      "Object Oriented Programming",
+      "CS0M20A Object Oriented Programming",
+      "Object Oriented Programming (CS0M20A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs0m20d",
+    "type": "course",
+    "name": "Programming Methodologies",
+    "code": "CS0M20D",
+    "aliases": [
+      "CS0M20D",
+      "Programming Methodologies",
+      "CS0M20D Programming Methodologies",
+      "Programming Methodologies (CS0M20D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs0m30a",
+    "type": "course",
+    "name": "Concepts in Software Engineering",
+    "code": "CS0M30A",
+    "aliases": [
+      "CS0M30A",
+      "Concepts in Software Engineering",
+      "CS0M30A Concepts in Software Engineering",
+      "Concepts in Software Engineering (CS0M30A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs0m30d",
+    "type": "course",
+    "name": "Introduction to Software Testing",
+    "code": "CS0M30D",
+    "aliases": [
+      "CS0M30D",
+      "Introduction to Software Testing",
+      "CS0M30D Introduction to Software Testing",
+      "Introduction to Software Testing (CS0M30D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs0m49a",
+    "type": "course",
+    "name": "Mini Project",
+    "code": "CS0M49A",
+    "aliases": [
+      "CS0M49A",
+      "Mini Project",
+      "CS0M49A Mini Project",
+      "Mini Project (CS0M49A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs0m49b",
+    "type": "course",
+    "name": "Mini Project",
+    "code": "CS0M49B",
+    "aliases": [
+      "CS0M49B",
+      "Mini Project",
+      "CS0M49B Mini Project",
+      "Mini Project (CS0M49B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1h20a",
+    "type": "course",
+    "name": "Number Theory",
+    "code": "CS1H20A",
+    "aliases": [
+      "CS1H20A",
+      "Number Theory",
+      "CS1H20A Number Theory",
+      "Number Theory (CS1H20A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1h30a",
+    "type": "course",
+    "name": "Cryptographic Algorithms",
+    "code": "CS1H30A",
+    "aliases": [
+      "CS1H30A",
+      "Cryptographic Algorithms",
+      "CS1H30A Cryptographic Algorithms",
+      "Cryptographic Algorithms (CS1H30A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1h30d",
+    "type": "course",
+    "name": "Network Security",
+    "code": "CS1H30D",
+    "aliases": [
+      "CS1H30D",
+      "Network Security",
+      "CS1H30D Network Security",
+      "Network Security (CS1H30D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1h40a",
+    "type": "course",
+    "name": "Cyber Forensics",
+    "code": "CS1H40A",
+    "aliases": [
+      "CS1H40A",
+      "Cyber Forensics",
+      "CS1H40A Cyber Forensics",
+      "Cyber Forensics (CS1H40A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1h49a",
+    "type": "course",
+    "name": "Mini Project",
+    "code": "CS1H49A",
+    "aliases": [
+      "CS1H49A",
+      "Mini Project",
+      "CS1H49A Mini Project",
+      "Mini Project (CS1H49A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_co4",
+    "type": "course",
+    "name": "Make use of user defined data types or functions to solve computational problems.",
+    "code": "CO4",
+    "aliases": [
+      "CO4",
+      "Make use of user defined data types or functions to solve computational problems.",
+      "CO4 Make use of user defined data types or functions to solve computational problems.",
+      "Make use of user defined data types or functions to solve computational problems. (CO4)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_co5",
+    "type": "course",
+    "name": "Develop programs using files and pointers.",
+    "code": "CO5",
+    "aliases": [
+      "CO5",
+      "Develop programs using files and pointers.",
+      "CO5 Develop programs using files and pointers.",
+      "Develop programs using files and pointers. (CO5)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_co6",
+    "type": "course",
+    "name": "Demonstrate the broad perspective of sustainable practices applicable for energy efficient buildings, green engineering, sustainable cities, sustainable urbanization, and sustainable transport.",
+    "code": "CO6",
+    "aliases": [
+      "CO6",
+      "Demonstrate the broad perspective of sustainable practices applicable for energy efficient buildings, green engineering, sustainable cities, sustainable urbanization, and sustainable transport.",
+      "CO6 Demonstrate the broad perspective of sustainable practices applicable for energy efficient buildings, green engineering, sustainable cities, sustainable urbanization, and sustainable transport.",
+      "Demonstrate the broad perspective of sustainable practices applicable for energy efficient buildings, green engineering, sustainable cities, sustainable urbanization, and sustainable transport. (CO6)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_co2",
+    "type": "course",
+    "name": "Explain the characteristics of data types and variables.",
+    "code": "CO2",
+    "aliases": [
+      "CO2",
+      "Explain the characteristics of data types and variables.",
+      "CO2 Explain the characteristics of data types and variables.",
+      "Explain the characteristics of data types and variables. (CO2)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_co3",
+    "type": "course",
+    "name": "Illustrate how control flow structures and subprograms help in developing the structure of a program to solve a computational problem.",
+    "code": "CO3",
+    "aliases": [
+      "CO3",
+      "Illustrate how control flow structures and subprograms help in developing the structure of a program to solve a computational problem.",
+      "CO3 Illustrate how control flow structures and subprograms help in developing the structure of a program to solve a computational problem.",
+      "Illustrate how control flow structures and subprograms help in developing the structure of a program to solve a computational problem. (CO3)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs0m20b",
+    "type": "course",
+    "name": "Python for Machine Learning",
+    "code": "CS0M20B",
+    "aliases": [
+      "CS0M20B",
+      "Python for Machine Learning",
+      "CS0M20B Python for Machine Learning",
+      "Python for Machine Learning (CS0M20B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs0m20e",
+    "type": "course",
+    "name": "Mathematics for Machine Learning",
+    "code": "CS0M20E",
+    "aliases": [
+      "CS0M20E",
+      "Mathematics for Machine Learning",
+      "CS0M20E Mathematics for Machine Learning",
+      "Mathematics for Machine Learning (CS0M20E)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs0m20c",
+    "type": "course",
+    "name": "Data Communication",
+    "code": "CS0M20C",
+    "aliases": [
+      "CS0M20C",
+      "Data Communication",
+      "CS0M20C Data Communication",
+      "Data Communication (CS0M20C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs0m20f",
+    "type": "course",
+    "name": "Introduction to Computer Networks",
+    "code": "CS0M20F",
+    "aliases": [
+      "CS0M20F",
+      "Introduction to Computer Networks",
+      "CS0M20F Introduction to Computer Networks",
+      "Introduction to Computer Networks (CS0M20F)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1h20b",
+    "type": "course",
+    "name": "Computational Fundamentals of Machine Learning",
+    "code": "CS1H20B",
+    "aliases": [
+      "CS1H20B",
+      "Computational Fundamentals of Machine Learning",
+      "CS1H20B Computational Fundamentals of Machine Learning",
+      "Computational Fundamentals of Machine Learning (CS1H20B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1h20c",
+    "type": "course",
+    "name": "PRINCIPLES OF PROGRAM ANALYSIS AND VERIFICATION",
+    "code": "CS1H20C",
+    "aliases": [
+      "CS1H20C",
+      "PRINCIPLES OF PROGRAM ANALYSIS AND VERIFICATION",
+      "CS1H20C PRINCIPLES OF PROGRAM ANALYSIS AND VERIFICATION",
+      "PRINCIPLES OF PROGRAM ANALYSIS AND VERIFICATION (CS1H20C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_co1",
+    "type": "course",
+    "name": "Classify a given formal language into Regular, Context-Free, Context Sensitive, Recursive or Recursively Enumerable. [Cognitive knowledge level: Understand]",
+    "code": "CO1",
+    "aliases": [
+      "CO1",
+      "Classify a given formal language into Regular, Context-Free, Context Sensitive, Recursive or Recursively Enumerable. [Cognitive knowledge level: Understand]",
+      "CO1 Classify a given formal language into Regular, Context-Free, Context Sensitive, Recursive or Recursively Enumerable. [Cognitive knowledge level: Understand]",
+      "Classify a given formal language into Regular, Context-Free, Context Sensitive, Recursive or Recursively Enumerable. [Cognitive knowledge level: Understand] (CO1)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_c03",
+    "type": "course",
+    "name": "Design and implement triggers and cursors. (Cognitive Knowledge Level: Apply)",
+    "code": "C03",
+    "aliases": [
+      "C03",
+      "Design and implement triggers and cursors. (Cognitive Knowledge Level: Apply)",
+      "C03 Design and implement triggers and cursors. (Cognitive Knowledge Level: Apply)",
+      "Design and implement triggers and cursors. (Cognitive Knowledge Level: Apply) (C03)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_c04",
+    "type": "course",
+    "name": "Implement procedures, functions, and control structures using PL/SQL. (Cognitive Knowledge Level: Apply)",
+    "code": "C04",
+    "aliases": [
+      "C04",
+      "Implement procedures, functions, and control structures using PL/SQL. (Cognitive Knowledge Level: Apply)",
+      "C04 Implement procedures, functions, and control structures using PL/SQL. (Cognitive Knowledge Level: Apply)",
+      "Implement procedures, functions, and control structures using PL/SQL. (Cognitive Knowledge Level: Apply) (C04)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_c06",
+    "type": "course",
+    "name": "Develop database applications using front-end tools and back-end DBMS. (Cognitive Knowledge Level: Create)",
+    "code": "C06",
+    "aliases": [
+      "C06",
+      "Develop database applications using front-end tools and back-end DBMS. (Cognitive Knowledge Level: Create)",
+      "C06 Develop database applications using front-end tools and back-end DBMS. (Cognitive Knowledge Level: Create)",
+      "Develop database applications using front-end tools and back-end DBMS. (Cognitive Knowledge Level: Create) (C06)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs0m30b",
+    "type": "course",
+    "name": "CONCEPTS IN MACHINE LEARNING",
+    "code": "CS0M30B",
+    "aliases": [
+      "CS0M30B",
+      "CONCEPTS IN MACHINE LEARNING",
+      "CS0M30B CONCEPTS IN MACHINE LEARNING",
+      "CONCEPTS IN MACHINE LEARNING (CS0M30B)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs0m30c",
+    "type": "course",
+    "name": "CLIENT SERVER SYSTEMS",
+    "code": "CS0M30C",
+    "aliases": [
+      "CS0M30C",
+      "CLIENT SERVER SYSTEMS",
+      "CS0M30C CLIENT SERVER SYSTEMS",
+      "CLIENT SERVER SYSTEMS (CS0M30C)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs1h30b",
+    "type": "course",
+    "name": "NEURAL NETWORKS AND DEEP LEARNING",
+    "code": "CS1H30B",
+    "aliases": [
+      "CS1H30B",
+      "NEURAL NETWORKS AND DEEP LEARNING",
+      "CS1H30B NEURAL NETWORKS AND DEEP LEARNING",
+      "NEURAL NETWORKS AND DEEP LEARNING (CS1H30B)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs1h30c",
+    "type": "course",
+    "name": "PRINCIPLES OF MODEL CHECKING",
+    "code": "CS1H30C",
+    "aliases": [
+      "CS1H30C",
+      "PRINCIPLES OF MODEL CHECKING",
+      "CS1H30C PRINCIPLES OF MODEL CHECKING",
+      "PRINCIPLES OF MODEL CHECKING (CS1H30C)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs0m30e",
+    "type": "course",
+    "name": "CONCEPTS IN DEEP LEARNING",
+    "code": "CS0M30E",
+    "aliases": [
+      "CS0M30E",
+      "CONCEPTS IN DEEP LEARNING",
+      "CS0M30E CONCEPTS IN DEEP LEARNING",
+      "CONCEPTS IN DEEP LEARNING (CS0M30E)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs0m30f",
+    "type": "course",
+    "name": "WIRELESS NETWORKS AND IoT APPLICATIONS",
+    "code": "CS0M30F",
+    "aliases": [
+      "CS0M30F",
+      "WIRELESS NETWORKS AND IoT APPLICATIONS",
+      "CS0M30F WIRELESS NETWORKS AND IoT APPLICATIONS",
+      "WIRELESS NETWORKS AND IoT APPLICATIONS (CS0M30F)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs1h30f",
+    "type": "course",
+    "name": "THEORY OF COMPUTABILITY AND COMPLEXITY",
+    "code": "CS1H30F",
+    "aliases": [
+      "CS1H30F",
+      "THEORY OF COMPUTABILITY AND COMPLEXITY",
+      "CS1H30F THEORY OF COMPUTABILITY AND COMPLEXITY",
+      "THEORY OF COMPUTABILITY AND COMPLEXITY (CS1H30F)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_csd481",
+    "type": "course",
+    "name": "MINI PROJECT",
+    "code": "CSD481",
+    "aliases": [
+      "CSD481",
+      "MINI PROJECT",
+      "CSD481 MINI PROJECT",
+      "MINI PROJECT (CSD481)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1h40b",
+    "type": "course",
+    "name": "REINFORCEMENT LEARNING",
+    "code": "CS1H40B",
+    "aliases": [
+      "CS1H40B",
+      "REINFORCEMENT LEARNING",
+      "CS1H40B REINFORCEMENT LEARNING",
+      "REINFORCEMENT LEARNING (CS1H40B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1h40c",
+    "type": "course",
+    "name": "LOGIC FOR COMPUTER SCIENCE",
+    "code": "CS1H40C",
+    "aliases": [
+      "CS1H40C",
+      "LOGIC FOR COMPUTER SCIENCE",
+      "CS1H40C LOGIC FOR COMPUTER SCIENCE",
+      "LOGIC FOR COMPUTER SCIENCE (CS1H40C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_es0u10f",
+    "type": "course",
+    "name": "Introduction to Computer Programming",
+    "code": "ES0U10F",
+    "aliases": [
+      "ES0U10F",
+      "Introduction to Computer Programming",
+      "ES0U10F Introduction to Computer Programming",
+      "Introduction to Computer Programming (ES0U10F)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_ma0u20g",
+    "type": "course",
+    "name": "Discrete Mathematical Structures",
+    "code": "MA0U20G",
+    "aliases": [
+      "MA0U20G",
+      "Discrete Mathematical Structures",
+      "MA0U20G Discrete Mathematical Structures",
+      "Discrete Mathematical Structures (MA0U20G)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_ma0u20d",
+    "type": "course",
+    "name": "Probability Statistics and Numerical Methods",
+    "code": "MA0U20D",
+    "aliases": [
+      "MA0U20D",
+      "Probability Statistics and Numerical Methods",
+      "MA0U20D Probability Statistics and Numerical Methods",
+      "Probability Statistics and Numerical Methods (MA0U20D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u20g",
+    "type": "course",
+    "name": "Formal Languages and Automata Theory",
+    "code": "CS1U20G",
+    "aliases": [
+      "CS1U20G",
+      "Formal Languages and Automata Theory",
+      "CS1U20G Formal Languages and Automata Theory",
+      "Formal Languages and Automata Theory (CS1U20G)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u28e",
+    "type": "course",
+    "name": "Database Management Systems Lab",
+    "code": "CS1U28E",
+    "aliases": [
+      "CS1U28E",
+      "Database Management Systems Lab",
+      "CS1U28E Database Management Systems Lab",
+      "Database Management Systems Lab (CS1U28E)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1u30j",
+    "type": "course",
+    "name": "Algorithm Analysis and Design",
+    "code": "CS1U30J",
+    "aliases": [
+      "CS1U30J",
+      "Algorithm Analysis and Design",
+      "CS1U30J Algorithm Analysis and Design",
+      "Algorithm Analysis and Design (CS1U30J)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u30k",
+    "type": "course",
+    "name": "Operating Systems",
+    "code": "CS1U30K",
+    "aliases": [
+      "CS1U30K",
+      "Operating Systems",
+      "CS1U30K Operating Systems",
+      "Operating Systems (CS1U30K)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1u38d",
+    "type": "course",
+    "name": "Operating Systems Lab",
+    "code": "CS1U38D",
+    "aliases": [
+      "CS1U38D",
+      "Operating Systems Lab",
+      "CS1U38D Operating Systems Lab",
+      "Operating Systems Lab (CS1U38D)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_ncou40a",
+    "type": "course",
+    "name": "INDUSTRIAL SAFETY ENGINEERING",
+    "code": "NCOU40A",
+    "aliases": [
+      "NCOU40A",
+      "INDUSTRIAL SAFETY ENGINEERING",
+      "NCOU40A INDUSTRIAL SAFETY ENGINEERING",
+      "INDUSTRIAL SAFETY ENGINEERING (NCOU40A)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs0u41",
+    "type": "course",
+    "name": "INTRODUCTION TO MOBILE COMPUTING",
+    "code": "CS0U41",
+    "aliases": [
+      "CS0U41",
+      "INTRODUCTION TO MOBILE COMPUTING",
+      "CS0U41 INTRODUCTION TO MOBILE COMPUTING",
+      "INTRODUCTION TO MOBILE COMPUTING (CS0U41)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23mal10a",
+    "type": "course",
+    "name": "Linear Algebra and Calculus",
+    "code": "23MAL10A",
+    "aliases": [
+      "23MAL10A",
+      "Linear Algebra and Calculus",
+      "23MAL10A Linear Algebra and Calculus",
+      "Linear Algebra and Calculus (23MAL10A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23pyl10a",
+    "type": "course",
+    "name": "Engineering Physics",
+    "code": "23PYL10A",
+    "aliases": [
+      "23PYL10A",
+      "Engineering Physics",
+      "23PYL10A Engineering Physics",
+      "Engineering Physics (23PYL10A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23esb10e",
+    "type": "course",
+    "name": "Programming in C",
+    "code": "23ESB10E",
+    "aliases": [
+      "23ESB10E",
+      "Programming in C",
+      "23ESB10E Programming in C",
+      "Programming in C (23ESB10E)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23esl1na",
+    "type": "course",
+    "name": "Environmental Science",
+    "code": "23ESL1NA",
+    "aliases": [
+      "23ESL1NA",
+      "Environmental Science",
+      "23ESL1NA Environmental Science",
+      "Environmental Science (23ESL1NA)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23pyp10a",
+    "type": "course",
+    "name": "Engineering Physics Lab",
+    "code": "23PYP10A",
+    "aliases": [
+      "23PYP10A",
+      "Engineering Physics Lab",
+      "23PYP10A Engineering Physics Lab",
+      "Engineering Physics Lab (23PYP10A)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_23esp10b",
+    "type": "course",
+    "name": "Electrical and Electronics Workshop",
+    "code": "23ESP10B",
+    "aliases": [
+      "23ESP10B",
+      "Electrical and Electronics Workshop",
+      "23ESP10B Electrical and Electronics Workshop",
+      "Electrical and Electronics Workshop (23ESP10B)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_23mal10b",
+    "type": "course",
+    "name": "Vector Calculus, Differential Equations and Transforms",
+    "code": "23MAL10B",
+    "aliases": [
+      "23MAL10B",
+      "Vector Calculus, Differential Equations and Transforms",
+      "23MAL10B Vector Calculus, Differential Equations and Transforms",
+      "Vector Calculus, Differential Equations and Transforms (23MAL10B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23cyl10a",
+    "type": "course",
+    "name": "Engineering Chemistry",
+    "code": "23CYL10A",
+    "aliases": [
+      "23CYL10A",
+      "Engineering Chemistry",
+      "23CYL10A Engineering Chemistry",
+      "Engineering Chemistry (23CYL10A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23esb10a",
+    "type": "course",
+    "name": "Engineering Graphics",
+    "code": "23ESB10A",
+    "aliases": [
+      "23ESB10A",
+      "Engineering Graphics",
+      "23ESB10A Engineering Graphics",
+      "Engineering Graphics (23ESB10A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23esb10h",
+    "type": "course",
+    "name": "Programming using Python",
+    "code": "23ESB10H",
+    "aliases": [
+      "23ESB10H",
+      "Programming using Python",
+      "23ESB10H Programming using Python",
+      "Programming using Python (23ESB10H)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23esl10q",
+    "type": "course",
+    "name": "Digital Electronics",
+    "code": "23ESL10Q",
+    "aliases": [
+      "23ESL10Q",
+      "Digital Electronics",
+      "23ESL10Q Digital Electronics",
+      "Digital Electronics (23ESL10Q)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23hsj1nb",
+    "type": "course",
+    "name": "Professional Communication",
+    "code": "23HSJ1NB",
+    "aliases": [
+      "23HSJ1NB",
+      "Professional Communication",
+      "23HSJ1NB Professional Communication",
+      "Professional Communication (23HSJ1NB)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23cyp10a",
+    "type": "course",
+    "name": "Engineering Chemistry Lab",
+    "code": "23CYP10A",
+    "aliases": [
+      "23CYP10A",
+      "Engineering Chemistry Lab",
+      "23CYP10A Engineering Chemistry Lab",
+      "Engineering Chemistry Lab (23CYP10A)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_23esb10p",
+    "type": "course",
+    "name": "Manufacturing and Construction Practices-B",
+    "code": "23ESB10P",
+    "aliases": [
+      "23ESB10P",
+      "Manufacturing and Construction Practices-B",
+      "23ESB10P Manufacturing and Construction Practices-B",
+      "Manufacturing and Construction Practices-B (23ESB10P)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23mal20b",
+    "type": "course",
+    "name": "Discrete Mathematical Structures",
+    "code": "23MAL20B",
+    "aliases": [
+      "23MAL20B",
+      "Discrete Mathematical Structures",
+      "23MAL20B Discrete Mathematical Structures",
+      "Discrete Mathematical Structures (23MAL20B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csl20a",
+    "type": "course",
+    "name": "Data Structures",
+    "code": "23CSL20A",
+    "aliases": [
+      "23CSL20A",
+      "Data Structures",
+      "23CSL20A Data Structures",
+      "Data Structures (23CSL20A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csl20b",
+    "type": "course",
+    "name": "Computer Organization and Architecture",
+    "code": "23CSL20B",
+    "aliases": [
+      "23CSL20B",
+      "Computer Organization and Architecture",
+      "23CSL20B Computer Organization and Architecture",
+      "Computer Organization and Architecture (23CSL20B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csb20c",
+    "type": "course",
+    "name": "Object Oriented Programming Concepts",
+    "code": "23CSB20C",
+    "aliases": [
+      "23CSB20C",
+      "Object Oriented Programming Concepts",
+      "23CSB20C Object Oriented Programming Concepts",
+      "Object Oriented Programming Concepts (23CSB20C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23esl00a",
+    "type": "course",
+    "name": "Design Engineering",
+    "code": "23ESL00A",
+    "aliases": [
+      "23ESL00A",
+      "Design Engineering",
+      "23ESL00A Design Engineering",
+      "Design Engineering (23ESL00A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23hsl2na",
+    "type": "course",
+    "name": "Professional Ethics",
+    "code": "23HSL2NA",
+    "aliases": [
+      "23HSL2NA",
+      "Professional Ethics",
+      "23HSL2NA Professional Ethics",
+      "Professional Ethics (23HSL2NA)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23csp20a",
+    "type": "course",
+    "name": "Hardware Lab",
+    "code": "23CSP20A",
+    "aliases": [
+      "23CSP20A",
+      "Hardware Lab",
+      "23CSP20A Hardware Lab",
+      "Hardware Lab (23CSP20A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23csp20b",
+    "type": "course",
+    "name": "Data Structures Lab",
+    "code": "23CSP20B",
+    "aliases": [
+      "23CSP20B",
+      "Data Structures Lab",
+      "23CSP20B Data Structures Lab",
+      "Data Structures Lab (23CSP20B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23mal20d",
+    "type": "course",
+    "name": "Probability, Statistics and Numerical Methods",
+    "code": "23MAL20D",
+    "aliases": [
+      "23MAL20D",
+      "Probability, Statistics and Numerical Methods",
+      "23MAL20D Probability, Statistics and Numerical Methods",
+      "Probability, Statistics and Numerical Methods (23MAL20D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csl20d",
+    "type": "course",
+    "name": "Operating Systems",
+    "code": "23CSL20D",
+    "aliases": [
+      "23CSL20D",
+      "Operating Systems",
+      "23CSL20D Operating Systems",
+      "Operating Systems (23CSL20D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csl20e",
+    "type": "course",
+    "name": "Database Management Systems",
+    "code": "23CSL20E",
+    "aliases": [
+      "23CSL20E",
+      "Database Management Systems",
+      "23CSL20E Database Management Systems",
+      "Database Management Systems (23CSL20E)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csl20f",
+    "type": "course",
+    "name": "Formal Languages and Automata Theory",
+    "code": "23CSL20F",
+    "aliases": [
+      "23CSL20F",
+      "Formal Languages and Automata Theory",
+      "23CSL20F Formal Languages and Automata Theory",
+      "Formal Languages and Automata Theory (23CSL20F)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23hsl2nb",
+    "type": "course",
+    "name": "Universal Human Values-II",
+    "code": "23HSL2NB",
+    "aliases": [
+      "23HSL2NB",
+      "Universal Human Values-II",
+      "23HSL2NB Universal Human Values-II",
+      "Universal Human Values-II (23HSL2NB)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23esl2nc",
+    "type": "course",
+    "name": "Industrial Safety Engineering",
+    "code": "23ESL2NC",
+    "aliases": [
+      "23ESL2NC",
+      "Industrial Safety Engineering",
+      "23ESL2NC Industrial Safety Engineering",
+      "Industrial Safety Engineering (23ESL2NC)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csp20c",
+    "type": "course",
+    "name": "Operating Systems Lab",
+    "code": "23CSP20C",
+    "aliases": [
+      "23CSP20C",
+      "Operating Systems Lab",
+      "23CSP20C Operating Systems Lab",
+      "Operating Systems Lab (23CSP20C)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23csp20d",
+    "type": "course",
+    "name": "Database Lab",
+    "code": "23CSP20D",
+    "aliases": [
+      "23CSP20D",
+      "Database Lab",
+      "23CSP20D Database Lab",
+      "Database Lab (23CSP20D)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23csl30a",
+    "type": "course",
+    "name": "Computer Networks",
+    "code": "23CSL30A",
+    "aliases": [
+      "23CSL30A",
+      "Computer Networks",
+      "23CSL30A Computer Networks",
+      "Computer Networks (23CSL30A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csl30b",
+    "type": "course",
+    "name": "Microprocessors and Microcontrollers",
+    "code": "23CSL30B",
+    "aliases": [
+      "23CSL30B",
+      "Microprocessors and Microcontrollers",
+      "23CSL30B Microprocessors and Microcontrollers",
+      "Microprocessors and Microcontrollers (23CSL30B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csl30c",
+    "type": "course",
+    "name": "Artificial Intelligence",
+    "code": "23CSL30C",
+    "aliases": [
+      "23CSL30C",
+      "Artificial Intelligence",
+      "23CSL30C Artificial Intelligence",
+      "Artificial Intelligence (23CSL30C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl31x",
+    "type": "course",
+    "name": "Programme Elective Course 1",
+    "code": "23CSL31X",
+    "aliases": [
+      "23CSL31X",
+      "Programme Elective Course 1",
+      "23CSL31X Programme Elective Course 1",
+      "Programme Elective Course 1 (23CSL31X)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23hsl30a",
+    "type": "course",
+    "name": "Business Economics and Accountancy",
+    "code": "23HSL30A",
+    "aliases": [
+      "23HSL30A",
+      "Business Economics and Accountancy",
+      "23HSL30A Business Economics and Accountancy",
+      "Business Economics and Accountancy (23HSL30A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csp30a",
+    "type": "course",
+    "name": "Microprocessor Lab",
+    "code": "23CSP30A",
+    "aliases": [
+      "23CSP30A",
+      "Microprocessor Lab",
+      "23CSP30A Microprocessor Lab",
+      "Microprocessor Lab (23CSP30A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23csp30b",
+    "type": "course",
+    "name": "Networking Lab",
+    "code": "23CSP30B",
+    "aliases": [
+      "23CSP30B",
+      "Networking Lab",
+      "23CSP30B Networking Lab",
+      "Networking Lab (23CSP30B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23csl30d",
+    "type": "course",
+    "name": "Algorithm Analysis and Design",
+    "code": "23CSL30D",
+    "aliases": [
+      "23CSL30D",
+      "Algorithm Analysis and Design",
+      "23CSL30D Algorithm Analysis and Design",
+      "Algorithm Analysis and Design (23CSL30D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csl30e",
+    "type": "course",
+    "name": "Cyber Security",
+    "code": "23CSL30E",
+    "aliases": [
+      "23CSL30E",
+      "Cyber Security",
+      "23CSL30E Cyber Security",
+      "Cyber Security (23CSL30E)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csb30f",
+    "type": "course",
+    "name": "Machine Learning",
+    "code": "23CSB30F",
+    "aliases": [
+      "23CSB30F",
+      "Machine Learning",
+      "23CSB30F Machine Learning",
+      "Machine Learning (23CSB30F)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csj30g",
+    "type": "course",
+    "name": "Software Engineering Theory and Practices",
+    "code": "23CSJ30G",
+    "aliases": [
+      "23CSJ30G",
+      "Software Engineering Theory and Practices",
+      "23CSJ30G Software Engineering Theory and Practices",
+      "Software Engineering Theory and Practices (23CSJ30G)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csl32x",
+    "type": "course",
+    "name": "Programme Elective Course 2",
+    "code": "23CSL32X",
+    "aliases": [
+      "23CSL32X",
+      "Programme Elective Course 2",
+      "23CSL32X Programme Elective Course 2",
+      "Programme Elective Course 2 (23CSL32X)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23iel31x",
+    "type": "course",
+    "name": "Institute Elective 1",
+    "code": "23IEL31X",
+    "aliases": [
+      "23IEL31X",
+      "Institute Elective 1",
+      "23IEL31X Institute Elective 1",
+      "Institute Elective 1 (23IEL31X)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23css38a",
+    "type": "course",
+    "name": "Seminar",
+    "code": "23CSS38A",
+    "aliases": [
+      "23CSS38A",
+      "Seminar",
+      "23CSS38A Seminar",
+      "Seminar (23CSS38A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23csj38b",
+    "type": "course",
+    "name": "Mini Project",
+    "code": "23CSJ38B",
+    "aliases": [
+      "23CSJ38B",
+      "Mini Project",
+      "23CSJ38B Mini Project",
+      "Mini Project (23CSJ38B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23csl40a",
+    "type": "course",
+    "name": "Compiler Design",
+    "code": "23CSL40A",
+    "aliases": [
+      "23CSL40A",
+      "Compiler Design",
+      "23CSL40A Compiler Design",
+      "Compiler Design (23CSL40A)"
+    ],
+    "credits": "5"
+  },
+  {
+    "id": "course_23csb40b",
+    "type": "course",
+    "name": "Web Technology",
+    "code": "23CSB40B",
+    "aliases": [
+      "23CSB40B",
+      "Web Technology",
+      "23CSB40B Web Technology",
+      "Web Technology (23CSB40B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csl43x",
+    "type": "course",
+    "name": "Programme Elective Course 3/ Industry Elective",
+    "code": "23CSL43X",
+    "aliases": [
+      "23CSL43X",
+      "Programme Elective Course 3/ Industry Elective",
+      "23CSL43X Programme Elective Course 3/ Industry Elective",
+      "Programme Elective Course 3/ Industry Elective (23CSL43X)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23iel42x",
+    "type": "course",
+    "name": "Institute Elective 2",
+    "code": "23IEL42X",
+    "aliases": [
+      "23IEL42X",
+      "Institute Elective 2",
+      "23IEL42X Institute Elective 2",
+      "Institute Elective 2 (23IEL42X)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csv48a",
+    "type": "course",
+    "name": "Comprehensive Course Viva",
+    "code": "23CSV48A",
+    "aliases": [
+      "23CSV48A",
+      "Comprehensive Course Viva",
+      "23CSV48A Comprehensive Course Viva",
+      "Comprehensive Course Viva (23CSV48A)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_23csj48a",
+    "type": "course",
+    "name": "Project",
+    "code": "23CSJ48A",
+    "aliases": [
+      "23CSJ48A",
+      "Project",
+      "23CSJ48A Project",
+      "Project (23CSJ48A)"
+    ],
+    "credits": "5"
+  },
+  {
+    "id": "course_23csi48a",
+    "type": "course",
+    "name": "Internship*",
+    "code": "23CSI48A",
+    "aliases": [
+      "23CSI48A",
+      "Internship*",
+      "23CSI48A Internship*",
+      "Internship* (23CSI48A)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23csl44x",
+    "type": "course",
+    "name": "Programme Elective Course 4",
+    "code": "23CSL44X",
+    "aliases": [
+      "23CSL44X",
+      "Programme Elective Course 4",
+      "23CSL44X Programme Elective Course 4",
+      "Programme Elective Course 4 (23CSL44X)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl45x",
+    "type": "course",
+    "name": "Programme Elective Course 5",
+    "code": "23CSL45X",
+    "aliases": [
+      "23CSL45X",
+      "Programme Elective Course 5",
+      "23CSL45X Programme Elective Course 5",
+      "Programme Elective Course 5 (23CSL45X)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl46x",
+    "type": "course",
+    "name": "Programme Elective Course 6",
+    "code": "23CSL46X",
+    "aliases": [
+      "23CSL46X",
+      "Programme Elective Course 6",
+      "23CSL46X Programme Elective Course 6",
+      "Programme Elective Course 6 (23CSL46X)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csj48b",
+    "type": "course",
+    "name": "Project",
+    "code": "23CSJ48B",
+    "aliases": [
+      "23CSJ48B",
+      "Project",
+      "23CSJ48B Project",
+      "Project (23CSJ48B)"
+    ],
+    "credits": "5"
+  },
+  {
+    "id": "course_23csi48b",
+    "type": "course",
+    "name": "Internship*",
+    "code": "23CSI48B",
+    "aliases": [
+      "23CSI48B",
+      "Internship*",
+      "23CSI48B Internship*",
+      "Internship* (23CSI48B)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23csl31a",
+    "type": "course",
+    "name": "Parallel Computer Architecture",
+    "code": "23CSL31A",
+    "aliases": [
+      "23CSL31A",
+      "Parallel Computer Architecture",
+      "23CSL31A Parallel Computer Architecture",
+      "Parallel Computer Architecture (23CSL31A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl31b",
+    "type": "course",
+    "name": "Introduction to Data Science",
+    "code": "23CSL31B",
+    "aliases": [
+      "23CSL31B",
+      "Introduction to Data Science",
+      "23CSL31B Introduction to Data Science",
+      "Introduction to Data Science (23CSL31B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl31c",
+    "type": "course",
+    "name": "Computer Graphics and Multimedia",
+    "code": "23CSL31C",
+    "aliases": [
+      "23CSL31C",
+      "Computer Graphics and Multimedia",
+      "23CSL31C Computer Graphics and Multimedia",
+      "Computer Graphics and Multimedia (23CSL31C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl31d",
+    "type": "course",
+    "name": "Fundamentals of Cryptography",
+    "code": "23CSL31D",
+    "aliases": [
+      "23CSL31D",
+      "Fundamentals of Cryptography",
+      "23CSL31D Fundamentals of Cryptography",
+      "Fundamentals of Cryptography (23CSL31D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl32a",
+    "type": "course",
+    "name": "Cloud Computing",
+    "code": "23CSL32A",
+    "aliases": [
+      "23CSL32A",
+      "Cloud Computing",
+      "23CSL32A Cloud Computing",
+      "Cloud Computing (23CSL32A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl32b",
+    "type": "course",
+    "name": "Applied Data Science Using Python",
+    "code": "23CSL32B",
+    "aliases": [
+      "23CSL32B",
+      "Applied Data Science Using Python",
+      "23CSL32B Applied Data Science Using Python",
+      "Applied Data Science Using Python (23CSL32B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl32c",
+    "type": "course",
+    "name": "Robotics and Intelligent Systems",
+    "code": "23CSL32C",
+    "aliases": [
+      "23CSL32C",
+      "Robotics and Intelligent Systems",
+      "23CSL32C Robotics and Intelligent Systems",
+      "Robotics and Intelligent Systems (23CSL32C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl32d",
+    "type": "course",
+    "name": "Virtual and Augmented Reality Systems",
+    "code": "23CSL32D",
+    "aliases": [
+      "23CSL32D",
+      "Virtual and Augmented Reality Systems",
+      "23CSL32D Virtual and Augmented Reality Systems",
+      "Virtual and Augmented Reality Systems (23CSL32D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl43a",
+    "type": "course",
+    "name": "Internet of Things",
+    "code": "23CSL43A",
+    "aliases": [
+      "23CSL43A",
+      "Internet of Things",
+      "23CSL43A Internet of Things",
+      "Internet of Things (23CSL43A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl43b",
+    "type": "course",
+    "name": "Computational Complexity",
+    "code": "23CSL43B",
+    "aliases": [
+      "23CSL43B",
+      "Computational Complexity",
+      "23CSL43B Computational Complexity",
+      "Computational Complexity (23CSL43B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl43c",
+    "type": "course",
+    "name": "Deep Learning",
+    "code": "23CSL43C",
+    "aliases": [
+      "23CSL43C",
+      "Deep Learning",
+      "23CSL43C Deep Learning",
+      "Deep Learning (23CSL43C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl43d",
+    "type": "course",
+    "name": "Cloud Security",
+    "code": "23CSL43D",
+    "aliases": [
+      "23CSL43D",
+      "Cloud Security",
+      "23CSL43D Cloud Security",
+      "Cloud Security (23CSL43D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl43e",
+    "type": "course",
+    "name": "Human Computer Interaction",
+    "code": "23CSL43E",
+    "aliases": [
+      "23CSL43E",
+      "Human Computer Interaction",
+      "23CSL43E Human Computer Interaction",
+      "Human Computer Interaction (23CSL43E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl44a",
+    "type": "course",
+    "name": "Virtualization",
+    "code": "23CSL44A",
+    "aliases": [
+      "23CSL44A",
+      "Virtualization",
+      "23CSL44A Virtualization",
+      "Virtualization (23CSL44A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl44b",
+    "type": "course",
+    "name": "Approximation Algorithms",
+    "code": "23CSL44B",
+    "aliases": [
+      "23CSL44B",
+      "Approximation Algorithms",
+      "23CSL44B Approximation Algorithms",
+      "Approximation Algorithms (23CSL44B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl44c",
+    "type": "course",
+    "name": "Natural Language Processing",
+    "code": "23CSL44C",
+    "aliases": [
+      "23CSL44C",
+      "Natural Language Processing",
+      "23CSL44C Natural Language Processing",
+      "Natural Language Processing (23CSL44C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl44d",
+    "type": "course",
+    "name": "Digital Forensics",
+    "code": "23CSL44D",
+    "aliases": [
+      "23CSL44D",
+      "Digital Forensics",
+      "23CSL44D Digital Forensics",
+      "Digital Forensics (23CSL44D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl45a",
+    "type": "course",
+    "name": "Algorithmic Game Theory",
+    "code": "23CSL45A",
+    "aliases": [
+      "23CSL45A",
+      "Algorithmic Game Theory",
+      "23CSL45A Algorithmic Game Theory",
+      "Algorithmic Game Theory (23CSL45A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl45b",
+    "type": "course",
+    "name": "Large Language Models",
+    "code": "23CSL45B",
+    "aliases": [
+      "23CSL45B",
+      "Large Language Models",
+      "23CSL45B Large Language Models",
+      "Large Language Models (23CSL45B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl45c",
+    "type": "course",
+    "name": "Hardware Security",
+    "code": "23CSL45C",
+    "aliases": [
+      "23CSL45C",
+      "Hardware Security",
+      "23CSL45C Hardware Security",
+      "Hardware Security (23CSL45C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl45d",
+    "type": "course",
+    "name": "Social Media Analysis",
+    "code": "23CSL45D",
+    "aliases": [
+      "23CSL45D",
+      "Social Media Analysis",
+      "23CSL45D Social Media Analysis",
+      "Social Media Analysis (23CSL45D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl46a",
+    "type": "course",
+    "name": "Parallel Algorithms",
+    "code": "23CSL46A",
+    "aliases": [
+      "23CSL46A",
+      "Parallel Algorithms",
+      "23CSL46A Parallel Algorithms",
+      "Parallel Algorithms (23CSL46A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl46b",
+    "type": "course",
+    "name": "Big Data Analytics",
+    "code": "23CSL46B",
+    "aliases": [
+      "23CSL46B",
+      "Big Data Analytics",
+      "23CSL46B Big Data Analytics",
+      "Big Data Analytics (23CSL46B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl46c",
+    "type": "course",
+    "name": "Block Chain and Crypto Currencies",
+    "code": "23CSL46C",
+    "aliases": [
+      "23CSL46C",
+      "Block Chain and Crypto Currencies",
+      "23CSL46C Block Chain and Crypto Currencies",
+      "Block Chain and Crypto Currencies (23CSL46C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl46d",
+    "type": "course",
+    "name": "Vibe Coding",
+    "code": "23CSL46D",
+    "aliases": [
+      "23CSL46D",
+      "Vibe Coding",
+      "23CSL46D Vibe Coding",
+      "Vibe Coding (23CSL46D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23iel31e",
+    "type": "course",
+    "name": "Data Science for Engineers",
+    "code": "23IEL31E",
+    "aliases": [
+      "23IEL31E",
+      "Data Science for Engineers",
+      "23IEL31E Data Science for Engineers",
+      "Data Science for Engineers (23IEL31E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23iel31f",
+    "type": "course",
+    "name": "Introduction to Mobile Application",
+    "code": "23IEL31F",
+    "aliases": [
+      "23IEL31F",
+      "Introduction to Mobile Application",
+      "23IEL31F Introduction to Mobile Application",
+      "Introduction to Mobile Application (23IEL31F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23iel31g",
+    "type": "course",
+    "name": "Introduction to Cyber Security and Ethical Hacking",
+    "code": "23IEL31G",
+    "aliases": [
+      "23IEL31G",
+      "Introduction to Cyber Security and Ethical Hacking",
+      "23IEL31G Introduction to Cyber Security and Ethical Hacking",
+      "Introduction to Cyber Security and Ethical Hacking (23IEL31G)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23iel31h",
+    "type": "course",
+    "name": "Digital Marketing and E- commerce",
+    "code": "23IEL31H",
+    "aliases": [
+      "23IEL31H",
+      "Digital Marketing and E- commerce",
+      "23IEL31H Digital Marketing and E- commerce",
+      "Digital Marketing and E- commerce (23IEL31H)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23iel42e",
+    "type": "course",
+    "name": "Responsible AI",
+    "code": "23IEL42E",
+    "aliases": [
+      "23IEL42E",
+      "Responsible AI",
+      "23IEL42E Responsible AI",
+      "Responsible AI (23IEL42E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23iel42f",
+    "type": "course",
+    "name": "Prompt Engineering",
+    "code": "23IEL42F",
+    "aliases": [
+      "23IEL42F",
+      "Prompt Engineering",
+      "23IEL42F Prompt Engineering",
+      "Prompt Engineering (23IEL42F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23iel42g",
+    "type": "course",
+    "name": "Business Intelligence and Analytics",
+    "code": "23IEL42G",
+    "aliases": [
+      "23IEL42G",
+      "Business Intelligence and Analytics",
+      "23IEL42G Business Intelligence and Analytics",
+      "Business Intelligence and Analytics (23IEL42G)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23iel42h",
+    "type": "course",
+    "name": "Game Development",
+    "code": "23IEL42H",
+    "aliases": [
+      "23IEL42H",
+      "Game Development",
+      "23IEL42H Game Development",
+      "Game Development (23IEL42H)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2mg",
+    "type": "course",
+    "name": "Statistics for Data Science and Time Forecasting",
+    "code": "23CSL2MG",
+    "aliases": [
+      "23CSL2MG",
+      "Statistics for Data Science and Time Forecasting",
+      "23CSL2MG Statistics for Data Science and Time Forecasting",
+      "Statistics for Data Science and Time Forecasting (23CSL2MG)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2mh",
+    "type": "course",
+    "name": "Data Visualization & ML",
+    "code": "23CSL2MH",
+    "aliases": [
+      "23CSL2MH",
+      "Data Visualization & ML",
+      "23CSL2MH Data Visualization & ML",
+      "Data Visualization & ML (23CSL2MH)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3mg",
+    "type": "course",
+    "name": "Natural Language Processing",
+    "code": "23CSL3MG",
+    "aliases": [
+      "23CSL3MG",
+      "Natural Language Processing",
+      "23CSL3MG Natural Language Processing",
+      "Natural Language Processing (23CSL3MG)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3mh",
+    "type": "course",
+    "name": "Deep Learning",
+    "code": "23CSL3MH",
+    "aliases": [
+      "23CSL3MH",
+      "Deep Learning",
+      "23CSL3MH Deep Learning",
+      "Deep Learning (23CSL3MH)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csj4mg",
+    "type": "course",
+    "name": "Mini Project",
+    "code": "23CSJ4MG",
+    "aliases": [
+      "23CSJ4MG",
+      "Mini Project",
+      "23CSJ4MG Mini Project",
+      "Mini Project (23CSJ4MG)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23esl10j",
+    "type": "course",
+    "name": "BASICS OF ELECTRICAL",
+    "code": "23ESL10J",
+    "aliases": [
+      "23ESL10J",
+      "BASICS OF ELECTRICAL",
+      "23ESL10J BASICS OF ELECTRICAL",
+      "BASICS OF ELECTRICAL (23ESL10J)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23esl10l",
+    "type": "course",
+    "name": "BASICS OF ELECTRONICS",
+    "code": "23ESL10L",
+    "aliases": [
+      "23ESL10L",
+      "BASICS OF ELECTRONICS",
+      "23ESL10L BASICS OF ELECTRONICS",
+      "BASICS OF ELECTRONICS (23ESL10L)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23mal20e",
+    "type": "course",
+    "name": "Mathematics of Artificial Intelligence",
+    "code": "23MAL20E",
+    "aliases": [
+      "23MAL20E",
+      "Mathematics of Artificial Intelligence",
+      "23MAL20E Mathematics of Artificial Intelligence",
+      "Mathematics of Artificial Intelligence (23MAL20E)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23csj4ma",
+    "type": "course",
+    "name": "Mini Project",
+    "code": "23CSJ4MA",
+    "aliases": [
+      "23CSJ4MA",
+      "Mini Project",
+      "23CSJ4MA Mini Project",
+      "Mini Project (23CSJ4MA)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2hb",
+    "type": "course",
+    "name": "Number Theory",
+    "code": "23CSL2HB",
+    "aliases": [
+      "23CSL2HB",
+      "Number Theory",
+      "23CSL2HB Number Theory",
+      "Number Theory (23CSL2HB)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3ha",
+    "type": "course",
+    "name": "Cryptogr aphic Algorith ms",
+    "code": "23CSL3HA",
+    "aliases": [
+      "23CSL3HA",
+      "Cryptogr aphic Algorith ms",
+      "23CSL3HA Cryptogr aphic Algorith ms",
+      "Cryptogr aphic Algorith ms (23CSL3HA)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3hd",
+    "type": "course",
+    "name": "Network Security",
+    "code": "23CSL3HD",
+    "aliases": [
+      "23CSL3HD",
+      "Network Security",
+      "23CSL3HD Network Security",
+      "Network Security (23CSL3HD)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl4ha",
+    "type": "course",
+    "name": "Cyber Forensics",
+    "code": "23CSL4HA",
+    "aliases": [
+      "23CSL4HA",
+      "Cyber Forensics",
+      "23CSL4HA Cyber Forensics",
+      "Cyber Forensics (23CSL4HA)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctj4ha",
+    "type": "course",
+    "name": "Mini Project",
+    "code": "23CTJ4HA",
+    "aliases": [
+      "23CTJ4HA",
+      "Mini Project",
+      "23CTJ4HA Mini Project",
+      "Mini Project (23CTJ4HA)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ncl20a",
+    "type": "course",
+    "name": "PROFESSIONAL ETHICS",
+    "code": "23NCL20A",
+    "aliases": [
+      "23NCL20A",
+      "PROFESSIONAL ETHICS",
+      "23NCL20A PROFESSIONAL ETHICS",
+      "PROFESSIONAL ETHICS (23NCL20A)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_23csl2ma",
+    "type": "course",
+    "name": "Object Oriented Programming",
+    "code": "23CSL2MA",
+    "aliases": [
+      "23CSL2MA",
+      "Object Oriented Programming",
+      "23CSL2MA Object Oriented Programming",
+      "Object Oriented Programming (23CSL2MA)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2mc",
+    "type": "course",
+    "name": "Mathematics for Machine Learning",
+    "code": "23CSL2MC",
+    "aliases": [
+      "23CSL2MC",
+      "Mathematics for Machine Learning",
+      "23CSL2MC Mathematics for Machine Learning",
+      "Mathematics for Machine Learning (23CSL2MC)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2me",
+    "type": "course",
+    "name": "Data Communication",
+    "code": "23CSL2ME",
+    "aliases": [
+      "23CSL2ME",
+      "Data Communication",
+      "23CSL2ME Data Communication",
+      "Data Communication (23CSL2ME)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2mi",
+    "type": "course",
+    "name": "BASICS OF COMPUTER SYSTEMS",
+    "code": "23CSL2MI",
+    "aliases": [
+      "23CSL2MI",
+      "BASICS OF COMPUTER SYSTEMS",
+      "23CSL2MI BASICS OF COMPUTER SYSTEMS",
+      "BASICS OF COMPUTER SYSTEMS (23CSL2MI)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2mb",
+    "type": "course",
+    "name": "Programming Methodologies",
+    "code": "23CSL2MB",
+    "aliases": [
+      "23CSL2MB",
+      "Programming Methodologies",
+      "23CSL2MB Programming Methodologies",
+      "Programming Methodologies (23CSL2MB)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2md",
+    "type": "course",
+    "name": "CONCEPTS IN MACHINE LEARNING",
+    "code": "23CSL2MD",
+    "aliases": [
+      "23CSL2MD",
+      "CONCEPTS IN MACHINE LEARNING",
+      "23CSL2MD CONCEPTS IN MACHINE LEARNING",
+      "CONCEPTS IN MACHINE LEARNING (23CSL2MD)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2mf",
+    "type": "course",
+    "name": "Introduction to Computer Networks",
+    "code": "23CSL2MF",
+    "aliases": [
+      "23CSL2MF",
+      "Introduction to Computer Networks",
+      "23CSL2MF Introduction to Computer Networks",
+      "Introduction to Computer Networks (23CSL2MF)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2mj",
+    "type": "course",
+    "name": "Cyber Security",
+    "code": "23CSL2MJ",
+    "aliases": [
+      "23CSL2MJ",
+      "Cyber Security",
+      "23CSL2MJ Cyber Security",
+      "Cyber Security (23CSL2MJ)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctl2hb",
+    "type": "course",
+    "name": "Computational Fundamentals for Bioinformatics",
+    "code": "23CTL2HB",
+    "aliases": [
+      "23CTL2HB",
+      "Computational Fundamentals for Bioinformatics",
+      "23CTL2HB Computational Fundamentals for Bioinformatics",
+      "Computational Fundamentals for Bioinformatics (23CTL2HB)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctl2hd",
+    "type": "course",
+    "name": "ADVANCED TOPICS IN COMPUTER GRAPHICS",
+    "code": "23CTL2HD",
+    "aliases": [
+      "23CTL2HD",
+      "ADVANCED TOPICS IN COMPUTER GRAPHICS",
+      "23CTL2HD ADVANCED TOPICS IN COMPUTER GRAPHICS",
+      "ADVANCED TOPICS IN COMPUTER GRAPHICS (23CTL2HD)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctl30a",
+    "type": "course",
+    "name": "Introduction to Artificial Intelligence",
+    "code": "23CTL30A",
+    "aliases": [
+      "23CTL30A",
+      "Introduction to Artificial Intelligence",
+      "23CTL30A Introduction to Artificial Intelligence",
+      "Introduction to Artificial Intelligence (23CTL30A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23ctl30b",
+    "type": "course",
+    "name": "Data Science",
+    "code": "23CTL30B",
+    "aliases": [
+      "23CTL30B",
+      "Data Science",
+      "23CTL30B Data Science",
+      "Data Science (23CTL30B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctb30c",
+    "type": "course",
+    "name": "Introduction to Machine Learning",
+    "code": "23CTB30C",
+    "aliases": [
+      "23CTB30C",
+      "Introduction to Machine Learning",
+      "23CTB30C Introduction to Machine Learning",
+      "Introduction to Machine Learning (23CTB30C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23ctl31x",
+    "type": "course",
+    "name": "Programme Elective I- Course1",
+    "code": "23CTL31X",
+    "aliases": [
+      "23CTL31X",
+      "Programme Elective I- Course1",
+      "23CTL31X Programme Elective I- Course1",
+      "Programme Elective I- Course1 (23CTL31X)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctp30a",
+    "type": "course",
+    "name": "Artificial Intelligence Lab",
+    "code": "23CTP30A",
+    "aliases": [
+      "23CTP30A",
+      "Artificial Intelligence Lab",
+      "23CTP30A Artificial Intelligence Lab",
+      "Artificial Intelligence Lab (23CTP30A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23ctb30d",
+    "type": "course",
+    "name": "Deep Learning",
+    "code": "23CTB30D",
+    "aliases": [
+      "23CTB30D",
+      "Deep Learning",
+      "23CTB30D Deep Learning",
+      "Deep Learning (23CTB30D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23ctl30d",
+    "type": "course",
+    "name": "Robotics and Intelligent systems",
+    "code": "23CTL30D",
+    "aliases": [
+      "23CTL30D",
+      "Robotics and Intelligent systems",
+      "23CTL30D Robotics and Intelligent systems",
+      "Robotics and Intelligent systems (23CTL30D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_23ctl32x",
+    "type": "course",
+    "name": "Programme Elective II- Course2",
+    "code": "23CTL32X",
+    "aliases": [
+      "23CTL32X",
+      "Programme Elective II- Course2",
+      "23CTL32X Programme Elective II- Course2",
+      "Programme Elective II- Course2 (23CTL32X)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctp30b",
+    "type": "course",
+    "name": "Robotics Lab",
+    "code": "23CTP30B",
+    "aliases": [
+      "23CTP30B",
+      "Robotics Lab",
+      "23CTP30B Robotics Lab",
+      "Robotics Lab (23CTP30B)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_23cts38a",
+    "type": "course",
+    "name": "Seminar",
+    "code": "23CTS38A",
+    "aliases": [
+      "23CTS38A",
+      "Seminar",
+      "23CTS38A Seminar",
+      "Seminar (23CTS38A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23ctj38b",
+    "type": "course",
+    "name": "Miniproject",
+    "code": "23CTJ38B",
+    "aliases": [
+      "23CTJ38B",
+      "Miniproject",
+      "23CTJ38B Miniproject",
+      "Miniproject (23CTJ38B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_23ctl31a",
+    "type": "course",
+    "name": "Web Technology",
+    "code": "23CTL31A",
+    "aliases": [
+      "23CTL31A",
+      "Web Technology",
+      "23CTL31A Web Technology",
+      "Web Technology (23CTL31A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctl32a",
+    "type": "course",
+    "name": "Natural Language Processing",
+    "code": "23CTL32A",
+    "aliases": [
+      "23CTL32A",
+      "Natural Language Processing",
+      "23CTL32A Natural Language Processing",
+      "Natural Language Processing (23CTL32A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctl32b",
+    "type": "course",
+    "name": "Foundations of Security in Computing",
+    "code": "23CTL32B",
+    "aliases": [
+      "23CTL32B",
+      "Foundations of Security in Computing",
+      "23CTL32B Foundations of Security in Computing",
+      "Foundations of Security in Computing (23CTL32B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctl32c",
+    "type": "course",
+    "name": "Data Analytics",
+    "code": "23CTL32C",
+    "aliases": [
+      "23CTL32C",
+      "Data Analytics",
+      "23CTL32C Data Analytics",
+      "Data Analytics (23CTL32C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3mi",
+    "type": "course",
+    "name": "Introduction to Blockchain Technologies",
+    "code": "23CSL3MI",
+    "aliases": [
+      "23CSL3MI",
+      "Introduction to Blockchain Technologies",
+      "23CSL3MI Introduction to Blockchain Technologies",
+      "Introduction to Blockchain Technologies (23CSL3MI)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctl3ha",
+    "type": "course",
+    "name": "Computational Biology",
+    "code": "23CTL3HA",
+    "aliases": [
+      "23CTL3HA",
+      "Computational Biology",
+      "23CTL3HA Computational Biology",
+      "Computational Biology (23CTL3HA)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3mj",
+    "type": "course",
+    "name": "Privacy and security in IoT",
+    "code": "23CSL3MJ",
+    "aliases": [
+      "23CSL3MJ",
+      "Privacy and security in IoT",
+      "23CSL3MJ Privacy and security in IoT",
+      "Privacy and security in IoT (23CSL3MJ)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3hb",
+    "type": "course",
+    "name": "NETWORK SECURITY",
+    "code": "23CSL3HB",
+    "aliases": [
+      "23CSL3HB",
+      "NETWORK SECURITY",
+      "23CSL3HB NETWORK SECURITY",
+      "NETWORK SECURITY (23CSL3HB)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23ctl3hb",
+    "type": "course",
+    "name": "MACHINE LEARNING IN COMPUTATIONAL BIOLOGY",
+    "code": "23CTL3HB",
+    "aliases": [
+      "23CTL3HB",
+      "MACHINE LEARNING IN COMPUTATIONAL BIOLOGY",
+      "23CTL3HB MACHINE LEARNING IN COMPUTATIONAL BIOLOGY",
+      "MACHINE LEARNING IN COMPUTATIONAL BIOLOGY (23CTL3HB)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2hd",
+    "type": "course",
+    "name": "Computational Fundamentals of Machine Learning",
+    "code": "23CSL2HD",
+    "aliases": [
+      "23CSL2HD",
+      "Computational Fundamentals of Machine Learning",
+      "23CSL2HD Computational Fundamentals of Machine Learning",
+      "Computational Fundamentals of Machine Learning (23CSL2HD)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl2hf",
+    "type": "course",
+    "name": "PRINCIPLES OF PROGRAM ANALYSIS AND VERIFICATION",
+    "code": "23CSL2HF",
+    "aliases": [
+      "23CSL2HF",
+      "PRINCIPLES OF PROGRAM ANALYSIS AND VERIFICATION",
+      "23CSL2HF PRINCIPLES OF PROGRAM ANALYSIS AND VERIFICATION",
+      "PRINCIPLES OF PROGRAM ANALYSIS AND VERIFICATION (23CSL2HF)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_ma0p60a",
+    "type": "course",
+    "name": "Mathematical Foundations of",
+    "code": "MA0P60A",
+    "aliases": [
+      "MA0P60A",
+      "Mathematical Foundations of",
+      "MA0P60A Mathematical Foundations of",
+      "Mathematical Foundations of (MA0P60A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p60a",
+    "type": "course",
+    "name": "Topics in Database Technology",
+    "code": "CS1P60A",
+    "aliases": [
+      "CS1P60A",
+      "Topics in Database Technology",
+      "CS1P60A Topics in Database Technology",
+      "Topics in Database Technology (CS1P60A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1p60b",
+    "type": "course",
+    "name": "Advanced Data Structures and",
+    "code": "CS1P60B",
+    "aliases": [
+      "CS1P60B",
+      "Advanced Data Structures and",
+      "CS1P60B Advanced Data Structures and",
+      "Advanced Data Structures and (CS1P60B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1p60c",
+    "type": "course",
+    "name": "Advanced Software Engineering",
+    "code": "CS1P60C",
+    "aliases": [
+      "CS1P60C",
+      "Advanced Software Engineering",
+      "CS1P60C Advanced Software Engineering",
+      "Advanced Software Engineering (CS1P60C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1pxx",
+    "type": "course",
+    "name": "Elective I",
+    "code": "CS1PXX",
+    "aliases": [
+      "CS1PXX",
+      "Elective I",
+      "CS1PXX Elective I",
+      "Elective I (CS1PXX)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_mc0p60a",
+    "type": "course",
+    "name": "Research Methodology",
+    "code": "MC0P60A",
+    "aliases": [
+      "MC0P60A",
+      "Research Methodology",
+      "MC0P60A Research Methodology",
+      "Research Methodology (MC0P60A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1p68a",
+    "type": "course",
+    "name": "Algorithm Design laboratory",
+    "code": "CS1P68A",
+    "aliases": [
+      "CS1P68A",
+      "Algorithm Design laboratory",
+      "CS1P68A Algorithm Design laboratory",
+      "Algorithm Design laboratory (CS1P68A)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_cs1p69a",
+    "type": "course",
+    "name": "Seminar I",
+    "code": "CS1P69A",
+    "aliases": [
+      "CS1P69A",
+      "Seminar I",
+      "CS1P69A Seminar I",
+      "Seminar I (CS1P69A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1p60d",
+    "type": "course",
+    "name": "Soft Computing",
+    "code": "CS1P60D",
+    "aliases": [
+      "CS1P60D",
+      "Soft Computing",
+      "CS1P60D Soft Computing",
+      "Soft Computing (CS1P60D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs1p60e",
+    "type": "course",
+    "name": "Operating System Design",
+    "code": "CS1P60E",
+    "aliases": [
+      "CS1P60E",
+      "Operating System Design",
+      "CS1P60E Operating System Design",
+      "Operating System Design (CS1P60E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p60f",
+    "type": "course",
+    "name": "Advanced Computer Networks",
+    "code": "CS1P60F",
+    "aliases": [
+      "CS1P60F",
+      "Advanced Computer Networks",
+      "CS1P60F Advanced Computer Networks",
+      "Advanced Computer Networks (CS1P60F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1pxxx",
+    "type": "course",
+    "name": "Elective II",
+    "code": "CS1PXXX",
+    "aliases": [
+      "CS1PXXX",
+      "Elective II",
+      "CS1PXXX Elective II",
+      "Elective II (CS1PXXX)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p68b",
+    "type": "course",
+    "name": "Network & OS Laboratory",
+    "code": "CS1P68B",
+    "aliases": [
+      "CS1P68B",
+      "Network & OS Laboratory",
+      "CS1P68B Network & OS Laboratory",
+      "Network & OS Laboratory (CS1P68B)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_cs1p69b",
+    "type": "course",
+    "name": "Mini Project",
+    "code": "CS1P69B",
+    "aliases": [
+      "CS1P69B",
+      "Mini Project",
+      "CS1P69B Mini Project",
+      "Mini Project (CS1P69B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1p61a",
+    "type": "course",
+    "name": "Data Mining &Warehousing",
+    "code": "CS1P61A",
+    "aliases": [
+      "CS1P61A",
+      "Data Mining &Warehousing",
+      "CS1P61A Data Mining &Warehousing",
+      "Data Mining &Warehousing (CS1P61A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p61b",
+    "type": "course",
+    "name": "Data Compression Techniques",
+    "code": "CS1P61B",
+    "aliases": [
+      "CS1P61B",
+      "Data Compression Techniques",
+      "CS1P61B Data Compression Techniques",
+      "Data Compression Techniques (CS1P61B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p61c",
+    "type": "course",
+    "name": "Advanced Topics in Distributed Systems",
+    "code": "CS1P61C",
+    "aliases": [
+      "CS1P61C",
+      "Advanced Topics in Distributed Systems",
+      "CS1P61C Advanced Topics in Distributed Systems",
+      "Advanced Topics in Distributed Systems (CS1P61C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p61d",
+    "type": "course",
+    "name": "Advanced Complier Design",
+    "code": "CS1P61D",
+    "aliases": [
+      "CS1P61D",
+      "Advanced Complier Design",
+      "CS1P61D Advanced Complier Design",
+      "Advanced Complier Design (CS1P61D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p61e",
+    "type": "course",
+    "name": "Cloud Computing",
+    "code": "CS1P61E",
+    "aliases": [
+      "CS1P61E",
+      "Cloud Computing",
+      "CS1P61E Cloud Computing",
+      "Cloud Computing (CS1P61E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p62a",
+    "type": "course",
+    "name": "Parallel Algorithms",
+    "code": "CS1P62A",
+    "aliases": [
+      "CS1P62A",
+      "Parallel Algorithms",
+      "CS1P62A Parallel Algorithms",
+      "Parallel Algorithms (CS1P62A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p62b",
+    "type": "course",
+    "name": "Parallel Computer Architecture",
+    "code": "CS1P62B",
+    "aliases": [
+      "CS1P62B",
+      "Parallel Computer Architecture",
+      "CS1P62B Parallel Computer Architecture",
+      "Parallel Computer Architecture (CS1P62B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p62c",
+    "type": "course",
+    "name": "Computational Geometry",
+    "code": "CS1P62C",
+    "aliases": [
+      "CS1P62C",
+      "Computational Geometry",
+      "CS1P62C Computational Geometry",
+      "Computational Geometry (CS1P62C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p62d",
+    "type": "course",
+    "name": "Semantic Web Technology",
+    "code": "CS1P62D",
+    "aliases": [
+      "CS1P62D",
+      "Semantic Web Technology",
+      "CS1P62D Semantic Web Technology",
+      "Semantic Web Technology (CS1P62D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p62e",
+    "type": "course",
+    "name": "Image Processing",
+    "code": "CS1P62E",
+    "aliases": [
+      "CS1P62E",
+      "Image Processing",
+      "CS1P62E Image Processing",
+      "Image Processing (CS1P62E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p63a",
+    "type": "course",
+    "name": "Machine Learning",
+    "code": "CS1P63A",
+    "aliases": [
+      "CS1P63A",
+      "Machine Learning",
+      "CS1P63A Machine Learning",
+      "Machine Learning (CS1P63A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p63b",
+    "type": "course",
+    "name": "Advanced Graph Theory",
+    "code": "CS1P63B",
+    "aliases": [
+      "CS1P63B",
+      "Advanced Graph Theory",
+      "CS1P63B Advanced Graph Theory",
+      "Advanced Graph Theory (CS1P63B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p63c",
+    "type": "course",
+    "name": "Cyber Laws and ethics",
+    "code": "CS1P63C",
+    "aliases": [
+      "CS1P63C",
+      "Cyber Laws and ethics",
+      "CS1P63C Cyber Laws and ethics",
+      "Cyber Laws and ethics (CS1P63C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p63d",
+    "type": "course",
+    "name": "Principles of Information Security",
+    "code": "CS1P63D",
+    "aliases": [
+      "CS1P63D",
+      "Principles of Information Security",
+      "CS1P63D Principles of Information Security",
+      "Principles of Information Security (CS1P63D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p79a",
+    "type": "course",
+    "name": "Seminar II",
+    "code": "CS1P79A",
+    "aliases": [
+      "CS1P79A",
+      "Seminar II",
+      "CS1P79A Seminar II",
+      "Seminar II (CS1P79A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs1p79b",
+    "type": "course",
+    "name": "Project \u2013 Phase 1",
+    "code": "CS1P79B",
+    "aliases": [
+      "CS1P79B",
+      "Project \u2013 Phase 1",
+      "CS1P79B Project \u2013 Phase 1",
+      "Project \u2013 Phase 1 (CS1P79B)"
+    ],
+    "credits": "6"
+  },
+  {
+    "id": "course_cs1p71a",
+    "type": "course",
+    "name": "Complexity Theory",
+    "code": "CS1P71A",
+    "aliases": [
+      "CS1P71A",
+      "Complexity Theory",
+      "CS1P71A Complexity Theory",
+      "Complexity Theory (CS1P71A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p71b",
+    "type": "course",
+    "name": "Distributed Algorithms",
+    "code": "CS1P71B",
+    "aliases": [
+      "CS1P71B",
+      "Distributed Algorithms",
+      "CS1P71B Distributed Algorithms",
+      "Distributed Algorithms (CS1P71B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p71c",
+    "type": "course",
+    "name": "Advanced Computer Graphics",
+    "code": "CS1P71C",
+    "aliases": [
+      "CS1P71C",
+      "Advanced Computer Graphics",
+      "CS1P71C Advanced Computer Graphics",
+      "Advanced Computer Graphics (CS1P71C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p71d",
+    "type": "course",
+    "name": "Ad-hoc and Sensor Networks",
+    "code": "CS1P71D",
+    "aliases": [
+      "CS1P71D",
+      "Ad-hoc and Sensor Networks",
+      "CS1P71D Ad-hoc and Sensor Networks",
+      "Ad-hoc and Sensor Networks (CS1P71D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p72a",
+    "type": "course",
+    "name": "Principles of Network Security",
+    "code": "CS1P72A",
+    "aliases": [
+      "CS1P72A",
+      "Principles of Network Security",
+      "CS1P72A Principles of Network Security",
+      "Principles of Network Security (CS1P72A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p72b",
+    "type": "course",
+    "name": "Fuzzy Set Theory & Applications",
+    "code": "CS1P72B",
+    "aliases": [
+      "CS1P72B",
+      "Fuzzy Set Theory & Applications",
+      "CS1P72B Fuzzy Set Theory & Applications",
+      "Fuzzy Set Theory & Applications (CS1P72B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p72c",
+    "type": "course",
+    "name": "Decision Support Systems",
+    "code": "CS1P72C",
+    "aliases": [
+      "CS1P72C",
+      "Decision Support Systems",
+      "CS1P72C Decision Support Systems",
+      "Decision Support Systems (CS1P72C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p72d",
+    "type": "course",
+    "name": "Advanced Software Project Management",
+    "code": "CS1P72D",
+    "aliases": [
+      "CS1P72D",
+      "Advanced Software Project Management",
+      "CS1P72D Advanced Software Project Management",
+      "Advanced Software Project Management (CS1P72D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs1p79c",
+    "type": "course",
+    "name": "Project Phase \u2013II",
+    "code": "CS1P79C",
+    "aliases": [
+      "CS1P79C",
+      "Project Phase \u2013II",
+      "CS1P79C Project Phase \u2013II",
+      "Project Phase \u2013II (CS1P79C)"
+    ],
+    "credits": "0"
+  },
+  {
+    "id": "course_cs7192",
+    "type": "course",
+    "name": "SEMINAR II",
+    "code": "CS7192",
+    "aliases": [
+      "CS7192",
+      "SEMINAR II",
+      "CS7192 SEMINAR II",
+      "SEMINAR II (CS7192)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_cs7193",
+    "type": "course",
+    "name": "PROJECT(PHASE I)",
+    "code": "CS7193",
+    "aliases": [
+      "CS7193",
+      "PROJECT(PHASE I)",
+      "CS7193 PROJECT(PHASE I)",
+      "PROJECT(PHASE I) (CS7193)"
+    ],
+    "credits": "6"
+  },
+  {
+    "id": "course_cs7194",
+    "type": "course",
+    "name": "PROJECT(PHASE II)",
+    "code": "CS7194",
+    "aliases": [
+      "CS7194",
+      "PROJECT(PHASE II)",
+      "CS7194 PROJECT(PHASE II)",
+      "PROJECT(PHASE II) (CS7194)"
+    ],
+    "credits": "0"
+  },
+  {
+    "id": "course_23csl3ma",
+    "type": "course",
+    "name": "CONCEPTS IN SOFTWARE",
+    "code": "23CSL3MA",
+    "aliases": [
+      "23CSL3MA",
+      "CONCEPTS IN SOFTWARE",
+      "23CSL3MA CONCEPTS IN SOFTWARE",
+      "CONCEPTS IN SOFTWARE (23CSL3MA)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3mc",
+    "type": "course",
+    "name": "23CSL3MC",
+    "code": "23CSL3MC",
+    "aliases": [
+      "23CSL3MC",
+      "23CSL3MC",
+      "23CSL3MC 23CSL3MC",
+      "23CSL3MC (23CSL3MC)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3me",
+    "type": "course",
+    "name": "23CSL3ME",
+    "code": "23CSL3ME",
+    "aliases": [
+      "23CSL3ME",
+      "23CSL3ME",
+      "23CSL3ME 23CSL3ME",
+      "23CSL3ME (23CSL3ME)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3hc",
+    "type": "course",
+    "name": "NEURAL NETWORKS",
+    "code": "23CSL3HC",
+    "aliases": [
+      "23CSL3HC",
+      "NEURAL NETWORKS",
+      "23CSL3HC NEURAL NETWORKS",
+      "NEURAL NETWORKS (23CSL3HC)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3he",
+    "type": "course",
+    "name": "PRINCIPLES OF MODEL",
+    "code": "23CSL3HE",
+    "aliases": [
+      "23CSL3HE",
+      "PRINCIPLES OF MODEL",
+      "23CSL3HE PRINCIPLES OF MODEL",
+      "PRINCIPLES OF MODEL (23CSL3HE)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3md",
+    "type": "course",
+    "name": "23CSL3MD",
+    "code": "23CSL3MD",
+    "aliases": [
+      "23CSL3MD",
+      "23CSL3MD",
+      "23CSL3MD 23CSL3MD",
+      "23CSL3MD (23CSL3MD)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3mf",
+    "type": "course",
+    "name": "WIRELESS NETWORKS",
+    "code": "23CSL3MF",
+    "aliases": [
+      "23CSL3MF",
+      "WIRELESS NETWORKS",
+      "23CSL3MF WIRELESS NETWORKS",
+      "WIRELESS NETWORKS (23CSL3MF)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_23csl3hf",
+    "type": "course",
+    "name": "THEORY OF",
+    "code": "23CSL3HF",
+    "aliases": [
+      "23CSL3HF",
+      "THEORY OF",
+      "23CSL3HF THEORY OF",
+      "THEORY OF (23CSL3HF)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_ph0u10c",
+    "type": "course",
+    "name": "Engineering Physics-C",
+    "code": "PH0U10C",
+    "aliases": [
+      "PH0U10C",
+      "Engineering Physics-C",
+      "PH0U10C Engineering Physics-C",
+      "Engineering Physics-C (PH0U10C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cyou10b",
+    "type": "course",
+    "name": "Engineering Chemistry-B",
+    "code": "CYOU10B",
+    "aliases": [
+      "CYOU10B",
+      "Engineering Chemistry-B",
+      "CYOU10B Engineering Chemistry-B",
+      "Engineering Chemistry-B (CYOU10B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_es0u10g",
+    "type": "course",
+    "name": "Problem Solving & Programming in C",
+    "code": "ES0U10G",
+    "aliases": [
+      "ES0U10G",
+      "Problem Solving & Programming in C",
+      "ES0U10G Problem Solving & Programming in C",
+      "Problem Solving & Programming in C (ES0U10G)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_phou18a",
+    "type": "course",
+    "name": "Physics Lab",
+    "code": "PHOU18A",
+    "aliases": [
+      "PHOU18A",
+      "Physics Lab",
+      "PHOU18A Physics Lab",
+      "Physics Lab (PHOU18A)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_cyou18a",
+    "type": "course",
+    "name": "Chemistry Lab",
+    "code": "CYOU18A",
+    "aliases": [
+      "CYOU18A",
+      "Chemistry Lab",
+      "CYOU18A Chemistry Lab",
+      "Chemistry Lab (CYOU18A)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_es0u10h",
+    "type": "course",
+    "name": "Introduction to Python",
+    "code": "ES0U10H",
+    "aliases": [
+      "ES0U10H",
+      "Introduction to Python",
+      "ES0U10H Introduction to Python",
+      "Introduction to Python (ES0U10H)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs2u20a",
+    "type": "course",
+    "name": "Object Oriented Programming using Python",
+    "code": "CS2U20A",
+    "aliases": [
+      "CS2U20A",
+      "Object Oriented Programming using Python",
+      "CS2U20A Object Oriented Programming using Python",
+      "Object Oriented Programming using Python (CS2U20A)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs2u28a",
+    "type": "course",
+    "name": "Object Oriented Programming Lab (in Python)",
+    "code": "CS2U28A",
+    "aliases": [
+      "CS2U28A",
+      "Object Oriented Programming Lab (in Python)",
+      "CS2U28A Object Oriented Programming Lab (in Python)",
+      "Object Oriented Programming Lab (in Python) (CS2U28A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_ma0u20f",
+    "type": "course",
+    "name": "Mathematics for Artificial Intelligence",
+    "code": "MA0U20F",
+    "aliases": [
+      "MA0U20F",
+      "Mathematics for Artificial Intelligence",
+      "MA0U20F Mathematics for Artificial Intelligence",
+      "Mathematics for Artificial Intelligence (MA0U20F)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs2u20b",
+    "type": "course",
+    "name": "Introduction to Artificial Intelligence",
+    "code": "CS2U20B",
+    "aliases": [
+      "CS2U20B",
+      "Introduction to Artificial Intelligence",
+      "CS2U20B Introduction to Artificial Intelligence",
+      "Introduction to Artificial Intelligence (CS2U20B)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_nc0u20c",
+    "type": "course",
+    "name": "Universal Human Values-II",
+    "code": "NC0U20C",
+    "aliases": [
+      "NC0U20C",
+      "Universal Human Values-II",
+      "NC0U20C Universal Human Values-II",
+      "Universal Human Values-II (NC0U20C)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs2u28b",
+    "type": "course",
+    "name": "AI Algorithms Lab",
+    "code": "CS2U28B",
+    "aliases": [
+      "CS2U28B",
+      "AI Algorithms Lab",
+      "CS2U28B AI Algorithms Lab",
+      "AI Algorithms Lab (CS2U28B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs2u30c",
+    "type": "course",
+    "name": "Introduction to Machine Learning",
+    "code": "CS2U30C",
+    "aliases": [
+      "CS2U30C",
+      "Introduction to Machine Learning",
+      "CS2U30C Introduction to Machine Learning",
+      "Introduction to Machine Learning (CS2U30C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs2u30d",
+    "type": "course",
+    "name": "Artificial Neural Network",
+    "code": "CS2U30D",
+    "aliases": [
+      "CS2U30D",
+      "Artificial Neural Network",
+      "CS2U30D Artificial Neural Network",
+      "Artificial Neural Network (CS2U30D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs2u38a",
+    "type": "course",
+    "name": "Operating Systems and Networking Lab",
+    "code": "CS2U38A",
+    "aliases": [
+      "CS2U38A",
+      "Operating Systems and Networking Lab",
+      "CS2U38A Operating Systems and Networking Lab",
+      "Operating Systems and Networking Lab (CS2U38A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs2u38b",
+    "type": "course",
+    "name": "Machine Learning Lab",
+    "code": "CS2U38B",
+    "aliases": [
+      "CS2U38B",
+      "Machine Learning Lab",
+      "CS2U38B Machine Learning Lab",
+      "Machine Learning Lab (CS2U38B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs2u30e",
+    "type": "course",
+    "name": "Robotics and Intelligent System",
+    "code": "CS2U30E",
+    "aliases": [
+      "CS2U30E",
+      "Robotics and Intelligent System",
+      "CS2U30E Robotics and Intelligent System",
+      "Robotics and Intelligent System (CS2U30E)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs2uxxx",
+    "type": "course",
+    "name": "Program elective I",
+    "code": "CS2UXXX",
+    "aliases": [
+      "CS2UXXX",
+      "Program elective I",
+      "CS2UXXX Program elective I",
+      "Program elective I (CS2UXXX)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u30i",
+    "type": "course",
+    "name": "Comprehensive Course Work",
+    "code": "CS2U30I",
+    "aliases": [
+      "CS2U30I",
+      "Comprehensive Course Work",
+      "CS2U30I Comprehensive Course Work",
+      "Comprehensive Course Work (CS2U30I)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_cs2u38c",
+    "type": "course",
+    "name": "Robotics Lab",
+    "code": "CS2U38C",
+    "aliases": [
+      "CS2U38C",
+      "Robotics Lab",
+      "CS2U38C Robotics Lab",
+      "Robotics Lab (CS2U38C)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs2u39a",
+    "type": "course",
+    "name": "Mini Project",
+    "code": "CS2U39A",
+    "aliases": [
+      "CS2U39A",
+      "Mini Project",
+      "CS2U39A Mini Project",
+      "Mini Project (CS2U39A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs2u31a",
+    "type": "course",
+    "name": "Intelligent Model Design and Thinking",
+    "code": "CS2U31A",
+    "aliases": [
+      "CS2U31A",
+      "Intelligent Model Design and Thinking",
+      "CS2U31A Intelligent Model Design and Thinking",
+      "Intelligent Model Design and Thinking (CS2U31A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u31b",
+    "type": "course",
+    "name": "Concepts in computer graphics and image processing",
+    "code": "CS2U31B",
+    "aliases": [
+      "CS2U31B",
+      "Concepts in computer graphics and image processing",
+      "CS2U31B Concepts in computer graphics and image processing",
+      "Concepts in computer graphics and image processing (CS2U31B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u31c",
+    "type": "course",
+    "name": "Object Oriented Programming using Java",
+    "code": "CS2U31C",
+    "aliases": [
+      "CS2U31C",
+      "Object Oriented Programming using Java",
+      "CS2U31C Object Oriented Programming using Java",
+      "Object Oriented Programming using Java (CS2U31C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u31e",
+    "type": "course",
+    "name": "Programming in R",
+    "code": "CS2U31E",
+    "aliases": [
+      "CS2U31E",
+      "Programming in R",
+      "CS2U31E Programming in R",
+      "Programming in R (CS2U31E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u31f",
+    "type": "course",
+    "name": "Machine Learning models and Storage Management",
+    "code": "CS2U31F",
+    "aliases": [
+      "CS2U31F",
+      "Machine Learning models and Storage Management",
+      "CS2U31F Machine Learning models and Storage Management",
+      "Machine Learning models and Storage Management (CS2U31F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u40a",
+    "type": "course",
+    "name": "Foundations of Deep Learning",
+    "code": "CS2U40A",
+    "aliases": [
+      "CS2U40A",
+      "Foundations of Deep Learning",
+      "CS2U40A Foundations of Deep Learning",
+      "Foundations of Deep Learning (CS2U40A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u48a",
+    "type": "course",
+    "name": "Deep Learning Lab",
+    "code": "CS2U48A",
+    "aliases": [
+      "CS2U48A",
+      "Deep Learning Lab",
+      "CS2U48A Deep Learning Lab",
+      "Deep Learning Lab (CS2U48A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs2u49a",
+    "type": "course",
+    "name": "Seminar",
+    "code": "CS2U49A",
+    "aliases": [
+      "CS2U49A",
+      "Seminar",
+      "CS2U49A Seminar",
+      "Seminar (CS2U49A)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs2u49b",
+    "type": "course",
+    "name": "Project Phase I",
+    "code": "CS2U49B",
+    "aliases": [
+      "CS2U49B",
+      "Project Phase I",
+      "CS2U49B Project Phase I",
+      "Project Phase I (CS2U49B)"
+    ],
+    "credits": "2"
+  },
+  {
+    "id": "course_cs2u41a",
+    "type": "course",
+    "name": "Big data Analytics",
+    "code": "CS2U41A",
+    "aliases": [
+      "CS2U41A",
+      "Big data Analytics",
+      "CS2U41A Big data Analytics",
+      "Big data Analytics (CS2U41A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u41b",
+    "type": "course",
+    "name": "Social Network Analysis",
+    "code": "CS2U41B",
+    "aliases": [
+      "CS2U41B",
+      "Social Network Analysis",
+      "CS2U41B Social Network Analysis",
+      "Social Network Analysis (CS2U41B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u41c",
+    "type": "course",
+    "name": "Data Mining",
+    "code": "CS2U41C",
+    "aliases": [
+      "CS2U41C",
+      "Data Mining",
+      "CS2U41C Data Mining",
+      "Data Mining (CS2U41C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u41d",
+    "type": "course",
+    "name": "AI for Health Care",
+    "code": "CS2U41D",
+    "aliases": [
+      "CS2U41D",
+      "AI for Health Care",
+      "CS2U41D AI for Health Care",
+      "AI for Health Care (CS2U41D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u41e",
+    "type": "course",
+    "name": "Game Theory in Artificial Intelligence",
+    "code": "CS2U41E",
+    "aliases": [
+      "CS2U41E",
+      "Game Theory in Artificial Intelligence",
+      "CS2U41E Game Theory in Artificial Intelligence",
+      "Game Theory in Artificial Intelligence (CS2U41E)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u41f",
+    "type": "course",
+    "name": "Cloud Data Management",
+    "code": "CS2U41F",
+    "aliases": [
+      "CS2U41F",
+      "Cloud Data Management",
+      "CS2U41F Cloud Data Management",
+      "Cloud Data Management (CS2U41F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs0u41f",
+    "type": "course",
+    "name": "Introduction to AI and ML",
+    "code": "CS0U41F",
+    "aliases": [
+      "CS0U41F",
+      "Introduction to AI and ML",
+      "CS0U41F Introduction to AI and ML",
+      "Introduction to AI and ML (CS0U41F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u40b",
+    "type": "course",
+    "name": "Robotic Process Automation",
+    "code": "CS2U40B",
+    "aliases": [
+      "CS2U40B",
+      "Robotic Process Automation",
+      "CS2U40B Robotic Process Automation",
+      "Robotic Process Automation (CS2U40B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u40c",
+    "type": "course",
+    "name": "Comprehensive Course Viva",
+    "code": "CS2U40C",
+    "aliases": [
+      "CS2U40C",
+      "Comprehensive Course Viva",
+      "CS2U40C Comprehensive Course Viva",
+      "Comprehensive Course Viva (CS2U40C)"
+    ],
+    "credits": "1"
+  },
+  {
+    "id": "course_cs2u49c",
+    "type": "course",
+    "name": "Project Phase II",
+    "code": "CS2U49C",
+    "aliases": [
+      "CS2U49C",
+      "Project Phase II",
+      "CS2U49C Project Phase II",
+      "Project Phase II (CS2U49C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs2u42a",
+    "type": "course",
+    "name": "AI For Cyber Security",
+    "code": "CS2U42A",
+    "aliases": [
+      "CS2U42A",
+      "AI For Cyber Security",
+      "CS2U42A AI For Cyber Security",
+      "AI For Cyber Security (CS2U42A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u42b",
+    "type": "course",
+    "name": "Web Intelligence and Big Data",
+    "code": "CS2U42B",
+    "aliases": [
+      "CS2U42B",
+      "Web Intelligence and Big Data",
+      "CS2U42B Web Intelligence and Big Data",
+      "Web Intelligence and Big Data (CS2U42B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u42c",
+    "type": "course",
+    "name": "Cognitive Modelling",
+    "code": "CS2U42C",
+    "aliases": [
+      "CS2U42C",
+      "Cognitive Modelling",
+      "CS2U42C Cognitive Modelling",
+      "Cognitive Modelling (CS2U42C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u42d",
+    "type": "course",
+    "name": "Image and Video Analytics",
+    "code": "CS2U42D",
+    "aliases": [
+      "CS2U42D",
+      "Image and Video Analytics",
+      "CS2U42D Image and Video Analytics",
+      "Image and Video Analytics (CS2U42D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u43a",
+    "type": "course",
+    "name": "Human Computer Interaction",
+    "code": "CS2U43A",
+    "aliases": [
+      "CS2U43A",
+      "Human Computer Interaction",
+      "CS2U43A Human Computer Interaction",
+      "Human Computer Interaction (CS2U43A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u43b",
+    "type": "course",
+    "name": "Deep Learning for Signal & Image Processing",
+    "code": "CS2U43B",
+    "aliases": [
+      "CS2U43B",
+      "Deep Learning for Signal & Image Processing",
+      "CS2U43B Deep Learning for Signal & Image Processing",
+      "Deep Learning for Signal & Image Processing (CS2U43B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u43c",
+    "type": "course",
+    "name": "Artificial Intelligence for Robotics",
+    "code": "CS2U43C",
+    "aliases": [
+      "CS2U43C",
+      "Artificial Intelligence for Robotics",
+      "CS2U43C Artificial Intelligence for Robotics",
+      "Artificial Intelligence for Robotics (CS2U43C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u43d",
+    "type": "course",
+    "name": "Data Pre-processing and Feature Engineering",
+    "code": "CS2U43D",
+    "aliases": [
+      "CS2U43D",
+      "Data Pre-processing and Feature Engineering",
+      "CS2U43D Data Pre-processing and Feature Engineering",
+      "Data Pre-processing and Feature Engineering (CS2U43D)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u43f",
+    "type": "course",
+    "name": "Introduction to Reinforcement Learning",
+    "code": "CS2U43F",
+    "aliases": [
+      "CS2U43F",
+      "Introduction to Reinforcement Learning",
+      "CS2U43F Introduction to Reinforcement Learning",
+      "Introduction to Reinforcement Learning (CS2U43F)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u43g",
+    "type": "course",
+    "name": "Bio-Inspired Optimization Techniques",
+    "code": "CS2U43G",
+    "aliases": [
+      "CS2U43G",
+      "Bio-Inspired Optimization Techniques",
+      "CS2U43G Bio-Inspired Optimization Techniques",
+      "Bio-Inspired Optimization Techniques (CS2U43G)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u43h",
+    "type": "course",
+    "name": "Text Mining",
+    "code": "CS2U43H",
+    "aliases": [
+      "CS2U43H",
+      "Text Mining",
+      "CS2U43H Text Mining",
+      "Text Mining (CS2U43H)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u44a",
+    "type": "course",
+    "name": "Knowledge Engineering and Expert Systems",
+    "code": "CS2U44A",
+    "aliases": [
+      "CS2U44A",
+      "Knowledge Engineering and Expert Systems",
+      "CS2U44A Knowledge Engineering and Expert Systems",
+      "Knowledge Engineering and Expert Systems (CS2U44A)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u44b",
+    "type": "course",
+    "name": "IoT for AI",
+    "code": "CS2U44B",
+    "aliases": [
+      "CS2U44B",
+      "IoT for AI",
+      "CS2U44B IoT for AI",
+      "IoT for AI (CS2U44B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2u44c",
+    "type": "course",
+    "name": "Big Data and Database Management",
+    "code": "CS2U44C",
+    "aliases": [
+      "CS2U44C",
+      "Big Data and Database Management",
+      "CS2U44C Big Data and Database Management",
+      "Big Data and Database Management (CS2U44C)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cy0u10b",
+    "type": "course",
+    "name": "ENGINEERING CHEMISTRY-B",
+    "code": "CY0U10B",
+    "aliases": [
+      "CY0U10B",
+      "ENGINEERING CHEMISTRY-B",
+      "CY0U10B ENGINEERING CHEMISTRY-B",
+      "ENGINEERING CHEMISTRY-B (CY0U10B)"
+    ],
+    "credits": "3"
+  },
+  {
+    "id": "course_cs2h20a",
+    "type": "course",
+    "name": "COMPUTATIONAL FUNDAMENTALS FOR BIOINFORMATICS",
+    "code": "CS2H20A",
+    "aliases": [
+      "CS2H20A",
+      "COMPUTATIONAL FUNDAMENTALS FOR BIOINFORMATICS",
+      "CS2H20A COMPUTATIONAL FUNDAMENTALS FOR BIOINFORMATICS",
+      "COMPUTATIONAL FUNDAMENTALS FOR BIOINFORMATICS (CS2H20A)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs2h20b",
+    "type": "course",
+    "name": "ADVANCED TOPICS IN COMPUTER GRAPHICS",
+    "code": "CS2H20B",
+    "aliases": [
+      "CS2H20B",
+      "ADVANCED TOPICS IN COMPUTER GRAPHICS",
+      "CS2H20B ADVANCED TOPICS IN COMPUTER GRAPHICS",
+      "ADVANCED TOPICS IN COMPUTER GRAPHICS (CS2H20B)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs2h30a",
+    "type": "course",
+    "name": "Computational Biology",
+    "code": "CS2H30A",
+    "aliases": [
+      "CS2H30A",
+      "Computational Biology",
+      "CS2H30A Computational Biology",
+      "Computational Biology (CS2H30A)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs2h30b",
+    "type": "course",
+    "name": "Advanced Concepts in Computer Vision",
+    "code": "CS2H30B",
+    "aliases": [
+      "CS2H30B",
+      "Advanced Concepts in Computer Vision",
+      "CS2H30B Advanced Concepts in Computer Vision",
+      "Advanced Concepts in Computer Vision (CS2H30B)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_cs2h30c",
+    "type": "course",
+    "name": "MACHINE LEARNING IN COMPUTATIONAL BIOLOGY",
+    "code": "CS2H30C",
+    "aliases": [
+      "CS2H30C",
+      "MACHINE LEARNING IN COMPUTATIONAL BIOLOGY",
+      "CS2H30C MACHINE LEARNING IN COMPUTATIONAL BIOLOGY",
+      "MACHINE LEARNING IN COMPUTATIONAL BIOLOGY (CS2H30C)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_cs2h30d",
+    "type": "course",
+    "name": "IMAGE AND VIDEO PROCESSING",
+    "code": "CS2H30D",
+    "aliases": [
+      "CS2H30D",
+      "IMAGE AND VIDEO PROCESSING",
+      "CS2H30D IMAGE AND VIDEO PROCESSING",
+      "IMAGE AND VIDEO PROCESSING (CS2H30D)"
+    ],
+    "credits": "4"
+  },
+  {
+    "id": "course_2ac071a",
+    "type": "course",
+    "name": "Universal Human Values",
+    "code": "2AC071A",
+    "aliases": [
+      "2AC071A",
+      "Universal Human Values",
+      "2AC071A Universal Human Values",
+      "Universal Human Values (2AC071A)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23ecl2ma",
+    "type": "course",
+    "name": "Electronic Circuits",
+    "code": "23ECL2MA",
+    "aliases": [
+      "23ECL2MA",
+      "Electronic Circuits",
+      "23ECL2MA Electronic Circuits",
+      "Electronic Circuits (23ECL2MA)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23ecl2mc",
+    "type": "course",
+    "name": "Introduction to Multidimensional Data",
+    "code": "23ECL2MC",
+    "aliases": [
+      "23ECL2MC",
+      "Introduction to Multidimensional Data",
+      "23ECL2MC Introduction to Multidimensional Data",
+      "Introduction to Multidimensional Data (23ECL2MC)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23ecl2me",
+    "type": "course",
+    "name": "Fundamentals of Robotics",
+    "code": "23ECL2ME",
+    "aliases": [
+      "23ECL2ME",
+      "Fundamentals of Robotics",
+      "23ECL2ME Fundamentals of Robotics",
+      "Fundamentals of Robotics (23ECL2ME)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23ecl2mg",
+    "type": "course",
+    "name": "Fundamentals of Biomedical Engineering",
+    "code": "23ECL2MG",
+    "aliases": [
+      "23ECL2MG",
+      "Fundamentals of Biomedical Engineering",
+      "23ECL2MG Fundamentals of Biomedical Engineering",
+      "Fundamentals of Biomedical Engineering (23ECL2MG)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23hsl2ma",
+    "type": "course",
+    "name": "Financial Management",
+    "code": "23HSL2MA",
+    "aliases": [
+      "23HSL2MA",
+      "Financial Management",
+      "23HSL2MA Financial Management",
+      "Financial Management (23HSL2MA)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23eel2ma",
+    "type": "course",
+    "name": "Microcontrollers and Embedded Systems",
+    "code": "23EEL2MA",
+    "aliases": [
+      "23EEL2MA",
+      "Microcontrollers and Embedded Systems",
+      "23EEL2MA Microcontrollers and Embedded Systems",
+      "Microcontrollers and Embedded Systems (23EEL2MA)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23eel2mg",
+    "type": "course",
+    "name": "Electric Machinery",
+    "code": "23EEL2MG",
+    "aliases": [
+      "23EEL2MG",
+      "Electric Machinery",
+      "23EEL2MG Electric Machinery",
+      "Electric Machinery (23EEL2MG)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23mel3mc",
+    "type": "course",
+    "name": "DESIGN AND SIMULATION",
+    "code": "23MEL3MC",
+    "aliases": [
+      "23MEL3MC",
+      "DESIGN AND SIMULATION",
+      "23MEL3MC DESIGN AND SIMULATION",
+      "DESIGN AND SIMULATION (23MEL3MC)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_23mel3me",
+    "type": "course",
+    "name": "Computational Mechanic",
+    "code": "23MEL3ME",
+    "aliases": [
+      "23MEL3ME",
+      "Computational Mechanic",
+      "23MEL3ME Computational Mechanic",
+      "Computational Mechanic (23MEL3ME)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_me0u41d",
+    "type": "course",
+    "name": "Renewable Energy Engineering",
+    "code": "ME0U41D",
+    "aliases": [
+      "ME0U41D",
+      "Renewable Energy Engineering",
+      "ME0U41D Renewable Energy Engineering",
+      "Renewable Energy Engineering (ME0U41D)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_me0u41e",
+    "type": "course",
+    "name": "Quality Engineering and Management",
+    "code": "ME0U41E",
+    "aliases": [
+      "ME0U41E",
+      "Quality Engineering and Management",
+      "ME0U41E Quality Engineering and Management",
+      "Quality Engineering and Management (ME0U41E)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_ce0u41a",
+    "type": "course",
+    "name": "Introduction to Environmental Impact assessment",
+    "code": "CE0U41A",
+    "aliases": [
+      "CE0U41A",
+      "Introduction to Environmental Impact assessment",
+      "CE0U41A Introduction to Environmental Impact assessment",
+      "Introduction to Environmental Impact assessment (CE0U41A)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_ce0u41e",
+    "type": "course",
+    "name": "Environmental Health and Safety",
+    "code": "CE0U41E",
+    "aliases": [
+      "CE0U41E",
+      "Environmental Health and Safety",
+      "CE0U41E Environmental Health and Safety",
+      "Environmental Health and Safety (CE0U41E)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_ee0u41d",
+    "type": "course",
+    "name": "Electric Vehicles",
+    "code": "EE0U41D",
+    "aliases": [
+      "EE0U41D",
+      "Electric Vehicles",
+      "EE0U41D Electric Vehicles",
+      "Electric Vehicles (EE0U41D)"
+    ],
+    "credits": ""
+  },
+  {
+    "id": "course_me0u41c",
+    "type": "course",
+    "name": "Automotive Technology",
+    "code": "ME0U41C",
+    "aliases": [
+      "ME0U41C",
+      "Automotive Technology",
+      "ME0U41C Automotive Technology",
+      "Automotive Technology (ME0U41C)"
+    ],
+    "credits": ""
+  }
+]
