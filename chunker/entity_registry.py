@@ -222,6 +222,26 @@ class EntityRegistry:
                 if fuzzy_id:
                     found_ids.add(fuzzy_id)
                     logger.debug(f"Fuzzy matched '{potential}' to {fuzzy_id}")
+
+        # Explicitly check for Semester entities using Regex
+        # Matches: "semester 1", "semester i", "s1", "s 1", "semester v", "s5", "semester 5"
+        sem_pattern = re.compile(r'\b(semester|s)\s*([1-8ivx]+)\b', re.IGNORECASE)
+        for match in sem_pattern.finditer(text):
+            val = match.group(2).lower()
+            
+            # Map roman/number to 1-8
+            mapping = {
+                '1': '1', 'i': '1',
+                '2': '2', 'ii': '2',
+                '3': '3', 'iii': '3',
+                '4': '4', 'iv': '4',
+                '5': '5', 'v': '5',
+                '6': '6', 'vi': '6',
+                '7': '7', 'vii': '7',
+                '8': '8', 'viii': '8'
+            }
+            if val in mapping:
+                found_ids.add(f"semester_{mapping[val]}")
         
         return list(found_ids)
 

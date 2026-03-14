@@ -1,10 +1,10 @@
 {
-  "total_chunks": 2060,
-  "duplicates_skipped": 440,
+  "total_chunks": 2203,
+  "duplicates_skipped": 297,
   "too_small_skipped": 0,
   "tables_split": 0,
   "chunks_by_type": {
-    "table": 1829,
+    "table": 1972,
     "profile": 101,
     "list": 11,
     "section": 69,
@@ -12,6 +12,6 @@
   },
   "chunks_by_source": {
     "html": 191,
-    "pdf": 1869
+    "pdf": 2012
   }
 }

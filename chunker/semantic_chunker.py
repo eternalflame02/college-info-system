@@ -439,12 +439,17 @@ class MarkdownChunker:
                 table_chunks = self._split_large_table(table_text)
                 
                 for tc_idx, tc_text in enumerate(table_chunks):
+                    # Add context header for tables to retain meaning
+                    header_context = " > ".join([t for _, t in heading_stack])
+                    if header_context:
+                        tc_text = f"[Context: {header_context}]\n" + tc_text
+
                     chunk = self._create_chunk(
                         tc_text,
                         filepath,
                         source_type,
                         [t for _, t in heading_stack],
-                        i - len(table_lines),
+                        i - len(table_lines) + (tc_idx * config.MAX_TABLE_ROWS_PER_CHUNK),
                         i - 1,
                         page_markers,
                         entity_registry,

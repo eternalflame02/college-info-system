@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "id": "prog_btech_cse",
+    "type": "program",
+    "name": "B.Tech Computer Science and Engineering",
+    "aliases": [
+      "B.Tech CSE",
+      "Computer Science and Engineering",
+      "CSE",
+      "CS",
+      "BTech CSE",
+      "B.Tech in Computer Science and Engineering"
+    ]
+  },
+  {
+    "id": "prog_btech_ai",
+    "type": "program",
+    "name": "B.Tech Artificial Intelligence",
+    "aliases": [
+      "B.Tech AI",
+      "Artificial Intelligence",
+      "AI",
+      "CT",
+      "BTech AI",
+      "B.Tech in Artificial Intelligence"
+    ]
+  },
+  {
+    "id": "prog_mtech_cse",
+    "type": "program",
+    "name": "M.Tech Computer Science and Engineering",
+    "aliases": [
+      "M.Tech CSE",
+      "MTech CSE",
+      "M.Tech in Computer Science and Engineering"
+    ]
+  }
+]
