@@ -1,4 +1,7 @@
 {
+    "faculty_dr_anil_j": [
+        "course_23eel2ma"
+    ],
     "faculty_dr_anne_dickson": [
         "course_23csl30a",
         "course_23csl31d",
@@ -11,6 +14,9 @@
     "faculty_dr_jisha_john": [
         "course_cs1u40a"
     ],
+    "faculty_dr_jishnu_chandran_r": [
+        "course_me0u41e"
+    ],
     "faculty_dr_merlin_george": [
         "course_23csb20c",
         "course_23csl31b",
@@ -18,15 +24,51 @@
         "course_cs1u41e",
         "course_cs1u48a"
     ],
+    "faculty_dr_neena_raj_n_r": [
+        "course_23csp20b"
+    ],
+    "faculty_dr_swapna_p_s": [
+        "course_23ecl2ma"
+    ],
     "faculty_dr_tessy_mathew": [
         "course_23ctl30b"
     ],
-    "faculty_mr_praveen_j_s": [
+    "faculty_mr_abhiram_r": [
+        "course_me0u41d"
+    ],
+    "faculty_mr_alen_k_johnson": [
+        "course_23mel3me"
+    ],
+    "faculty_mr_anoop_k_johnson": [
+        "course_23ecl2mg"
+    ],
+    "faculty_mr_aravind_sarma": [
+        "course_23csp20a"
+    ],
+    "faculty_mr_aswin_r_b": [
+        "course_ee0u41d"
+    ],
+    "faculty_mr_divya_prasad": [
+        "course_ce0u41e"
+    ],
+    "faculty_mr_g_l_praveen": [
         "course_23csl20a",
+        "course_23csp20b"
+    ],
+    "faculty_mr_jithin_m_george": [
+        "course_23csp20a",
+        "course_23ecl2me"
+    ],
+    "faculty_mr_melvin_jacob": [
+        "course_me0u41c"
+    ],
+    "faculty_mr_praveen_j_s": [
         "course_23csl30a",
-        "course_23csp20b",
         "course_cs1h40a",
         "course_cs1u48a"
+    ],
+    "faculty_mr_r_s_praveen_raj": [
+        "course_23eel2mg"
     ],
     "faculty_mr_ramjith_r_p": [
         "course_23csl20a",
@@ -44,6 +86,14 @@
         "course_23csl30b",
         "course_23csp30b"
     ],
+    "faculty_mr_vaisakh_s_nair": [
+        "course_23mel3mc",
+        "course_me0u41d"
+    ],
+    "faculty_mr_vinu_v": [
+        "course_23hsl2ma",
+        "course_23hsl30a"
+    ],
     "faculty_ms_anjali_s": [
         "course_23csl20b",
         "course_23csp20a",
@@ -51,9 +101,15 @@
         "course_23hsl2na",
         "course_cs1u41b"
     ],
+    "faculty_ms_ann_mary_alex": [
+        "course_23csp20a"
+    ],
     "faculty_ms_bindhya_p_s": [
         "course_23ctl31a",
         "course_cs1u41e"
+    ],
+    "faculty_ms_deepa_p_l": [
+        "course_23ecl2mc"
     ],
     "faculty_ms_deepthi_k_moorthy": [
         "course_23csl31d",
@@ -79,6 +135,11 @@
         "course_23csl31b",
         "course_23esl00a"
     ],
+    "faculty_ms_indu_v": [
+        "course_23csp30a",
+        "course_23ctp30a",
+        "course_ce0u41e"
+    ],
     "faculty_ms_jayalekshmi_j": [
         "course_23csl30c",
         "course_23csp20b",
@@ -94,6 +155,9 @@
         "course_23csl20b",
         "course_23csp20b"
     ],
+    "faculty_ms_lekshmi_i": [
+        "course_ma0m40a"
+    ],
     "faculty_ms_lino_zachariah": [
         "course_23csb20c",
         "course_cs1u41c",
@@ -102,6 +166,9 @@
     "faculty_ms_neethi_narayanan": [
         "course_23csb20c",
         "course_23csl20b"
+    ],
+    "faculty_ms_nimisha_anna_jacob": [
+        "course_ce0u41a"
     ],
     "faculty_ms_poorna_br": [
         "course_23ctb30c",
@@ -117,6 +184,9 @@
         "course_23csl20b",
         "course_23csp20a",
         "course_cs1u48a"
+    ],
+    "faculty_ms_rini_rajan": [
+        "course_23csp30b"
     ],
     "faculty_ms_rini_vijayan": [
         "course_23csb20c",
@@ -134,12 +204,24 @@
         "course_23ctp30a",
         "course_cs1h40b"
     ],
+    "faculty_ms_sruthi_janardhanan": [
+        "course_23mal20b"
+    ],
+    "faculty_ms_syama_s_mohan": [
+        "course_23mal20b"
+    ],
     "faculty_ms_vijitha_robinson": [
         "course_23csp30b",
         "course_23hsl2na"
     ],
     "faculty_ms_vinitha_v_k": [
         "course_23csb20c",
+        "course_23csl30a",
+        "course_23csp30b"
+    ],
+    "faculty_msanjali_devi_a_j": [
+        "course_23csl31b",
+        "course_23csp30a",
         "course_23csp30b"
     ]
 }
