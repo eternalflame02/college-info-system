@@ -339,7 +339,8 @@ def generate_knowledge_graph_documents(data_dir: Path) -> List[Dict]:
     """
     Generate synthetic relationship documents from canonical graph edges.
     """
-    graph = load_knowledge_graph()
+    graph_path = data_dir / "graph" / "knowledge_graph.json"
+    graph = _safe_load_json(graph_path, default={})
     if not graph:
         graph = build_knowledge_graph(data_dir)
 
