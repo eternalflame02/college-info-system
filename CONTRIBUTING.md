@@ -56,6 +56,18 @@ This is a **Mini Project** for the B.Tech Computer Science and Engineering progr
 
 ## 📝 Workflow Guidelines
 
+### Current Phase-1 Scope (Knowledge Graph)
+
+For the current cycle, align contributions with these constraints:
+
+- Use **JSON only** for graph artifacts
+- Add only **high-confidence deterministic** edges
+- Prioritize **graph construction and documentation**
+- Limit updates to technical docs:
+  - `README.md`
+  - `CONTRIBUTING.md`
+  - `Docs/knowledge-graph/*`
+
 ### Branch Naming
 
 - `feature/<name>` - New features

@@ -14,6 +14,7 @@ A Python-based pipeline for scraping, processing, and semantically chunking MBCE
 - [Installation](#-installation)
 - [Usage](#-usage)
 - [Pipeline Stages](#-pipeline-stages)
+- [Knowledge Graph (Phase 1)](#-knowledge-graph-phase-1)
 - [Project Structure](#-project-structure)
 - [Configuration](#-configuration)
 - [Output Formats](#-output-formats)
@@ -214,6 +215,22 @@ python main.py --stage all -v
 
 ---
 
+## 🕸 Knowledge Graph (Phase 1)
+
+Current phase-1 implementation constraints:
+
+- **Storage format:** JSON only
+- **Edge policy:** deterministic, high-confidence edges only
+- **Priority:** graph construction and documentation first
+- **Current update scope:** technical docs (`README.md`, `CONTRIBUTING.md`, `Docs/knowledge-graph/*`)
+
+Detailed phase-1 documentation is available in:
+
+- `Docs/knowledge-graph/README.md`
+- `Docs/knowledge-graph/phase1-schema.md`
+
+---
+
 ## 📁 Project Structure
 
 ```
@@ -250,6 +267,7 @@ mbcet-chunking-pipeline/
 │   └── chunks/             # Final chunks
 │
 └── Docs/                   # Reference documents
+    └── knowledge-graph/    # Phase-1 KG docs and schema
 ```
 
 ---
