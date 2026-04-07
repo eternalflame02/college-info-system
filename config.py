@@ -85,6 +85,11 @@ CHUNK_REPORT_FILE = CHUNKS_DIR / "chunk_report.json"
 ERRORS_LOG_FILE = CHUNKS_DIR / "errors.log"
 CHUNKER_LOG_FILE = LOGS_DIR / "chunker.log"
 
+# ========== Knowledge Graph Output ==========
+KNOWLEDGE_GRAPH_DIR = DATA_DIR / "knowledge_graph"
+KNOWLEDGE_GRAPH_FILE = KNOWLEDGE_GRAPH_DIR / "graph.json"
+KNOWLEDGE_GRAPH_REPORT_FILE = KNOWLEDGE_GRAPH_DIR / "graph_report.json"
+
 # ========== Faculty Detection Patterns ==========
 FACULTY_SECTION_KEYWORDS = [
     "faculty",
@@ -138,6 +143,7 @@ def ensure_directories():
         MARKDOWN_PDFS_DIR,
         ENTITIES_DIR,
         CHUNKS_DIR,
+        KNOWLEDGE_GRAPH_DIR,
         LOGS_DIR,
         EMBEDDING_CACHE_DIR,
         VALIDATION_DIR,
@@ -148,4 +154,3 @@ def ensure_directories():
 
 # Create directories on import
 ensure_directories()
-

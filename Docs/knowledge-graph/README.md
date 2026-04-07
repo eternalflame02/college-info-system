@@ -13,11 +13,38 @@ This folder defines the implementation scope for the phase-1 knowledge graph wor
 3. **Graph construction and documentation first**  
    The immediate priority is building the graph artifacts and documenting the design/constraints.
 
-4. **Technical-docs-only update scope (for this cycle)**  
-   Updates are currently limited to:
-   - `README.md`
-   - `CONTRIBUTING.md`
-   - `Docs/knowledge-graph/*`
+4. **Deterministic reproducibility required**  
+   Graph output must be reproducible with stable node/edge IDs and deterministic ordering.
+
+## Implementation Entry Points
+
+- CLI stage: `python main.py --stage graph`
+- Module entry: `knowledge_graph.builder.run_knowledge_graph_pipeline()`
+
+## Data Inputs and Outputs
+
+### Inputs
+
+- `data/entities/faculty.json`
+- `data/entities/courses.json`
+- `data/entities/programs.json`
+- `data/chunks/chunks.json`
+
+### Outputs
+
+- `data/knowledge_graph/graph.json`
+- `data/knowledge_graph/graph_report.json`
+
+## Validation Checklist (Phase 1)
+
+- Graph JSON has top-level keys: `version`, `generated_at`, `nodes`, `edges`
+- Every edge has:
+  - `confidence == 1.0`
+  - `deterministic == true`
+  - non-empty `evidence`
+- Every edge endpoint references an existing node
+- No duplicate node IDs
+- No duplicate edge IDs
 
 ## Phase-1 Document Index
 

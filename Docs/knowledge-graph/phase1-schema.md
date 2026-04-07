@@ -6,6 +6,7 @@ This schema applies only to phase 1:
 
 - JSON storage only
 - Deterministic high-confidence edges only
+- Deterministic serialization (stable IDs and sorted nodes/edges)
 
 ## Graph File Shape
 
@@ -59,3 +60,34 @@ Examples of acceptable deterministic rules:
 - `course -> has_prerequisite -> course` only when prerequisites are explicitly stated.
 
 If evidence is ambiguous, omit the edge in phase 1.
+
+## Accepted Evidence Patterns (Current Implementation)
+
+### `course -> part_of -> program`
+
+Accepted only when:
+- exactly one explicit program entity appears in the chunk evidence, or
+- source file naming deterministically maps to one known program.
+
+Rejected when:
+- multiple program mappings are present in same chunk,
+- no deterministic program mapping exists.
+
+### `course -> has_prerequisite -> course`
+
+Accepted only when:
+- text contains explicit prerequisite marker (for example `Prerequisite:` or `Pre-requisite:`),
+- referenced prerequisite course code can be mapped to a known course node.
+
+Rejected when:
+- source course is ambiguous in the chunk,
+- prerequisite code cannot be mapped to a known course node.
+
+### `faculty -> teaches -> course`
+
+Accepted only when:
+- faculty and course appear in the same row/span,
+- row/span has assignment signal (assignment cue words or table-row structure).
+
+Rejected when:
+- faculty and course only co-occur without assignment signal.

@@ -63,10 +63,21 @@ For the current cycle, align contributions with these constraints:
 - Use **JSON only** for graph artifacts
 - Add only **high-confidence deterministic** edges
 - Prioritize **graph construction and documentation**
-- Limit updates to technical docs:
-  - `README.md`
-  - `CONTRIBUTING.md`
-  - `Docs/knowledge-graph/*`
+- Keep all graph edges rule-based with explicit evidence strings
+- Enforce deterministic graph outputs (stable IDs and sorted serialization)
+
+### Phase-1 Edge Rules
+
+Allowed edge families in the current implementation:
+
+- `course -> part_of -> program`
+  - only when a single explicit/derived deterministic program mapping exists
+- `course -> has_prerequisite -> course`
+  - only when explicit prerequisite statement is present in source content
+- `faculty -> teaches -> course`
+  - only when faculty and course are explicitly linked in the same assignment-bearing row/text span
+
+If evidence is ambiguous, the edge must be omitted.
 
 ### Branch Naming
 
@@ -103,6 +114,9 @@ pytest
 
 # Run with verbose output
 pytest -v
+
+# Stable suite used for CI-like local verification
+pytest -q tests
 ```
 
 ---
