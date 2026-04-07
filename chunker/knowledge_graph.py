@@ -400,7 +400,7 @@ def generate_knowledge_graph_documents(data_dir: Path) -> List[Dict]:
                 "main_topic": "Teaching Assignment",
                 "relation_types": sorted(
                     [r for r in relation_types_by_faculty.get(faculty_id, set()) if r]
-                ) or ["TEACHES"],
+                ),
                 "faculty_id": faculty_id,
                 "faculty_name": fac_name,
                 "faculty_designation": fac_designation or "",
