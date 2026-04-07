@@ -333,6 +333,7 @@ def generate_knowledge_graph_documents(data_dir: Path) -> List[Dict]:
 
     nodes = {n.get("id"): n for n in graph.get("nodes", []) if isinstance(n, dict)}
     teaches_map: Dict[str, List[Dict[str, str]]] = {}
+    relation_types_by_faculty: Dict[str, Set[str]] = {}
 
     for edge in graph.get("edges", []):
         if not isinstance(edge, dict) or edge.get("relation") != "TEACHES":
@@ -345,6 +346,7 @@ def generate_knowledge_graph_documents(data_dir: Path) -> List[Dict]:
         course_node = nodes[course_id]
         course_name = str(course_node.get("label", "Unknown"))
         course_code = str(course_node.get("attributes", {}).get("code", course_id))
+        relation_types_by_faculty.setdefault(faculty_id, set()).add(str(edge.get("relation", "")))
         teaches_map.setdefault(faculty_id, []).append(
             {
                 "course_id": course_id,
@@ -384,7 +386,9 @@ def generate_knowledge_graph_documents(data_dir: Path) -> List[Dict]:
                 "source_file": "data/entities/teaching_assignments.json",
                 "content_type": "knowledge_graph",
                 "main_topic": "Teaching Assignment",
-                "relation_types": ["TEACHES"],
+                "relation_types": sorted(
+                    [r for r in relation_types_by_faculty.get(faculty_id, set()) if r]
+                ) or ["TEACHES"],
                 "faculty_id": faculty_id,
                 "faculty_name": fac_name,
                 "faculty_designation": fac_designation or "",
