@@ -106,6 +106,20 @@ pytest -v
 
 ---
 
+## 🕸️ Knowledge Graph Data Maintenance
+
+- The authoritative teaching relationship source is `data/entities/teaching_assignments.json`.
+- Use valid entity IDs only:
+  - Faculty IDs must exist in `data/entities/faculty.json`
+  - Course IDs must exist in `data/entities/courses.json`
+- Keep mappings deterministic and deduplicated (same faculty-course pair should appear once).
+- Regenerate the graph artifact after changes:
+  ```bash
+  python main.py --stage kg
+  ```
+
+---
+
 ## 📚 References
 
 1. Linders, J. and Tomczak, J.M., "Knowledge graph-extended retrieval augmented generation for question answering," *Applied Intelligence*, vol. 55, 2025.
