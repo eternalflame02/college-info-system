@@ -272,6 +272,18 @@ def query_knowledge_graph(graph: Dict[str, Any], query_text: str) -> str:
             elif node_type == "faculty":
                 faculty_lookup.append((norm, node_id))
 
+    def normalize_phrase(text: str) -> str:
+        return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9\s]", " ", text.lower())).strip()
+
+    def phrase_matches(target: str, candidate: str) -> bool:
+        target_norm = normalize_phrase(target)
+        candidate_norm = normalize_phrase(candidate)
+        if not target_norm or not candidate_norm:
+            return False
+        if target_norm == candidate_norm:
+            return True
+        return bool(re.search(rf"\b{re.escape(target_norm)}\b", candidate_norm))
+
     q = query_text.lower().strip()
     who_teaches_patterns = [
         r"who teaches (.+)\??$",
@@ -282,7 +294,7 @@ def query_knowledge_graph(graph: Dict[str, Any], query_text: str) -> str:
         match = re.search(pattern, q)
         if match:
             target = match.group(1).strip()
-            matched_course_ids = {cid for token, cid in course_lookup if target in token or token in target}
+            matched_course_ids = {cid for token, cid in course_lookup if phrase_matches(target, token)}
             if not matched_course_ids:
                 return "No matching course found in the knowledge graph."
             faculty_ids = sorted({
@@ -303,7 +315,7 @@ def query_knowledge_graph(graph: Dict[str, Any], query_text: str) -> str:
         match = re.search(pattern, q)
         if match:
             target = match.group(1).strip()
-            matched_faculty_ids = {fid for token, fid in faculty_lookup if target in token or token in target}
+            matched_faculty_ids = {fid for token, fid in faculty_lookup if phrase_matches(target, token)}
             if not matched_faculty_ids:
                 return "No matching faculty member found in the knowledge graph."
             course_ids = sorted({
