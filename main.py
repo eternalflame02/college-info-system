@@ -186,6 +186,7 @@ def run_all_stages(force: bool = False):
     run_scrape_stage()
     run_entities_stage()
     run_chunk_stage()
+    # Graph stage depends on entities + chunks but is independent of embeddings.
     run_graph_stage()
     run_embed_stage(force=force)
 

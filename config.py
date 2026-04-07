@@ -110,6 +110,16 @@ FACULTY_NAME_PATTERN = (
     r"[A-Z][a-z]+(\s+[A-Z]\.?\s*)*(\s+[A-Z][a-z]+)+"
 )
 
+# ========== Knowledge Graph Rule Patterns ==========
+TEACHES_ASSIGNMENT_CUES = [
+    "teaches",
+    "handled by",
+    "faculty",
+    "instructor",
+    "course teacher",
+    "course faculty",
+]
+
 # ========== Embedding & RAG Configuration ==========
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "google/embeddinggemma-300m")
 EMBEDDING_DIMENSIONS = 768

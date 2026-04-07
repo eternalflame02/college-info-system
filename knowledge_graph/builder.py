@@ -250,10 +250,8 @@ def extract_teaches_edges(
             aliases.append(code)
         course_matchers.append((c.get("id", ""), [a for a in aliases if a]))
 
-    cue_pat = re.compile(
-        r"\b(teaches|handled by|faculty|instructor|course teacher|course faculty)\b",
-        re.IGNORECASE,
-    )
+    cue_words = [re.escape(word) for word in config.TEACHES_ASSIGNMENT_CUES]
+    cue_pat = re.compile(rf"\b({'|'.join(cue_words)})\b", re.IGNORECASE)
 
     for chunk in chunks:
         lines = [ln.strip() for ln in chunk.get("text", "").splitlines() if ln.strip()]

@@ -3,6 +3,7 @@ Tests for phase-1 knowledge graph builder.
 """
 
 from pathlib import Path
+import json
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -13,6 +14,7 @@ from knowledge_graph.builder import (
     extract_prerequisite_edges,
     validate_graph,
 )
+import config
 
 
 def _sample_entities():
@@ -145,3 +147,31 @@ def test_validation_fails_for_dangling_edge():
 
     errors = validate_graph(graph)
     assert any("Dangling edge target" in err for err in errors)
+
+
+def test_real_data_graph_structure_smoke():
+    required = [
+        config.FACULTY_FILE,
+        config.COURSES_FILE,
+        config.PROGRAMS_FILE,
+        config.CHUNKS_FILE,
+    ]
+    if not all(p.exists() for p in required):
+        return
+
+    with open(config.FACULTY_FILE, "r", encoding="utf-8") as f:
+        faculty = json.load(f)
+    with open(config.COURSES_FILE, "r", encoding="utf-8") as f:
+        courses = json.load(f)
+    with open(config.PROGRAMS_FILE, "r", encoding="utf-8") as f:
+        programs = json.load(f)
+    with open(config.CHUNKS_FILE, "r", encoding="utf-8") as f:
+        chunks = json.load(f)
+
+    graph, report = build_knowledge_graph(faculty, courses, programs, chunks)
+
+    assert isinstance(graph, dict)
+    assert isinstance(report, dict)
+    assert "nodes" in graph and "edges" in graph
+    assert report["total_nodes"] >= 0
+    assert report["total_edges"] >= 0
