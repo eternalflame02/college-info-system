@@ -9,6 +9,7 @@ Usage:
     python main.py --stage scrape    # Run web scraper
     python main.py --stage chunk     # Run semantic chunker
     python main.py --stage entities  # Build entity registry
+    python main.py --stage kg        # Build knowledge graph artifact
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
@@ -158,6 +159,34 @@ def run_embed_stage(force: bool = False):
     run_ingestion_pipeline(force_reembed=force)
 
 
+def run_kg_stage(query_text: str = None):
+    """Build and persist canonical knowledge graph and optionally query it."""
+    print("\n" + "=" * 50)
+    print("🕸️  Building Knowledge Graph")
+    print("=" * 50)
+
+    from chunker.knowledge_graph import (
+        build_and_save_knowledge_graph,
+        query_knowledge_graph,
+    )
+
+    graph = build_and_save_knowledge_graph(config.DATA_DIR)
+    summary = graph.get("summary", {})
+    print(f"Saved graph: {config.KNOWLEDGE_GRAPH_FILE}")
+    print(f"Saved summary: {config.KNOWLEDGE_GRAPH_SUMMARY_FILE}")
+    print(
+        f"Nodes: {summary.get('total_nodes', 0)} | "
+        f"Edges: {summary.get('total_edges', 0)}"
+    )
+
+    if query_text:
+        print(f"\nQuery: {query_text}")
+        answer = query_knowledge_graph(graph, query_text)
+        print(f"Answer: {answer}")
+
+    print("\n✅ Knowledge graph stage complete!")
+
+
 def run_query_stage(query_text: str):
     """Run a query against the ChromaDB knowledge base."""
     from rag_ingestion import run_query
@@ -173,6 +202,7 @@ def run_all_stages(force: bool = False):
 
     run_scrape_stage()
     run_entities_stage()
+    run_kg_stage()
     run_chunk_stage()
     run_embed_stage(force=force)
 
@@ -193,13 +223,14 @@ Examples:
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
+    python main.py --stage kg --text "Who teaches Artificial Intelligence?"
     python main.py --stage all       # Run complete pipeline
         """
     )
 
     parser.add_argument(
         '--stage',
-        choices=['scrape', 'entities', 'chunk', 'embed', 'query', 'all'],
+        choices=['scrape', 'entities', 'chunk', 'embed', 'kg', 'query', 'all'],
         required=True,
         help='Pipeline stage to run'
     )
@@ -220,7 +251,7 @@ Examples:
         '--text',
         type=str,
         default=None,
-        help='Query text for --stage query'
+        help='Query text for --stage query or --stage kg'
     )
 
     args = parser.parse_args()
@@ -238,6 +269,8 @@ Examples:
         run_chunk_stage()
     elif args.stage == 'embed':
         run_embed_stage(force=args.force)
+    elif args.stage == 'kg':
+        run_kg_stage(args.text)
     elif args.stage == 'query':
         if not args.text:
             print("❌ --text is required for query stage")

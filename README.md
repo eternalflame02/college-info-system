@@ -153,7 +153,10 @@ python main.py --stage scrape
 # Stage 2: Build entity registry
 python main.py --stage entities
 
-# Stage 3: Run semantic chunker
+# Stage 3: Build canonical knowledge graph artifact
+python main.py --stage kg
+
+# Stage 4: Run semantic chunker
 python main.py --stage chunk
 ```
 
@@ -212,6 +215,21 @@ python main.py --stage all -v
 - `data/chunks/chunks.json` - 640 semantic chunks
 - `data/chunks/chunk_report.json` - Statistics and summary
 
+### 4. Knowledge Graph (`--stage kg`)
+
+**Purpose:** Builds a first-class graph artifact from entity registries.
+
+**What it does:**
+- Loads `faculty.json`, `courses.json`, `programs.json`, and `teaching_assignments.json`
+- Creates deterministic graph nodes (`faculty`, `course`, `program`)
+- Creates deterministic graph edges (`TEACHES`, optional `BELONGS_TO_PROGRAM` if present)
+- Validates missing references and records orphan IDs
+- Saves graph + summary outputs for downstream ingestion and debugging
+
+**Output:**
+- `data/graph/knowledge_graph.json` - Canonical graph (`nodes`, `edges`, `summary`)
+- `data/graph/knowledge_graph_summary.json` - Counts and orphan-reference summary
+
 ---
 
 ## 📁 Project Structure
@@ -247,7 +265,8 @@ mbcet-chunking-pipeline/
 │   │   ├── pages/          # From HTML pages
 │   │   └── pdfs/           # From PDF documents
 │   ├── entities/           # Entity registries
-│   └── chunks/             # Final chunks
+│   ├── chunks/             # Final chunks
+│   └── graph/              # Knowledge graph artifacts
 │
 └── Docs/                   # Reference documents
 ```
@@ -312,6 +331,39 @@ TESSERACT_CMD=C:/Program Files/Tesseract-OCR/tesseract.exe
   "aliases": ["John Doe", "Dr John Doe"],
   "type": "faculty",
   "url": "https://mbcet.ac.in/cse/faculty/john-doe"
+}
+```
+
+### Knowledge Graph JSON Schema
+
+```json
+{
+  "schema_version": "1.0",
+  "nodes": [
+    {
+      "id": "faculty_dr_john_doe",
+      "type": "faculty",
+      "label": "Dr. John Doe",
+      "aliases": ["John Doe"],
+      "attributes": {"designation": "Professor"}
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_teaches_faculty_dr_john_doe_to_course_cs0u20a",
+      "source": "faculty_dr_john_doe",
+      "target": "course_cs0u20a",
+      "relation": "TEACHES",
+      "attributes": {}
+    }
+  ],
+  "summary": {
+    "total_nodes": 0,
+    "total_edges": 0,
+    "node_counts_by_type": {},
+    "edge_counts_by_relation": {},
+    "orphan_references": {"faculty_ids": [], "course_ids": []}
+  }
 }
 ```
 
