@@ -1,14 +1,14 @@
 {
-  "validation_timestamp": "2026-03-12T06:22:13Z",
+  "validation_timestamp": "2026-03-15T05:07:13Z",
   "collection_health": {
-    "expected_count": 2060,
-    "actual_count": 2060,
+    "expected_count": 2203,
+    "actual_count": 2203,
     "status": "PASS"
   },
   "content_type_validation": {
     "table": {
-      "expected": 1829,
-      "actual": 1829,
+      "expected": 1972,
+      "actual": 1972,
       "status": "PASS"
     },
     "profile": {
@@ -42,9 +42,9 @@
       "query": "What courses are in Semester 3?",
       "expected_content_type": "table",
       "top_result_content_type": "table",
-      "top_result_distance": 0.776,
-      "results_count": 4,
-      "query_time_ms": 22326.98,
+      "top_result_distance": 0.773,
+      "results_count": 1,
+      "query_time_ms": 11528.63,
       "status": "PASS"
     },
     {
@@ -61,11 +61,16 @@
       "query": "faculty specializing in machine learning",
       "status": "FAIL",
       "error": "No results returned"
+    },
+    {
+      "query": "Who teaches Artificial Intelligence?",
+      "status": "FAIL",
+      "error": "No results returned"
     }
   ],
   "performance_metrics": {
-    "average_query_time_ms": 28369.22,
-    "min_query_time_ms": 22326.98,
-    "max_query_time_ms": 40757.19
+    "average_query_time_ms": 11199.46,
+    "min_query_time_ms": 10772.22,
+    "max_query_time_ms": 11952.39
   }
 }

@@ -29,6 +29,7 @@ MARKDOWN_PAGES_DIR = MARKDOWN_DIR / "pages"
 MARKDOWN_PDFS_DIR = MARKDOWN_DIR / "pdfs"
 ENTITIES_DIR = DATA_DIR / "entities"
 CHUNKS_DIR = DATA_DIR / "chunks"
+GRAPH_DIR = DATA_DIR / "graph"
 LOGS_DIR = PROJECT_ROOT / "logs"
 
 # ========== URL Configuration ==========
@@ -78,12 +79,15 @@ MAX_TABLE_ROWS_PER_CHUNK = 50
 FACULTY_FILE = ENTITIES_DIR / "faculty.json"
 COURSES_FILE = ENTITIES_DIR / "courses.json"
 PROGRAMS_FILE = ENTITIES_DIR / "programs.json"
+TEACHING_ASSIGNMENTS_FILE = ENTITIES_DIR / "teaching_assignments.json"
 
 # ========== Output Files ==========
 CHUNKS_FILE = CHUNKS_DIR / "chunks.json"
 CHUNK_REPORT_FILE = CHUNKS_DIR / "chunk_report.json"
 ERRORS_LOG_FILE = CHUNKS_DIR / "errors.log"
 CHUNKER_LOG_FILE = LOGS_DIR / "chunker.log"
+KNOWLEDGE_GRAPH_FILE = GRAPH_DIR / "knowledge_graph.json"
+KNOWLEDGE_GRAPH_SUMMARY_FILE = GRAPH_DIR / "knowledge_graph_summary.json"
 
 # ========== Knowledge Graph Output ==========
 KNOWLEDGE_GRAPH_DIR = DATA_DIR / "knowledge_graph"

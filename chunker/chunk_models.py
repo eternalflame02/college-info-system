@@ -3,7 +3,7 @@ Chunk data models for semantic chunking.
 """
 
 from dataclasses import dataclass, field, asdict
-from typing import List, Optional
+from typing import Dict, List, Optional
 import json
 
 
@@ -23,6 +23,7 @@ class Chunk:
         page_range: [start_page, end_page] for PDFs, None for HTML
         word_count: Number of words in the chunk
         hash: SHA-256 hash of normalized text
+        metadata: Additional flat metadata for retrieval-time filtering/context
     """
     chunk_id: str
     text: str
@@ -34,6 +35,7 @@ class Chunk:
     page_range: Optional[List[int]] = None
     word_count: int = 0
     hash: str = ""
+    metadata: Dict[str, object] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         """Convert chunk to dictionary for JSON serialization."""

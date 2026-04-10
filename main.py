@@ -185,6 +185,7 @@ def run_all_stages(force: bool = False):
 
     run_scrape_stage()
     run_entities_stage()
+    run_kg_stage()
     run_chunk_stage()
     # Graph stage depends on entities + chunks but is independent of embeddings.
     run_graph_stage()
@@ -208,6 +209,7 @@ Examples:
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
+    python main.py --stage kg --text "Who teaches Artificial Intelligence?"
     python main.py --stage all       # Run complete pipeline
         """
     )
@@ -235,7 +237,7 @@ Examples:
         '--text',
         type=str,
         default=None,
-        help='Query text for --stage query'
+        help='Query text for --stage query or --stage kg'
     )
 
     args = parser.parse_args()

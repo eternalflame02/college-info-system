@@ -146,11 +146,13 @@ class TestChunkModel:
             "entity_refs": [],
             "page_range": None,
             "word_count": 2,
-            "hash": "abc123"
+            "hash": "abc123",
+            "metadata": {"related_course_codes": "CS101"}
         }
         chunk = Chunk.from_dict(data)
         assert chunk.chunk_id == "test_123"
         assert chunk.section_hierarchy == ["A", "B"]
+        assert chunk.metadata["related_course_codes"] == "CS101"
 
 
 class TestMarkdownChunker:
@@ -202,6 +204,36 @@ we have enough content for a valid chunk.
             assert len(table_chunks) >= 1
         finally:
             temp_path.unlink()
+
+    def test_relational_metadata_for_profile(self):
+        chunker = MarkdownChunker(
+            teaching_assignments={"faculty_dr_john_doe": ["course_cs101"]},
+            faculty_by_id={"faculty_dr_john_doe": {"name": "Dr. John Doe"}},
+            course_by_id={"course_cs101": {"code": "CS101", "name": "Data Structures"}},
+        )
+
+        metadata = chunker._build_relational_metadata(
+            content_type="profile",
+            entity_refs=["faculty_dr_john_doe"],
+        )
+
+        assert metadata["related_course_ids"] == "course_cs101"
+        assert metadata["related_course_codes"] == "CS101"
+
+    def test_relational_metadata_for_course_chunk(self):
+        chunker = MarkdownChunker(
+            teaching_assignments={"faculty_dr_john_doe": ["course_cs101"]},
+            faculty_by_id={"faculty_dr_john_doe": {"name": "Dr. John Doe"}},
+            course_by_id={"course_cs101": {"code": "CS101", "name": "Data Structures"}},
+        )
+
+        metadata = chunker._build_relational_metadata(
+            content_type="table",
+            entity_refs=["course_cs101"],
+        )
+
+        assert metadata["related_faculty_ids"] == "faculty_dr_john_doe"
+        assert metadata["related_faculty_names"] == "Dr. John Doe"
 
 
 class TestChunkReport:
