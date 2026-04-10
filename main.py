@@ -9,6 +9,7 @@ Usage:
     python main.py --stage scrape    # Run web scraper
     python main.py --stage chunk     # Run semantic chunker
     python main.py --stage entities  # Build entity registry
+    python main.py --stage graph     # Build phase-1 knowledge graph JSON
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
@@ -158,6 +159,17 @@ def run_embed_stage(force: bool = False):
     run_ingestion_pipeline(force_reembed=force)
 
 
+def run_graph_stage():
+    """Run the phase-1 knowledge graph stage."""
+    print("\n" + "=" * 50)
+    print("🕸 Starting Knowledge Graph Stage")
+    print("=" * 50)
+
+    from knowledge_graph.builder import run_knowledge_graph_pipeline
+
+    run_knowledge_graph_pipeline()
+
+
 def run_query_stage(query_text: str):
     """Run a query against the ChromaDB knowledge base."""
     from rag_ingestion import run_query
@@ -174,6 +186,8 @@ def run_all_stages(force: bool = False):
     run_scrape_stage()
     run_entities_stage()
     run_chunk_stage()
+    # Graph stage depends on entities + chunks but is independent of embeddings.
+    run_graph_stage()
     run_embed_stage(force=force)
 
     print("\n" + "=" * 50)
@@ -190,6 +204,7 @@ Examples:
     python main.py --stage scrape    # Scrape MBCET website
     python main.py --stage entities  # Build entity registry
     python main.py --stage chunk     # Run semantic chunker
+    python main.py --stage graph     # Build phase-1 knowledge graph JSON
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
@@ -199,7 +214,7 @@ Examples:
 
     parser.add_argument(
         '--stage',
-        choices=['scrape', 'entities', 'chunk', 'embed', 'query', 'all'],
+        choices=['scrape', 'entities', 'chunk', 'graph', 'embed', 'query', 'all'],
         required=True,
         help='Pipeline stage to run'
     )
@@ -238,6 +253,8 @@ Examples:
         run_chunk_stage()
     elif args.stage == 'embed':
         run_embed_stage(force=args.force)
+    elif args.stage == 'graph':
+        run_graph_stage()
     elif args.stage == 'query':
         if not args.text:
             print("❌ --text is required for query stage")

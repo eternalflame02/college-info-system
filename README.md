@@ -14,6 +14,7 @@ A Python-based pipeline for scraping, processing, and semantically chunking MBCE
 - [Installation](#-installation)
 - [Usage](#-usage)
 - [Pipeline Stages](#-pipeline-stages)
+- [Knowledge Graph (Phase 1)](#-knowledge-graph-phase-1)
 - [Project Structure](#-project-structure)
 - [Configuration](#-configuration)
 - [Output Formats](#-output-formats)
@@ -155,6 +156,9 @@ python main.py --stage entities
 
 # Stage 3: Run semantic chunker
 python main.py --stage chunk
+
+# Stage 4: Build phase-1 knowledge graph
+python main.py --stage graph
 ```
 
 ### Verbose Mode
@@ -212,6 +216,40 @@ python main.py --stage all -v
 - `data/chunks/chunks.json` - 640 semantic chunks
 - `data/chunks/chunk_report.json` - Statistics and summary
 
+### 4. Knowledge Graph (`--stage graph`)
+
+**Purpose:** Builds phase-1 graph artifacts from entities + semantic chunks.
+
+**What it does:**
+- Loads entities from `data/entities/*.json`
+- Loads chunk evidence from `data/chunks/chunks.json`
+- Builds canonical nodes for faculty, courses, programs, and deterministic semester nodes
+- Extracts deterministic edges only:
+  - `course -> part_of -> program`
+  - `course -> has_prerequisite -> course`
+  - `faculty -> teaches -> course`
+- Validates output constraints (deterministic edges, endpoint integrity, evidence presence)
+
+**Output:**
+- `data/knowledge_graph/graph.json`
+- `data/knowledge_graph/graph_report.json`
+
+---
+
+## 🕸 Knowledge Graph (Phase 1)
+
+Current phase-1 implementation constraints:
+
+- **Storage format:** JSON only
+- **Edge policy:** deterministic, high-confidence edges only
+- **Priority:** graph construction and documentation first
+- **Current update scope:** technical docs (`README.md`, `CONTRIBUTING.md`, `Docs/knowledge-graph/*`)
+
+Detailed phase-1 documentation is available in:
+
+- `Docs/knowledge-graph/README.md`
+- `Docs/knowledge-graph/phase1-schema.md`
+
 ---
 
 ## 📁 Project Structure
@@ -236,6 +274,10 @@ mbcet-chunking-pipeline/
 │   ├── entity_registry.py  # Entity extraction and normalization
 │   └── chunk_classifiers.py # Content type classification
 │
+├── knowledge_graph/        # Phase-1 knowledge graph construction
+│   ├── __init__.py
+│   └── builder.py
+│
 ├── tests/                  # Unit tests
 │   ├── test_scraper.py
 │   ├── test_chunker.py
@@ -248,8 +290,10 @@ mbcet-chunking-pipeline/
 │   │   └── pdfs/           # From PDF documents
 │   ├── entities/           # Entity registries
 │   └── chunks/             # Final chunks
+│   └── knowledge_graph/    # Graph JSON artifacts + report
 │
 └── Docs/                   # Reference documents
+    └── knowledge-graph/    # Phase-1 KG docs and schema
 ```
 
 ---
@@ -312,6 +356,35 @@ TESSERACT_CMD=C:/Program Files/Tesseract-OCR/tesseract.exe
   "aliases": ["John Doe", "Dr John Doe"],
   "type": "faculty",
   "url": "https://mbcet.ac.in/cse/faculty/john-doe"
+}
+```
+
+### Knowledge Graph JSON Schema (Phase 1)
+
+```json
+{
+  "version": "1.0",
+  "generated_at": "ISO-8601 timestamp",
+  "nodes": [
+    {
+      "id": "course_cs101",
+      "type": "course",
+      "name": "Data Structures",
+      "aliases": ["CS101", "Data Structures"],
+      "source_refs": ["data/entities/courses.json"]
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_part_of_course_cs101_prog_btech_cse_<hash>",
+      "type": "part_of",
+      "source": "course_cs101",
+      "target": "prog_btech_cse",
+      "confidence": 1.0,
+      "deterministic": true,
+      "evidence": ["chunk_id:...", "source_file:...", "rule:..."]
+    }
+  ]
 }
 ```
 

@@ -1,0 +1,29 @@
+{
+  "total_nodes": 458,
+  "total_edges": 918,
+  "nodes_by_type": {
+    "course": 404,
+    "faculty": 43,
+    "program": 3,
+    "semester": 8
+  },
+  "edges_by_type": {
+    "part_of": 429,
+    "teaches": 489
+  },
+  "rejected_candidates": {
+    "part_of": {
+      "part_of_no_program": 235,
+      "part_of_ambiguous_programs": 770
+    },
+    "has_prerequisite": {
+      "prereq_ambiguous_source_course": 923
+    },
+    "teaches": {
+      "teaches_no_assignment_signal": 164
+    }
+  },
+  "validation_errors": [],
+  "valid": true,
+  "known_node_ids": 458
+}
