@@ -89,6 +89,11 @@ CHUNKER_LOG_FILE = LOGS_DIR / "chunker.log"
 KNOWLEDGE_GRAPH_FILE = GRAPH_DIR / "knowledge_graph.json"
 KNOWLEDGE_GRAPH_SUMMARY_FILE = GRAPH_DIR / "knowledge_graph_summary.json"
 
+# ========== Knowledge Graph Output ==========
+KNOWLEDGE_GRAPH_DIR = DATA_DIR / "knowledge_graph"
+KNOWLEDGE_GRAPH_FILE = KNOWLEDGE_GRAPH_DIR / "graph.json"
+KNOWLEDGE_GRAPH_REPORT_FILE = KNOWLEDGE_GRAPH_DIR / "graph_report.json"
+
 # ========== Faculty Detection Patterns ==========
 FACULTY_SECTION_KEYWORDS = [
     "faculty",
@@ -108,6 +113,16 @@ FACULTY_NAME_PATTERN = (
     r"(Dr\.?\s*|Prof\.?\s*|Mr\.?\s*|Ms\.?\s*|Mrs\.?\s*)"
     r"[A-Z][a-z]+(\s+[A-Z]\.?\s*)*(\s+[A-Z][a-z]+)+"
 )
+
+# ========== Knowledge Graph Rule Patterns ==========
+TEACHES_ASSIGNMENT_CUES = [
+    "teaches",
+    "handled by",
+    "faculty",
+    "instructor",
+    "course teacher",
+    "course faculty",
+]
 
 # ========== Embedding & RAG Configuration ==========
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "google/embeddinggemma-300m")
@@ -142,7 +157,7 @@ def ensure_directories():
         MARKDOWN_PDFS_DIR,
         ENTITIES_DIR,
         CHUNKS_DIR,
-        GRAPH_DIR,
+        KNOWLEDGE_GRAPH_DIR,
         LOGS_DIR,
         EMBEDDING_CACHE_DIR,
         VALIDATION_DIR,
