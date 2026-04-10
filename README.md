@@ -154,7 +154,10 @@ python main.py --stage scrape
 # Stage 2: Build entity registry
 python main.py --stage entities
 
-# Stage 3: Run semantic chunker
+# Stage 3: Build canonical knowledge graph artifact
+python main.py --stage kg
+
+# Stage 4: Run semantic chunker
 python main.py --stage chunk
 
 # Stage 4: Build phase-1 knowledge graph

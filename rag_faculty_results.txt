@@ -1,0 +1,83 @@
+Successfully connected to ChromaDB collection: mbcet_cse_knowledge
+Total entries: 2203
+Loading model...
+
+================================================================================
+TEST: What is the qualification of Dr. Jisha John?
+================================================================================
+
+>> Rank 1 (Distance: 0.678 L2)
+   Source: data\markdown\pages\faculty_dr-jisha-john_9304cf.md
+   Snippet: [Context: Dr. Jisha John] |  |  | | --- | --- | | Employee Code / ID No. |  | | Qualifications | PhD | | Orcid ID | <https://orcid.org/0000-0002-9506-6381> | | Industry / R & D Experience |  | | Email...
+
+>> Rank 2 (Distance: 1.035 L2)
+   Source: data\markdown\pages\computer-science-engineering_research-consultancy_c73ef9.md
+   Snippet: - **Jisha John** was resource person for 3 day FDP on Agile Methodologies, IT Security and Deep Generative Models” Conducted by Dept. of Information Technology, Panimalar Institute of Technology, Chen...
+
+>> Rank 3 (Distance: 1.108 L2)
+   Source: data\markdown\pages\faculty_ms-jisha-jose_ae211e.md
+   Snippet: [Context: Ms. Jisha Jose] |  |  | | --- | --- | | Employee Code / ID No. | 10213026 | | Qualifications | M.E COMPUTER SCIENCE AND ENGINEERING | | Orcid ID | https://orcid.org/0000-0002-2888-8254 | | I...
+
+================================================================================
+TEST: Which faculty member's email is jisha@mbcet.ac.in?
+================================================================================
+
+>> Rank 1 (Distance: 0.720 L2)
+   Source: data\markdown\pages\faculty_dr-jisha-john_9304cf.md
+   Snippet: [Context: Dr. Jisha John] |  |  | | --- | --- | | Employee Code / ID No. |  | | Qualifications | PhD | | Orcid ID | <https://orcid.org/0000-0002-9506-6381> | | Industry / R & D Experience |  | | Email...
+
+>> Rank 2 (Distance: 0.767 L2)
+   Source: data\markdown\pages\faculty_ms-jisha-jose_ae211e.md
+   Snippet: [Context: Ms. Jisha Jose] |  |  | | --- | --- | | Employee Code / ID No. | 10213026 | | Qualifications | M.E COMPUTER SCIENCE AND ENGINEERING | | Orcid ID | https://orcid.org/0000-0002-2888-8254 | | I...
+
+>> Rank 3 (Distance: 0.843 L2)
+   Source: data\markdown\pages\faculty_ms-jayalekshmi-j_2706b2.md
+   Snippet: [Context: Ms. Jayalekshmi J] |  |  | | --- | --- | | Employee Code / ID No. | —– | | Qualifications | M.Tech in Computer Science and Engineering | | Orcid ID | —– | | Industry / R & D Experience | 4 y...
+
+================================================================================
+TEST: Who are the assistant professors in CSE?
+================================================================================
+
+>> Rank 1 (Distance: 0.856 L2)
+   Source: data\markdown\pages\computer-science-engineering_e7599c.md
+   Snippet: ### [Ms. Anjali S](https://mbcet.ac.in/faculty/ms-anjali-s/)  Assistant Professor  Qualification : M.Tech Computer Vision and Image Processing (Pursuing  Ph.D) email ID: [[email protected]](/cdn-cgi/l...
+
+>> Rank 2 (Distance: 0.946 L2)
+   Source: data\markdown\pages\computer-science-engineering_academic-resources_3daf34.md
+   Snippet: [Context: Video Lectures] |  |  |  |  | | --- | --- | --- | --- | | 1 | Data Structures | Mr.Praveen G.L  Assistant Professor | <https://youtube.com/channel/UCT8Ig1QDNCCoFfkFEnlw8dw> | | 2 | Computer ...
+
+>> Rank 3 (Distance: 0.970 L2)
+   Source: data\markdown\pages\computer-science-engineering_e7599c.md
+   Snippet: ## Faculty  ### [Prof. Raju K Gopal](https://mbcet.ac.in/faculty/prof-raju-k-gopal/)  Professor & Head ITMS  Qualification : M.Tech Email : [[email protected]](/cdn-cgi/l/email-protection)  AICTE ID :...
+
+================================================================================
+TEST: What are the research areas of Mr. Binu D?
+================================================================================
+
+>> Rank 1 (Distance: 0.879 L2)
+   Source: data\markdown\pages\faculty_mr-binu-jose-a_c182af.md
+   Snippet: [Context: Mr. Binu Jose A.] |  |  | | --- | --- | | Employee Code / ID No. | —– | | Qualifications | M.E, Pursuing PhD at National Institute of Technology Calicut | | Orcid ID | 0000-0001-9325-252X | ...
+
+>> Rank 2 (Distance: 1.152 L2)
+   Source: data\markdown\pages\faculty_ms-indu-v-2_a5f116.md
+   Snippet: [Context: Ms. Indu V] |  |  | | --- | --- | | Employee Code / ID No. | 10225061 | | Qualifications | M Tech. | | Orcid ID | — | | Industry / R & D Experience | 11 years | | Email ID | [[email protecte...
+
+>> Rank 3 (Distance: 1.161 L2)
+   Source: data\markdown\pages\faculty_ms-shini-renjith_4110ca.md
+   Snippet: [Context: Dr. Shini Renjith] |  |  | | --- | --- | | Employee Code / ID No. | 10217029 | | Qualifications | MTech, PhD, UGC NET | | Orcid ID | https://orcid.org/0000-0003-1088-0825 | | Industry / R & ...
+
+================================================================================
+TEST: Who teaches Artificial Intelligence?
+================================================================================
+
+>> Rank 1 (Distance: 0.978 L2)
+   Source: data\markdown\pdfs\CSE_AI-B-Tech_2023Curriculum-060625-2-year-Syllabus.md
+   Snippet: [Context: CSE_AI-B-Tech_2023Curriculum-060625-2-year-Syllabus] | "Introduction to Machine Learning with Python: A Guide for Data |  | | --- | --- | | Scientists", | Andreas C. Müller and Sarah Guido |
+
+>> Rank 2 (Distance: 0.986 L2)
+   Source: data\markdown\pdfs\2020_autonomy_curriculum-and-syllabus_updated_18-08-25.md
+   Snippet: [Context: 2020_autonomy_curriculum-and-syllabus_updated_18-08-25] | Module | Contents | No. of hours | | --- | --- | --- | | I | Introduction, What is Artificial Intelligence(AI)?, The foundations of ...
+
+>> Rank 3 (Distance: 0.990 L2)
+   Source: data\markdown\pdfs\Curriculum-2022_CSEAI_B-Tech1st-n-2nd-year-and-3-yearsyllabus_030425.md
+   Snippet: <!-- page: 99 -->  11. Mini Project that implement a real world application using AI techniques (Group project with a maximum of four students) References: 1. Dan W. Patterson, “Introduction to AI and...

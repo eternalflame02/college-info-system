@@ -12,6 +12,7 @@ Usage:
 """
 
 import json
+import hashlib
 import logging
 import os
 import re
@@ -23,6 +24,7 @@ import numpy as np
 from tqdm import tqdm
 
 import config
+from chunker.knowledge_graph import generate_knowledge_graph_documents
 
 # Configure module logger
 logger = logging.getLogger(__name__)
@@ -351,6 +353,17 @@ def prepare_metadata(chunk: Dict) -> Dict:
         "word_count": chunk["word_count"],
     }
 
+    # Include extra relational metadata when available
+    for key, value in chunk.get("metadata", {}).items():
+        if value is None:
+            continue
+        if isinstance(value, list):
+            metadata[key] = ",".join(str(v) for v in value)
+        elif isinstance(value, (str, int, float, bool)):
+            metadata[key] = value
+        else:
+            metadata[key] = str(value)
+
     # Add page range if available
     if chunk.get("page_range"):
         metadata["page_start"] = chunk["page_range"][0]
@@ -481,9 +494,22 @@ def classify_query_type(query: str) -> str:
         query: User query string.
 
     Returns:
-        Query type: "faculty" | "course" | "timetable" | "regulation" | "general"
+        Query type: "teaching" | "faculty" | "course" | "timetable" | "regulation" | "general"
     """
     query_lower = query.lower()
+
+    # Teaching-assignment relational queries
+    teaching_keywords = [
+        "who teaches",
+        "who taught",
+        "teaches",
+        "taught by",
+        "instructor for",
+        "handles",
+        "handled by",
+    ]
+    if any(kw in query_lower for kw in teaching_keywords):
+        return "teaching"
 
     # Faculty queries
     faculty_keywords = [
@@ -559,6 +585,11 @@ def apply_adaptive_distance_threshold(results: Dict, query_type: str) -> Dict:
         threshold = 0.8
         quality = "poor"
 
+    # Teaching queries are routed to knowledge_graph chunks, which are compact
+    # synthetic statements and can have slightly higher distances in practice.
+    if query_type == "teaching":
+        threshold = max(threshold, 1.2)
+
     # Filter results
     filtered_indices = [i for i, d in enumerate(distances) if d <= threshold]
 
@@ -598,6 +629,7 @@ def query_chromadb(
     Query ChromaDB with routing and adaptive filtering.
 
     Routing Logic:
+    - "teaching" → filter content_type="knowledge_graph", n_results=5
     - "faculty" → filter content_type="profile", n_results=3
     - "course" → filter content_type="table", n_results=10
     - "timetable" → filter content_type="table", n_results=5
@@ -627,6 +659,9 @@ def query_chromadb(
     if query_type == "faculty":
         where_filter = {"content_type": "profile"}
         n_results = 3
+    elif query_type == "teaching":
+        where_filter = {"content_type": "knowledge_graph"}
+        n_results = 5
     elif query_type == "course":
         where_filter = {"content_type": "table"}
         n_results = 10
@@ -824,6 +859,69 @@ def validate_chromadb_ingestion(
 # ========================================================================
 
 
+def append_knowledge_graph_chunks(
+    chunks: List[Dict],
+    chunk_report: Dict,
+    data_dir: Path,
+) -> Tuple[List[Dict], Dict, int]:
+    """
+    Append synthetic knowledge-graph chunks derived from canonical graph docs.
+
+    Returns:
+        (updated_chunks, updated_chunk_report, added_count)
+    """
+    kg_documents = generate_knowledge_graph_documents(data_dir)
+    kg_chunks: List[Dict] = []
+
+    for doc in kg_documents:
+        metadata = doc.get("metadata", {})
+        faculty_id = metadata.get("faculty_id")
+        course_ids = metadata.get("course_ids", [])
+        entity_refs = []
+        if isinstance(faculty_id, str) and faculty_id:
+            entity_refs.append(faculty_id)
+        if isinstance(course_ids, list):
+            entity_refs.extend([cid for cid in course_ids if isinstance(cid, str)])
+
+        text = doc.get("text", "").strip()
+        if not text:
+            continue
+
+        chunk_id = doc.get("id") or (
+            "kg_" + hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
+        )
+
+        kg_chunks.append(
+            {
+                "chunk_id": chunk_id,
+                "text": text,
+                "source_type": "synthetic",
+                "source_file": metadata.get(
+                    "source_file", "data/entities/teaching_assignments.json"
+                ),
+                "section_hierarchy": ["Knowledge Graph", "Teaching Assignments"],
+                "content_type": "knowledge_graph",
+                "entity_refs": sorted(set(entity_refs)),
+                "page_range": None,
+                "word_count": len(text.split()),
+                "hash": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                "metadata": metadata,
+            }
+        )
+
+    existing_ids = {c["chunk_id"] for c in chunks}
+    unique_kg_chunks = [c for c in kg_chunks if c["chunk_id"] not in existing_ids]
+    chunks.extend(unique_kg_chunks)
+
+    chunk_report["total_chunks"] = chunk_report.get("total_chunks", 0) + len(unique_kg_chunks)
+    chunk_report.setdefault("chunks_by_type", {})
+    chunk_report["chunks_by_type"]["knowledge_graph"] = (
+        chunk_report["chunks_by_type"].get("knowledge_graph", 0) + len(unique_kg_chunks)
+    )
+
+    return chunks, chunk_report, len(unique_kg_chunks)
+
+
 def run_ingestion_pipeline(
     chunks_path: str = None,
     chunk_report_path: str = None,
@@ -868,6 +966,12 @@ def run_ingestion_pipeline(
 
     with open(chunk_report_path, encoding="utf-8") as f:
         chunk_report = json.load(f)
+
+    chunks, chunk_report, kg_added = append_knowledge_graph_chunks(
+        chunks, chunk_report, config.DATA_DIR
+    )
+    if kg_added:
+        print(f"✅ Added {kg_added} synthetic knowledge-graph chunks")
 
     print(f"✅ Loaded {len(chunks)} chunks")
     print(f"   Distribution: {chunk_report['chunks_by_type']}")
@@ -981,6 +1085,11 @@ def run_ingestion_pipeline(
             "query": "faculty specializing in machine learning",
             "expected_content_type": "profile",
             "query_type": "faculty",
+        },
+        {
+            "query": "Who teaches Artificial Intelligence?",
+            "expected_content_type": "knowledge_graph",
+            "query_type": "teaching",
         },
     ]
 

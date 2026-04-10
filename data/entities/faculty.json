@@ -14,7 +14,9 @@
     "name": "Mr. G. L. Praveen",
     "aliases": [
       "Mr. G. L. Praveen",
-      "G. L. Praveen"
+      "G. L. Praveen",
+      "Mr Praveen G L",
+      "Praveen G L"
     ],
     "type": "faculty",
     "url": "https://mbcet.ac.in/faculty/mr-g-l-praveen/"
@@ -104,7 +106,11 @@
     "name": "Ms. Vinitha  V K",
     "aliases": [
       "Ms. Vinitha  V K",
-      "Vinitha  V K"
+      "Vinitha  V K",
+      "Ms Vinitha V K",
+      "Vinitha V K",
+      "Ms Vineetha VK",
+      "Vineetha VK"
     ],
     "type": "faculty",
     "url": "https://mbcet.ac.in/faculty/ms-vinitha-v-k/"
@@ -234,7 +240,9 @@
     "name": "Dr. Neena Raj N R",
     "aliases": [
       "Dr. Neena Raj N R",
-      "Neena Raj N R"
+      "Neena Raj N R",
+      "Dr Neena Raj",
+      "Neena Raj"
     ],
     "type": "faculty",
     "url": "https://mbcet.ac.in/faculty/dr-neena-raj-n-r/"
@@ -294,7 +302,12 @@
     "name": "Ms. Indu V",
     "aliases": [
       "Ms. Indu V",
-      "Indu V"
+      "Indu V",
+      "Ms Indu Venugopal",
+      "Indu Venugopal",
+      "Ms. Indu Venugopal",
+      "Ms Indhu Luke",
+      "Indhu Luke"
     ],
     "type": "faculty",
     "url": "https://mbcet.ac.in/faculty/ms-indu-v-2/"
@@ -344,7 +357,9 @@
     "name": "Ms.ANJALI DEVI A J",
     "aliases": [
       "Ms.ANJALI DEVI A J",
-      "ANJALI DEVI A J"
+      "ANJALI DEVI A J",
+      "Ms Anjali Devi",
+      "Anjali Devi"
     ],
     "type": "faculty",
     "url": "https://mbcet.ac.in/faculty/ms-anjali-devi-a-j/"
@@ -428,5 +443,225 @@
     ],
     "type": "faculty",
     "url": "https://mbcet.ac.in/faculty/ms-sherly-wilson-r/"
+  },
+  {
+    "id": "faculty_dr_jishnu_chandran_r",
+    "name": "Dr Jishnu Chandran R",
+    "aliases": [
+      "Dr Jishnu Chandran R",
+      "Jishnu Chandran R"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_dr_swapna_p_s",
+    "name": "Dr SWAPNA P. S",
+    "aliases": [
+      "Dr SWAPNA P. S",
+      "SWAPNA P. S",
+      "Swapna P S"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_dr_anil_j",
+    "name": "Dr. Anil J",
+    "aliases": [
+      "Dr. Anil J",
+      "Anil J"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_alen_k_johnson",
+    "name": "Mr ALEN K JOHNSON",
+    "aliases": [
+      "Mr ALEN K JOHNSON",
+      "ALEN K JOHNSON",
+      "Alen K Johnson"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_anoop_k_johnson",
+    "name": "Mr ANOOP K. JOHNSON",
+    "aliases": [
+      "Mr ANOOP K. JOHNSON",
+      "ANOOP K. JOHNSON",
+      "Anoop K Johnson"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_abhiram_r",
+    "name": "Mr Abhiram R",
+    "aliases": [
+      "Mr Abhiram R",
+      "Abhiram R"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_aravind_sarma",
+    "name": "Mr Aravind Sarma",
+    "aliases": [
+      "Mr Aravind Sarma",
+      "Aravind Sarma"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_divya_prasad",
+    "name": "Mr Divya Prasad",
+    "aliases": [
+      "Mr Divya Prasad",
+      "Divya Prasad"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_jithin_m_george",
+    "name": "Mr Jithin M George",
+    "aliases": [
+      "Mr Jithin M George",
+      "Mr JITHIN M GEORGE",
+      "Jithin M George"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_r_s_praveen_raj",
+    "name": "Mr R S Praveen Raj",
+    "aliases": [
+      "Mr R S Praveen Raj",
+      "R S Praveen Raj"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_vaisakh_s_nair",
+    "name": "Mr VAISAKH S NAIR",
+    "aliases": [
+      "Mr VAISAKH S NAIR",
+      "VAISAKH S NAIR",
+      "Mr Vaisakh S",
+      "Vaisakh S"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_vinu_v",
+    "name": "Mr Vinu V",
+    "aliases": [
+      "Mr Vinu V",
+      "Mr. Vinu V",
+      "Vinu V"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_aswin_r_b",
+    "name": "Mr. Aswin R B",
+    "aliases": [
+      "Mr. Aswin R B",
+      "Aswin R B"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_ms_ann_mary_alex",
+    "name": "Ms Ann Mary Alex",
+    "aliases": [
+      "Ms Ann Mary Alex",
+      "Ann Mary Alex"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_ms_deepa_p_l",
+    "name": "Ms DEEPA P. L",
+    "aliases": [
+      "Ms DEEPA P. L",
+      "DEEPA P. L",
+      "Deepa P L"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_ms_rini_rajan",
+    "name": "Ms Rini Rajan",
+    "aliases": [
+      "Ms Rini Rajan",
+      "Rini Rajan"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_ms_syama_s_mohan",
+    "name": "Ms Syama S Mohan",
+    "aliases": [
+      "Ms Syama S Mohan",
+      "Syama S Mohan"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_ms_nimisha_anna_jacob",
+    "name": "Ms. Nimisha Anna Jacob",
+    "aliases": [
+      "Ms. Nimisha Anna Jacob",
+      "Nimisha Anna Jacob"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_ms_sruthi_janardhanan",
+    "name": "Ms. Sruthi Janardhanan",
+    "aliases": [
+      "Ms. Sruthi Janardhanan",
+      "Ms. Sruthi",
+      "Sruthi Janardhanan",
+      "Sruthi"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_mr_melvin_jacob",
+    "name": "Mr Melvin Jacob",
+    "aliases": [
+      "Mr Melvin Jacob",
+      "Melvin Jacob"
+    ],
+    "type": "faculty",
+    "url": ""
+  },
+  {
+    "id": "faculty_ms_lekshmi_i",
+    "name": "Ms. Lekshmi I",
+    "aliases": [
+      "Ms. Lekshmi I",
+      "Lekshmi I"
+    ],
+    "type": "faculty",
+    "url": ""
   }
 ]

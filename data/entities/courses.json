@@ -5250,5 +5250,18 @@
       "Automotive Technology (ME0U41C)"
     ],
     "credits": ""
+  },
+  {
+    "id": "course_ma0m40a",
+    "type": "course",
+    "name": "Functional Analysis",
+    "code": "MA0M40A",
+    "aliases": [
+      "MA0M40A",
+      "Functional Analysis",
+      "MA0M40A Functional Analysis",
+      "Functional Analysis (MA0M40A)"
+    ],
+    "credits": ""
   }
 ]
