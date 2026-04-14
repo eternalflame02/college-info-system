@@ -80,8 +80,8 @@ Academic Information Systems}}\\[0.2cm]
 \large \em{by}\\
 \vspace*{0.1cm}
 {\Large \textbf{\scshape{Julia Mariam John}}}\,({\textbf{B23CS2137}})\\
-{\Large \textbf{\scshape{Nirmel B Joseph}}}\,({\textbf{B23CS2148}})\\
-{\Large \textbf{\scshape{Rohith NS}}}\,({\textbf{B23CS2156}})\\
+{\Large \textbf{\scshape{Nirmel B. Joseph}}}\,({\textbf{B23CS2148}})\\
+{\Large \textbf{\scshape{Rohith N.S.}}}\,({\textbf{B23CS2156}})\\
 \vspace*{1cm}
 \centerline{\includegraphics[width=5cm]{logo.png}}
 \vspace*{-1cm}
@@ -117,12 +117,12 @@ Academic Information Systems}}\\[0.2cm]
 \vspace*{.1in}
 \setstretch{1.5}
 \par
-This is to certify that the report entitled \textbf{Hybrid Knowledge-Graph-Enhanced Retrieval-Augmented Generation for Academic Information Systems} submitted by \textbf{Julia Mariam John}~(B23CS2137), \textbf{Nirmel B Joseph}~(B23CS2148) \& \textbf{Rohith NS}~(B23CS2156), to the APJ Abdul Kalam Technological University in partial fulfillment of the B.Tech.\ degree in Computer Science and Engineering is a bonafide record of the mini project work carried out by them under our guidance and supervision. This report in any form has not been submitted to any other University or Institute for any purpose.
+This is to certify that the report entitled \textbf{Hybrid Knowledge-Graph-Enhanced Retrieval-Augmented Generation for Academic Information Systems} submitted by \textbf{Julia Mariam John}~(B23CS2137), \textbf{Nirmel B. Joseph}~(B23CS2148) \& \textbf{Rohith N.S.}~(B23CS2156), to the APJ Abdul Kalam Technological University in partial fulfillment of the B.Tech.\ degree in Computer Science and Engineering is a bonafide record of the mini project work carried out by them under our guidance and supervision. This report in any form has not been submitted to any other University or Institute for any purpose.
 \vspace{0.5in}
 \begin{singlespacing}
 \hspace*{-0.25in}
 \parbox{3in}{
-  \noindent \textbf{Mr. Praveen J.S} \\
+  \noindent \textbf{Mr. Praveen J.S.} \\
   \noindent (Mini Project Guide) \\
   \noindent Assistant Professor\\
   \noindent Department of CSE\\
@@ -151,7 +151,6 @@ This is to certify that the report entitled \textbf{Hybrid Knowledge-Graph-Enhan
 \hspace*{1.5in}
 \parbox{2.5in}{\noindent Date:\\}
 \end{singlespacing}
-\clearpage
 
 %% ============================================================
 %%  ACKNOWLEDGEMENT
@@ -163,21 +162,27 @@ This is to certify that the report entitled \textbf{Hybrid Knowledge-Graph-Enhan
 \end{center}
 \vspace*{0.5in}
 
-We express our deepest gratitude to our Mini Project Guide \textbf{Mr. Praveen J.S}, Assistant Professor, Department of Computer Science and Engineering, for providing continuous guidance, critical feedback, and technical insights throughout the development of this project. His expertise in natural language processing and information retrieval systems greatly shaped the direction and quality of this work.
+We express our deepest gratitude to our Mini Project Guide \textbf{Mr. Praveen J.S.}, Assistant Professor, Department of Computer Science and Engineering, for providing continuous guidance, critical feedback, and technical insights throughout the development of this project. His expertise in natural language processing and information retrieval systems greatly shaped the direction and quality of this work.
+
+\par
+We are equally thankful to \textbf{Mrs. Tessy Mathew}, Assistant Professor, Department of Computer Science and Engineering, for her valuable support, constructive suggestions, and guidance that helped us refine the system design and improve the overall quality of this project.
 
 \par
 We sincerely thank \textbf{Dr. Merlin George}, Mini Project Co-ordinator, and \textbf{Dr. Jisha John}, Head of the Department of CSE, for their academic support, resource provisioning, and encouragement at every stage of this project.
 
 \par
-We acknowledge the open-source communities behind \textbf{ChromaDB}, \textbf{Sentence-Transformers}, \textbf{BeautifulSoup}, \textbf{pdfplumber}, and \textbf{LangChain} — without their tools, building this system would not have been feasible within the project timeframe. We also thank the broader NLP and knowledge graph research communities whose published work on retrieval-augmented generation and graph-enhanced reasoning informed our system design.
+We acknowledge the open-source communities behind \textbf{ChromaDB}, \textbf{Sentence-Transformers}, \textbf{BeautifulSoup}, \textbf{pdfplumber}, and \textbf{LangChain} — without their tools, building this system would not have been feasible within the project timeframe.
+
+\par
+We also extend our heartfelt thanks to \textbf{Lloyd Frontera} from \textit{The Greatest Estate Developer} for the inspiration and motivation that kept our spirits high throughout this project.
 
 \par
 Finally, we are grateful to our families and friends for their patience and encouragement throughout this endeavour.
 
 \begin{flushright}
 \textbf{\noindent Julia Mariam John}\\
-\textbf{\noindent Nirmel B Joseph}\\
-\textbf{\noindent Rohith NS}
+\textbf{\noindent Nirmel B. Joseph}\\
+\textbf{\noindent Rohith N.S.}
 \end{flushright}
 \cleardoublepage
 
@@ -190,22 +195,19 @@ Finally, we are grateful to our families and friends for their patience and enco
 \end{center}
 \setstretch{1.5}
 
-Academic information hosted on college websites is largely unstructured, heterogeneous, and distributed across multiple webpages, making precise information retrieval difficult using traditional keyword-based search techniques. While retrieval-augmented generation (RAG) has shown effectiveness in grounding large language model outputs using semantic vector retrieval, purely embedding-based approaches often fail to capture explicit relationships among entities such as departments, courses, and faculty, leading to incomplete or contextually weak responses.
+Academic information hosted on college websites is largely unstructured and distributed across multiple pages, making precise retrieval difficult using keyword-based search. This mini project proposes a hybrid knowledge-graph-enhanced retrieval-augmented generation (KG-RAG) framework for academic information access, targeting the MBCET CSE department website.
 
 \par
-This mini project proposes a \textbf{hybrid knowledge-graph-enhanced retrieval-augmented generation framework} for academic information access. Unstructured institutional content from the MBCET CSE department website is processed through web scraping, text cleaning, semantic chunking, and vector embedding, then indexed in a ChromaDB vector database to support similarity-based retrieval. In parallel, a lightweight knowledge graph is constructed to explicitly represent structured academic entities — faculty, courses, programs, and semesters — and their relationships such as \textit{teaches}, \textit{part\_of}, and \textit{has\_prerequisite}.
+The system processes institutional content through web scraping, semantic chunking, and vector embedding using EmbeddingGemma (768-dimensional), indexed in a ChromaDB vector database. In parallel, a lightweight knowledge graph explicitly represents academic entities — faculty, courses, programs, and semesters — with deterministic, evidence-backed edges (teaches, part\_of, has\_prerequisite). An intent-aware query router dynamically selects semantic retrieval, graph-based reasoning, or a hybrid of both, and supplies the retrieved context to a large language model for grounded response generation.
 
 \par
-An intent-aware retrieval mechanism dynamically selects semantic retrieval, graph-based reasoning, or a hybrid of both to construct context for generation. The retrieved evidence is supplied to a large language model to generate grounded responses constrained to institutional knowledge. The data pipeline processes 60+ HTML pages and 10 PDF documents, producing 640 semantic chunks and a validated knowledge graph with deterministic, evidence-backed edges.
+The data pipeline processes 60+ HTML pages and 10 PDF documents, producing 640 semantic chunks and a validated knowledge graph. This design improves factual grounding, relational reasoning, and interpretability over purely embedding-based RAG approaches~\cite{kg_rag_springer,rag_edu_elsevier}.
 
 \par
-This design is motivated by recent journal studies demonstrating that integrating knowledge graphs into RAG pipelines improves factual grounding, relational reasoning, and interpretability, while domain-specific RAG systems enhance retrieval reliability in academic settings~\cite{kg_rag_springer,rag_edu_elsevier}.
+\noindent\textbf{Keywords:} Retrieval-Augmented Generation, Knowledge Graph, Vector Embeddings, Semantic Chunking, ChromaDB, Academic Information Systems.
 
 \par
-\noindent\textbf{Keywords:} Retrieval-Augmented Generation, Knowledge Graph Integration, Vector Embeddings, Semantic Chunking, ChromaDB, Academic Information Systems.
-
-\par
-\noindent\textbf{Sustainable Development Goals (SDGs):} This mini project supports SDG~4 (Quality Education) by improving structured access to academic information and SDG~9 (Industry, Innovation and Infrastructure) through the application of hybrid intelligent information retrieval systems.
+\noindent\textbf{Sustainable Development Goals:} SDG~4 (Quality Education), SDG~9 (Industry, Innovation and Infrastructure).
 
 \clearpage
 
@@ -244,36 +246,11 @@ Traditional search engines and site-specific keyword search tools offer little r
 Retrieval-Augmented Generation (RAG) addresses part of this problem by combining semantic vector retrieval with the generative power of large language models (LLMs). In a RAG pipeline, user queries are embedded into the same vector space as pre-processed document chunks, the most relevant chunks are retrieved via similarity search, and the retrieved context is supplied to an LLM to synthesise a grounded response. This approach dramatically reduces hallucination compared to using an LLM alone, and has shown promising results in educational applications~\cite{rag_edu_elsevier}.
 
 \par
-However, purely embedding-based RAG systems exhibit a critical weakness: they treat documents as isolated text passages and fail to capture the \textit{structural relationships} that exist between academic entities. A university's information space is inherently relational — courses belong to programs, faculty teach specific courses, prerequisites link modules across semesters, and departments houses laboratories. These relationships are not merely implied; they are essential for answering multi-hop queries such as ``Which professors in CSE teach semester 5 courses?'' or ``What are the prerequisites for the elective on Machine Learning?''
+However, purely embedding-based RAG systems exhibit a critical weakness: they treat documents as isolated text passages and fail to capture the \textit{structural relationships} that exist between academic entities. A university's information space is inherently relational — courses belong to programs, faculty teach specific courses, prerequisites link modules across semesters, and departments house laboratories. These relationships are essential for answering multi-hop queries such as ``Which professors in CSE teach semester~5 courses?'' or ``What are the prerequisites for the elective on Machine Learning?'' Knowledge graphs (KGs) offer a natural representation for such relationships. By explicitly encoding entities and typed relationships as nodes and edges, a knowledge graph enables graph-based reasoning that complements semantic similarity search. Recent research confirms that integrating knowledge graphs into RAG pipelines significantly improves multi-hop accuracy, factual grounding, and interpretability~\cite{kg_rag_springer}.
 
 \par
-Knowledge graphs (KGs) offer a natural representation for such structured relationships. By explicitly encoding entities and their typed relationships as nodes and edges, a knowledge graph enables graph-based reasoning that complements the semantic similarity search of vector retrieval. Recent research has demonstrated that integrating knowledge graphs into RAG pipelines significantly improves multi-hop question answering accuracy, factual grounding, and interpretability~\cite{kg_rag_springer}.
+This mini project proposes a \textbf{hybrid knowledge-graph-enhanced retrieval-augmented generation system} specifically designed for academic information access. The system targets the Computer Science and Engineering (CSE) department of Mar Baselios College of Engineering and Technology (MBCET), processing its website content through a comprehensive pipeline that includes web scraping, PDF extraction, semantic chunking, vector embedding, knowledge graph construction, and intent-aware hybrid retrieval. The data pipeline processes 60+ HTML pages and 10 PDF documents, producing 640 semantic chunks and a validated knowledge graph with deterministic, evidence-backed edges — providing accurate, contextually grounded, and relationally aware responses to academic queries.
 
-\par
-This mini project proposes a \textbf{hybrid knowledge-graph-enhanced retrieval-augmented generation system} specifically designed for academic information access. The system targets the Computer Science and Engineering (CSE) department of Mar Baselios College of Engineering and Technology (MBCET), processing its website content through a comprehensive pipeline that includes web scraping, PDF extraction, semantic chunking, vector embedding, knowledge graph construction, and intent-aware hybrid retrieval.
-
-\clearpage
-
-\section{Problem Statement}
-
-To develop a hybrid knowledge-graph-enhanced retrieval-augmented generation system that provides accurate, contextually grounded, and relationally aware responses to academic information queries using institutional web content.
-
-\par
-Specifically, the system must: (a)~scrape and process unstructured content from the MBCET CSE department website, including HTML pages and PDF syllabi; (b)~construct semantic vector embeddings and store them in a vector database for similarity-based retrieval; (c)~build a lightweight knowledge graph that explicitly represents academic entities (faculty, courses, programs) and their relationships (teaches, part\_of, has\_prerequisite); (d)~implement an intent-aware query router that dynamically selects semantic retrieval, graph-based retrieval, or a hybrid of both; and (e)~generate grounded, natural-language responses using a large language model constrained to retrieved institutional knowledge.
-
-\section{Objectives}
-
-\begin{enumerate}
-  \item To collect academic data from institutional websites using automated web scraping techniques.
-  \item To convert the collected text data into vector embeddings using semantic embedding models for similarity-based retrieval.
-  \item To construct a knowledge graph of academic entities for Mar Baselios College of Engineering and Technology.
-  \item To integrate hybrid retrieval combining vector similarity search and knowledge graph reasoning for query answering.
-  \item To improve factual grounding and relational reasoning in LLM-generated responses for academic queries.
-\end{enumerate}
-
-\section{Scope}
-
-The system targets the MBCET CSE department website (\texttt{mbcet.ac.in/cse}) as its primary data source. The data pipeline processes approximately 60 HTML pages and 10 PDF documents (syllabi, regulations, and academic calendars). The semantic chunker generates approximately 640 text chunks, each classified by content type (profile, regulation, table, section, list). The knowledge graph captures faculty, course, program, and semester entities with deterministic, evidence-backed edges. The system is designed for deployment on standard development hardware (Python 3.11, no GPU required for inference) and does not require proprietary APIs for its core retrieval pipeline.
 \clearpage
 
 %% ============================================================
@@ -281,28 +258,14 @@ The system targets the MBCET CSE department website (\texttt{mbcet.ac.in/cse}) a
 %% ============================================================
 \chapter{Literature Review}
 
-The intersection of retrieval-augmented generation and knowledge graph reasoning has attracted significant research attention in recent years, driven by the need to improve the factual accuracy and relational reasoning capabilities of large language model systems. This chapter reviews the key works that inform the design of the proposed hybrid KG-RAG system.
-
-\section{Retrieval-Augmented Generation}
-
-Lewis~\textit{et al.}~\cite{lewis2020} introduced RAG as a general-purpose fine-tuning method for knowledge-intensive NLP tasks. Their architecture combines a pre-trained parametric memory (BART generator) with a non-parametric memory (Dense Passage Retriever + Wikipedia index), allowing the model to access and condition on retrieved documents during generation. This foundational work established that retrieval augmentation significantly reduces hallucination and improves factual accuracy compared to closed-book language models.
+This chapter reviews the key works at the intersection of retrieval-augmented generation, knowledge graphs, and academic information systems that inform the design of the proposed hybrid KG-RAG system.
 
 \par
-Subsequent work by Izacard and Grave~\cite{izacard2021} introduced Fusion-in-Decoder (FiD), which encodes each retrieved passage independently before fusing them in the decoder. This approach scales more efficiently to larger numbers of retrieved documents and demonstrated state-of-the-art performance on open-domain QA benchmarks. The core insight — that independently encoding documents preserves passage-level information better than concatenation — informs the chunking strategy adopted in our system.
-
-\section{Knowledge Graphs in NLP}
-
-Knowledge graphs have become an essential component in NLP pipelines for representing structured world knowledge. Hogan~\textit{et al.}~\cite{hogan2021} provide a comprehensive survey of knowledge graph types, construction methods, and applications. In the context of question answering, knowledge graphs enable multi-hop reasoning by following explicit typed relationships between entities — a capability that purely embedding-based retrieval lacks.
+Lewis~\textit{et al.}~\cite{lewis2020} introduced RAG as a method for knowledge-intensive NLP tasks, combining a pre-trained generator with a Dense Passage Retriever and establishing that retrieval augmentation significantly reduces hallucination. Izacard and Grave~\cite{izacard2021} extended this with Fusion-in-Decoder, encoding each retrieved passage independently for improved multi-document QA. Pan~\textit{et al.}~\cite{pan2024} surveyed the unification of LLMs and knowledge graphs, identifying the KG-enhanced LLM paradigm — the approach adopted in this project.
 
 \par
-Pan~\textit{et al.}~\cite{pan2024} surveyed the unification of large language models and knowledge graphs, identifying three paradigms: (i)~KG-enhanced LLMs, where graph structure guides retrieval or reasoning; (ii)~LLM-enhanced KGs, where language models assist in graph construction and completion; and (iii)~synergised approaches where both systems co-evolve. The proposed system falls under the first paradigm, using a pre-constructed knowledge graph to complement vector retrieval.
-
-\section{Knowledge-Graph-Enhanced RAG}
-
-Linders and Tomczak~\cite{kg_rag_springer} proposed a knowledge-graph-extended RAG framework for question answering. Their approach augments the standard RAG retrieval step with graph-guided retrieval, where the knowledge graph identifies entity relationships that help the retriever surface relevant passages for multi-hop questions. Their experiments showed improved accuracy on complex compositional queries where standard retrieval fails due to the need to combine information from multiple documents.
-
-\par
-Li~\textit{et al.}~\cite{rag_edu_elsevier} conducted a systematic survey of RAG applications in educational settings. They found that domain-specific RAG systems, when properly grounded in curated institutional knowledge bases, significantly outperform general-purpose LLMs on tasks requiring factual precision about specific universities, courses, or policies. The survey also identified the lack of structured relational knowledge as a key limitation of existing educational RAG systems — a gap that the proposed hybrid approach directly addresses.
+Linders and Tomczak~\cite{kg_rag_springer} proposed a knowledge-graph-extended RAG framework that augments standard retrieval with graph-guided entity relationship traversal, improving multi-hop QA accuracy. Li~\textit{et al.}~\cite{rag_edu_elsevier} surveyed RAG in educational settings and found that domain-specific, properly grounded systems significantly outperform general-purpose LLMs on institutional queries, but identified the lack of structured relational knowledge as a key limitation.
+\clearpage
 
 \section{Summary of Related Works}
 
@@ -314,26 +277,26 @@ Li~\textit{et al.}~\cite{rag_edu_elsevier} conducted a systematic survey of RAG 
   \begin{tabular}{|p{3cm}|p{3.2cm}|p{3cm}|p{3cm}|}
     \hline
     \textbf{Author(s)} & \textbf{Method} & \textbf{Focus} & \textbf{Limitation} \\ \hline
-    Lewis et al.\ (2020)    & RAG (DPR + BART)          & Open-domain QA                  & No relational reasoning           \\ \hline
-    Izacard \& Grave (2021) & Fusion-in-Decoder         & Multi-document QA               & Scalability to large KBs          \\ \hline
-    Linders \& Tomczak (2025)& KG-extended RAG           & Multi-hop QA                    & Requires pre-built KG              \\ \hline
-    Li et al.\ (2025)       & RAG survey (education)    & Educational QA                  & Dependent on retriever quality    \\ \hline
-    Pan et al.\ (2024)      & LLM-KG unification survey & Knowledge representation        & Broad survey, no implementation   \\ \hline
-    \textbf{Proposed System}& Hybrid KG-RAG             & Academic info. retrieval (MBCET) & Limited to single institution  \\ \hline
+    Lewis et al.\ (2020)     & RAG (DPR + BART)           & Open-domain QA          & No relational reasoning           \\ \hline
+    Izacard \& Grave (2021)  & Fusion-in-Decoder          & Multi-document QA        & Scalability to large KBs          \\ \hline
+    Linders \& Tomczak (2025)& KG-extended RAG            & Multi-hop QA             & Requires pre-built KG              \\ \hline
+    Li et al.\ (2025)        & RAG survey (education)     & Educational QA           & Dependent on retriever quality    \\ \hline
+    Pan et al.\ (2024)       & LLM-KG unification survey  & Knowledge representation & Broad survey, no implementation   \\ \hline
+    \textbf{Proposed System} & Hybrid KG-RAG              & Academic info. retrieval & Limited to single institution     \\ \hline
   \end{tabular}
 \end{table}
 
 \section{Gaps in the Literature}
 
 \begin{itemize}
-  \item Limited use of knowledge graphs specifically in academic RAG systems for institutional information access.
-  \item Lack of hybrid vector-graph retrieval pipelines that dynamically route queries based on intent classification.
-  \item Insufficient explainability in LLM-based academic question answering — most systems provide answers without citing structured evidence provenance.
-  \item Few open-source, end-to-end implementations that combine web scraping, semantic chunking, knowledge graph construction, and retrieval-augmented generation in a single pipeline.
+  \item Limited use of knowledge graphs in academic RAG systems for institutional information access.
+  \item Lack of hybrid vector-graph retrieval pipelines with intent-based query routing.
+  \item Insufficient explainability — most systems do not cite structured evidence provenance.
+  \item Few open-source, end-to-end implementations combining scraping, chunking, KG construction, and RAG.
 \end{itemize}
 
 \par
-The proposed system directly addresses all four gaps by combining semantic vector retrieval (ChromaDB), a phase-1 deterministic knowledge graph (JSON-based), intent-aware query routing, and evidence-backed answer generation within an open-source, reproducible pipeline.
+The proposed system addresses these gaps by combining semantic vector retrieval (ChromaDB), a deterministic knowledge graph (JSON), intent-aware query routing, and evidence-backed answer generation.
 \clearpage
 
 %% ============================================================
@@ -536,173 +499,49 @@ The system is divided into the following functional modules:
 %% ============================================================
 \chapter{Mini Project Design}
 
-\section{Data Flow Diagram — Level 0 (Context Diagram)}
-
-The DFD Level~0 represents the entire system as a single process interacting with two external entities: the \textbf{User} (students, faculty, or administrative staff querying for information) and the \textbf{MBCET Website} (the institutional data source).
-
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[node distance=1.8cm, every node/.style={font=\small}]
-
-  % Central process
-  \node (sys) [process, minimum width=4.8cm, minimum height=2cm, text width=4.4cm,
-               fill=blue!20, font=\small\bfseries]
-               {0\\[4pt]Hybrid KG-RAG\\Academic Info. System};
-
-  % External entities
-  \node (user)    [entity, left=3.8cm of sys,  fill=orange!25] {User\\(Student / Staff)};
-  \node (website) [entity, right=3.8cm of sys, fill=orange!25] {MBCET\\Website};
-
-  % User arrows
-  \draw[arrow] (sys) -- node[above, sloped, yshift=4pt]{\tiny Grounded Answer,}
-                         node[below, sloped, yshift=-2pt]{\tiny Source Citations} (user);
-  \draw[arrow] (user) -- node[below, sloped]{\tiny Natural Language Query} (sys);
-
-  % Website arrows
-  \draw[arrow] (website) -- node[above, sloped]{\tiny HTML Pages} (sys);
-  \draw[arrow] (website) -- node[below, sloped]{\tiny PDF Documents} (sys);
-
-\end{tikzpicture}
-\caption{DFD Level 0 — Context Diagram}
-\label{fig:dfd0}
-\end{figure}
-
-The MBCET website provides raw HTML pages (faculty profiles, department information, program details) and PDF documents (syllabi, regulations, examination schedules). The system processes both data streams, builds a searchable knowledge base, and returns grounded answers with source citations to the user in response to natural-language queries.
-
-\section{Data Flow Diagram — Level 1}
-
-The Level~1 DFD decomposes the system into six sub-processes, three data stores, and the same two external entities.
-
-\begin{figure}[h!]
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tikzpicture}[node distance=1.5cm and 2cm, every node/.style={font=\footnotesize}]
-
-  % External entities
-  \node (website) [entity, fill=orange!25] at (0, 0)    {MBCET Website};
-  \node (user)    [entity, fill=orange!25] at (15, 0)   {User};
-
-  % Processes
-  \node (p1) [process, fill=blue!15] at (3.5,    0)   {1.0\\Web Scraping \&\\PDF Extraction};
-  \node (p2) [process, fill=blue!15] at (7.5,  2)     {2.0\\Semantic Chunking\\\ \& Entity Extraction};
-  \node (p3) [process, fill=blue!15] at (2.5, -3.5)   {3.0\\Knowledge Graph\\Construction};
-  \node (p4) [process, fill=blue!15] at (7.5, -3.5)   {4.0\\Embedding \&\\Vector Ingestion};
-  \node (p5) [process, fill=blue!15] at (12, -1.5)    {5.0\\Hybrid Retrieval\\(Intent-Aware)};
-  \node (p6) [process, fill=blue!15] at (7.5, -7)     {6.0\\Answer\\Generation (LLM)};
-
-  % Data stores
-  \node (ds1) [datastore, fill=yellow!20] at (7.5,  0.2)  {D1: Markdown Store};
-  \node (ds2) [datastore, fill=yellow!20] at (7.5, -1.6)  {D2: ChromaDB};
-  \node (ds3) [datastore, fill=yellow!20] at (1.5, -7)     {D3: Knowledge Graph\\(JSON)};
-
-  % Website -> P1
-  \draw[arrow] (website) -- node[above]{\tiny HTML + PDFs} (p1);
-  % P1 -> DS1
-  \draw[arrow] (p1) -- node[above, sloped]{\tiny Markdown Files} (ds1);
-  % DS1 -> P2
-  \draw[arrow] (ds1) -- node[right]{\tiny Raw Markdown} (p2);
-  % P2 -> P4
-  \draw[arrow] (p2) -- node[above, sloped]{\tiny 640 Chunks + Metadata} (p4);
-  % P2 -> P3
-  \draw[arrow] (p2) -- node[above, sloped]{\tiny Entity Registries} (p3);
-  % P3 -> DS3
-  \draw[arrow] (p3) -- node[above, sloped]{\tiny Graph JSON} (ds3);
-  % P4 -> DS2
-  \draw[arrow] (p4) -- node[left]{\tiny Embeddings + Metadata} (ds2);
-  % User -> P5
-  \draw[arrow] (user) -- node[right]{\tiny Query} (p5);
-  % DS2 -> P5
-  \draw[arrow] (ds2) -- node[above]{\tiny Relevant Chunks} (p5);
-  % DS3 -> P5
-  \draw[arrow] (ds3) -- node[above, sloped]{\tiny Related Entities} (p5);
-  % P5 -> P6
-  \draw[arrow] (p5) -- node[above, sloped]{\tiny Retrieved Context} (p6);
-  % P6 -> User (curved)
-  \draw[arrow] (p6) -| node[below, near start]{\tiny Grounded Answer} (user);
-
-\end{tikzpicture}
-}%
-\caption{DFD Level 1 — Expanded System Data Flows}
-\label{fig:dfd1}
-\end{figure}
-
-Process~1.0 (\textit{Web Scraping \& PDF Extraction}) crawls the MBCET website and converts content to Markdown. Process~2.0 (\textit{Semantic Chunking \& Entity Extraction}) splits Markdown into classified chunks with entity references. Process~3.0 (\textit{Knowledge Graph Construction}) builds the deterministic JSON knowledge graph from entities and chunks. Process~4.0 (\textit{Embedding \& Vector Ingestion}) generates embeddings and stores them in ChromaDB. Process~5.0 (\textit{Hybrid Retrieval}) classifies the user query by intent and retrieves relevant chunks and entities. Process~6.0 (\textit{Answer Generation}) assembles the context and invokes the LLM to produce a grounded response.
-
 \section{System Architecture}
 
-Figure~\ref{fig:sysarch} depicts the layered system architecture.
+Figure~\ref{fig:sysarch} depicts the overall system architecture of the hybrid KG-RAG system, showing the data flow from web scraping through embedding, knowledge graph construction, and hybrid retrieval to answer generation.
 
 \begin{figure}[h!]
 \centering
-\begin{tikzpicture}[node distance=0.55cm, every node/.style={font=\small}]
-
-  % --- Data Ingestion Layer ---
-  \node (d_lbl) [font=\bfseries\small, text=white, fill=gray!70,
-                 minimum width=3.2cm, minimum height=0.6cm, align=center]
-                 at (0,0) {Data Ingestion};
-  \node (scraper) [process, fill=teal!20, below=0.4cm of d_lbl, minimum width=3cm]
-                    {URL Discovery\\+ HTML Scraper};
-  \node (pdfproc) [process, fill=teal!10, below=0.5cm of scraper, minimum width=3cm]
-                    {PDF Handler\\(pdfplumber + OCR)};
-
-  % --- Processing Layer ---
-  \node (p_lbl) [font=\bfseries\small, text=white, fill=gray!70,
-                 minimum width=3.2cm, minimum height=0.6cm, align=center]
-                 at (5.5,0) {Processing Layer};
-  \node (chunker)  [process, fill=blue!15, below=0.4cm of p_lbl, minimum width=3cm]
-                   {Semantic Chunker\\(Content-Aware)};
-  \node (entity)   [process, fill=blue!15, below=0.5cm of chunker, minimum width=3cm]
-                   {Entity Registry\\Builder};
-  \node (kgbuild)  [process, fill=blue!15, below=0.5cm of entity, minimum width=3cm]
-                   {Knowledge Graph\\Builder (Phase 1)};
-  \node (embedder) [process, fill=blue!25, below=0.5cm of kgbuild, minimum width=3cm]
-                   {EmbeddingGemma\\Encoder};
-
-  % --- Storage Layer ---
-  \node (s_lbl) [font=\bfseries\small, text=white, fill=gray!70,
-                 minimum width=3.2cm, minimum height=0.6cm, align=center]
-                 at (11,0) {Storage \& Retrieval};
-  \node (chromadb)  [datastore, fill=yellow!20, below=0.4cm of s_lbl, minimum width=3cm]
-                    {ChromaDB\\(640 chunks, 768-dim)};
-  \node (kgstore)   [datastore, fill=yellow!20, below=0.6cm of chromadb, minimum width=3cm]
-                    {Knowledge Graph\\(JSON, Phase 1)};
-  \node (router)    [process, fill=green!15, below=0.6cm of kgstore, minimum width=3cm]
-                    {Intent-Aware\\Query Router};
-  \node (llm)       [process, fill=red!15, below=0.6cm of router, minimum width=3cm]
-                    {LLM\\(Answer Generation)};
-
-  % Arrows
-  \draw[arrow] (scraper) -- node[above]{\tiny Markdown} (chunker);
-  \draw[arrow] (pdfproc) -- node[above, sloped]{\tiny Markdown} (chunker);
-  \draw[arrow] (chunker) -- (entity);
-  \draw[arrow] (entity) -- (kgbuild);
-  \draw[arrow] (chunker) -- (embedder);
-  \draw[arrow] (embedder) -- node[above]{\tiny Vectors} (chromadb);
-  \draw[arrow] (kgbuild) -- node[above]{\tiny JSON} (kgstore);
-  \draw[darrow] (router) -- (chromadb);
-  \draw[darrow] (router) -- (kgstore);
-  \draw[arrow] (router) -- (llm);
-
-\end{tikzpicture}
+\includegraphics[width=0.88\textwidth]{Images/System_Architecture.png}
 \caption{System Architecture}
 \label{fig:sysarch}
 \end{figure}
 
+\section{Data Flow Diagram — Level 0 (Context Diagram)}
+
+The DFD Level~0 (Figure~\ref{fig:dfd0}) represents the entire system as a single process interacting with the user and the MBCET website. The website provides HTML pages and PDF documents; the system processes both and returns grounded answers to natural-language queries.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Images/DFD0.png}
+\caption{DFD Level 0 — Context Diagram}
+\label{fig:dfd0}
+\end{figure}
+
+\section{Data Flow Diagram — Level 1}
+
+The Level~1 DFD (Figure~\ref{fig:dfd1}) decomposes the system into sub-processes: web scraping, semantic chunking, knowledge graph construction, embedding and vector ingestion, hybrid retrieval, and answer generation.
+\clearpage
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Images/DFD1.png}
+\caption{DFD Level 1 — Expanded System Data Flows}
+\label{fig:dfd1}
+\end{figure}
+
 \section{Use Case Diagram}
 
-%TODO: Include use case diagram image if available (e.g., from presentation Images folder)
-% \begin{figure}[h!]
-%   \centering
-%   \includegraphics[width=0.5\textwidth]{Images/use_case_noarrow.jpg}
-%   \caption{Use Case Diagram}
-%   \label{fig:usecase}
-% \end{figure}
+Figure~\ref{fig:usecase} shows the use case diagram. The primary actors are the \textbf{Student / End User} (submits queries) and the \textbf{Administrator} (manages the data pipeline).
 
-The primary actors are:
-\begin{itemize}
-  \item \textbf{Student / End User:} Submits natural-language queries about academic information (courses, faculty, regulations, schedules).
-  \item \textbf{Administrator:} Manages the data pipeline (runs scraping, re-indexing, model updates).
-\end{itemize}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\textwidth]{Images/use_case_noarrow.png}
+  \caption{Use Case Diagram}
+  \label{fig:usecase}
+\end{figure}
 
 Key use cases include:
 \begin{enumerate}
@@ -717,15 +556,16 @@ Key use cases include:
 
 \section{Class Diagram}
 
-%TODO: Include class diagram image if available
-% \begin{figure}[h!]
-%   \centering
-%   \includegraphics[width=0.55\textwidth]{Images/class_diagram.png}
-%   \caption{Class Diagram}
-%   \label{fig:classdiag}
-% \end{figure}
+Figure~\ref{fig:classdiag} shows the class diagram depicting the core modules and their relationships.
 
-The core classes in the system are:
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.55\textwidth]{Images/class_diagram.png}
+  \caption{Class Diagram}
+  \label{fig:classdiag}
+\end{figure}
+
+The core classes and their responsibilities are summarised in Table~\ref{tab:classes}.
 
 \begin{table}[h!]
   \centering
@@ -740,7 +580,6 @@ The core classes in the system are:
     \texttt{pdf\_handler}       & \texttt{PDFHandler}              & PDF text/table extraction, OCR fallback \\ \hline
     \texttt{semantic\_chunker}  & \texttt{run\_chunking\_pipeline()} & Content-aware splitting, typing, dedup \\ \hline
     \texttt{entity\_registry}   & \texttt{EntityRegistry}          & Entity extraction, ID gen., alias normalisation \\ \hline
-    \texttt{content\_classifier}& \texttt{classify\_content()}     & Rule-based content type assignment \\ \hline
     \texttt{builder}            & \texttt{build\_knowledge\_graph()} & Node/edge construction, validation \\ \hline
     \texttt{rag\_ingestion}     & \texttt{run\_ingestion\_pipeline()} & Embedding gen., ChromaDB ingestion \\ \hline
     \texttt{rag\_ingestion}     & \texttt{query\_chromadb()}       & Intent routing, adaptive thresholding \\ \hline
@@ -749,49 +588,14 @@ The core classes in the system are:
 
 \section{Sequence Diagram}
 
-%TODO: Include sequence diagram image if available
-% \begin{figure}[h!]
-%   \centering
-%   \includegraphics[width=\textwidth]{Images/sequence_diagram.png}
-%   \caption{Sequence Diagram — Query Processing Flow}
-%   \label{fig:seqdiag}
-% \end{figure}
-
-The query processing flow follows these steps:
-\begin{enumerate}
-  \item User submits a natural-language query via the chatbot interface.
-  \item The \texttt{classify\_query\_type()} function analyses the query text against keyword patterns and assigns a query type (teaching, faculty, course, regulation, general).
-  \item The query router selects the appropriate retrieval strategy and content-type filter.
-  \item The EmbeddingGemma model encodes the query into a 768-dimensional vector.
-  \item ChromaDB performs a filtered similarity search, returning the top-$k$ most relevant chunks.
-  \item For teaching queries, the knowledge graph is additionally consulted for entity relationships.
-  \item Adaptive distance thresholding filters out low-quality matches.
-  \item The retrieved context (chunks + graph entities) is assembled and passed to the LLM.
-  \item The LLM generates a grounded response and returns it to the user.
-\end{enumerate}
-
-\section{Entity-Relationship (ER) Diagram}
+Figure~\ref{fig:seqdiag} illustrates the query processing flow from user input through intent classification, retrieval, and LLM-based answer generation.
 
 \begin{figure}[h!]
-\centering
-\begin{tikzpicture}[node distance=2.2cm, every node/.style={font=\small}]
-  \node (faculty)  [entity, fill=orange!20, minimum width=2.5cm] {FACULTY};
-  \node (course)   [entity, fill=orange!20, minimum width=2.5cm, right=4cm of faculty] {COURSE};
-  \node (program)  [entity, fill=orange!20, minimum width=2.5cm, right=4cm of course]  {PROGRAM};
-  \node (chunk)    [entity, fill=orange!20, minimum width=2.5cm, below=2.5cm of faculty] {CHUNK};
-  \node (semester) [entity, fill=orange!20, minimum width=2.5cm, below=2.5cm of course]  {SEMESTER};
-
-  \draw (faculty) -- node[above]{\scriptsize teaches} node[above, xshift=-1.2cm]{\scriptsize M} node[above, xshift=1.2cm]{\scriptsize M} (course);
-  \draw (course)  -- node[above]{\scriptsize part\_of} node[above, xshift=-1.2cm]{\scriptsize M} node[above, xshift=1.2cm]{\scriptsize 1} (program);
-  \draw (faculty) -- node[left]{\scriptsize referenced\_in} node[left, yshift=-1.2cm]{\scriptsize M} (chunk);
-  \draw (course)  -- node[right]{\scriptsize offered\_in} node[right, yshift=-1.2cm]{\scriptsize M} (semester);
-  \draw (chunk)   -- node[below, sloped]{\scriptsize contains} (course);
-\end{tikzpicture}
-\caption{Entity-Relationship Diagram}
-\label{fig:er}
+  \centering
+  \includegraphics[width=\textwidth]{Images/sequence_diagram.png}
+  \caption{Sequence Diagram — Query Processing Flow}
+  \label{fig:seqdiag}
 \end{figure}
-
-The ER diagram captures the core relationships in the knowledge graph: faculty members teach courses, courses belong to programs, courses are offered in specific semesters, and chunks reference both faculty and course entities.
 
 \section{Pipeline Output Summary}
 
