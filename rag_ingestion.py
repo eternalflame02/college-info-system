@@ -601,6 +601,11 @@ def apply_adaptive_distance_threshold(results: Dict, query_type: str) -> Dict:
     if query_type == "teaching":
         threshold = max(threshold, 1.2)
 
+    # Faculty profile text is often sparse/noisy; allow a wider threshold
+    # to avoid dropping valid profile hits and triggering noisy mixed fallback.
+    if query_type == "faculty":
+        threshold = max(threshold, 1.35)
+
     # Filter results
     filtered_indices = [i for i, d in enumerate(distances) if d <= threshold]
 
@@ -932,6 +937,10 @@ def query_chromadb_with_fallback(
         n_results=max(n_results * 2, 8),
     )
     fallback = apply_adaptive_distance_threshold(fallback_raw, "general")
+
+    # Re-apply query-signal reranking on fallback results using original query type.
+    # This improves partial-name faculty queries (e.g., "Who is Dr Tessy").
+    fallback = _rerank_with_query_signals(fallback, query_text, query_type)
 
     # If adaptive threshold filters everything, keep top broad candidates
     # to avoid zero-result responses for open-ended general queries.

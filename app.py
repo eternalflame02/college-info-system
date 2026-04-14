@@ -9,11 +9,19 @@ Launch with:
 
 import sys
 from pathlib import Path
+import logging
 
 # Ensure project root is on path
 sys.path.insert(0, str(Path(__file__).parent))
 
 import streamlit as st
+
+logger = logging.getLogger(__name__)
+if not logging.getLogger().handlers:
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    )
 
 # ── Page Config ──────────────────────────────────────────────────────────
 st.set_page_config(
@@ -270,6 +278,8 @@ if prefill and not prompt:
     prompt = prefill
 
 if prompt:
+    logger.info("Streamlit chat request: prompt='%s'", prompt)
+
     # Add user message
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
@@ -280,6 +290,14 @@ if prompt:
         with st.spinner("Thinking..."):
             answer_fn = load_chatbot()
             response = answer_fn(prompt)
+
+        logger.info(
+            "Streamlit chat response: query_type=%s quality=%s sources=%d response_time_ms=%.2f",
+            response.query_type,
+            response.quality,
+            len(response.source_chunks),
+            response.response_time_ms,
+        )
 
         st.markdown(response.answer, unsafe_allow_html=True)
 

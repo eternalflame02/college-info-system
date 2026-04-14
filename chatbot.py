@@ -31,6 +31,11 @@ if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
         pass
 
 logger = logging.getLogger(__name__)
+if not logging.getLogger().handlers:
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    )
 
 # ========================================================================
 # SINGLETON RESOURCE MANAGER
@@ -99,6 +104,15 @@ class ChatResponse:
     response_time_ms: float = 0.0
 
 
+@dataclass
+class RetrievalPlan:
+    """Planner output controlling retrieval strategy."""
+    query_type: str
+    source_mode: str = "hybrid"  # kg_only | vector_only | hybrid | no_retrieval
+    rewritten_query: str = ""
+    rationale: str = ""
+
+
 # ========================================================================
 # QUERY CLASSIFICATION
 # ========================================================================
@@ -113,6 +127,166 @@ def classify_query(query: str) -> str:
     """
     from rag_ingestion import classify_query_type
     return classify_query_type(query)
+
+
+def _default_retrieval_plan(query: str) -> RetrievalPlan:
+    """Fast deterministic fallback plan when LLM planning is unavailable."""
+    q_norm = query.strip().lower()
+    greeting_markers = {
+        "hi", "hello", "hey", "good morning", "good afternoon", "good evening",
+        "thanks", "thank you", "how are you", "yo", "hola",
+    }
+    if q_norm in greeting_markers or any(q_norm.startswith(m + " ") for m in greeting_markers):
+        return RetrievalPlan(
+            query_type="general",
+            source_mode="no_retrieval",
+            rewritten_query=query,
+            rationale="greeting_smalltalk_default",
+        )
+
+    query_type = classify_query(query)
+    if query_type == "teaching":
+        mode = "hybrid"
+    elif query_type == "faculty":
+        mode = "vector_only"
+    elif query_type == "regulation":
+        mode = "hybrid"
+    else:
+        mode = "vector_only"
+    return RetrievalPlan(
+        query_type=query_type,
+        source_mode=mode,
+        rewritten_query=query,
+        rationale="default_router",
+    )
+
+
+def _extract_json_block(raw_text: str) -> Optional[Dict]:
+    """Extract planner JSON from model output, including fenced blocks."""
+    if not raw_text:
+        return None
+
+    text = raw_text.strip()
+
+    # Direct JSON
+    try:
+        parsed = json.loads(text)
+        if isinstance(parsed, dict):
+            return parsed
+    except Exception:
+        pass
+
+    # Fenced JSON block
+    fence_match = re.search(r"```(?:json)?\s*(\{[\s\S]*?\})\s*```", text, flags=re.IGNORECASE)
+    if fence_match:
+        try:
+            parsed = json.loads(fence_match.group(1))
+            if isinstance(parsed, dict):
+                return parsed
+        except Exception:
+            pass
+
+    # Fallback to first object-like block
+    brace_start = text.find("{")
+    brace_end = text.rfind("}")
+    if brace_start != -1 and brace_end != -1 and brace_end > brace_start:
+        try:
+            parsed = json.loads(text[brace_start : brace_end + 1])
+            if isinstance(parsed, dict):
+                return parsed
+        except Exception:
+            pass
+
+    return None
+
+
+def _normalize_planner_output(plan: Dict, original_query: str) -> RetrievalPlan:
+    """Normalize raw planner dictionary into validated RetrievalPlan."""
+    valid_query_types = {"teaching", "faculty", "course", "timetable", "regulation", "general"}
+    valid_modes = {"kg_only", "vector_only", "hybrid", "no_retrieval"}
+
+    query_type = str(plan.get("query_type", "")).strip().lower()
+    source_mode = str(plan.get("source_mode", "")).strip().lower()
+    rewritten_query = str(plan.get("rewritten_query", "")).strip()
+    rationale = str(plan.get("rationale", "")).strip()
+
+    if query_type not in valid_query_types:
+        query_type = classify_query(original_query)
+
+    if source_mode not in valid_modes:
+        source_mode = "hybrid" if query_type in {"teaching", "regulation"} else "vector_only"
+
+    if not rewritten_query:
+        rewritten_query = original_query
+
+    return RetrievalPlan(
+        query_type=query_type,
+        source_mode=source_mode,
+        rewritten_query=rewritten_query,
+        rationale=rationale or "planner_normalized",
+    )
+
+
+def _should_use_llm_planner(query: str, default_query_type: str) -> bool:
+    """Use planner selectively to balance latency and quality."""
+    if default_query_type in {"general", "regulation", "teaching"}:
+        return True
+
+    # Ambiguous intent markers where source choice is uncertain.
+    ambiguous_markers = ["or", "and", "about", "details", "explain", "tell me"]
+    q_lower = query.lower()
+    if any(marker in q_lower for marker in ambiguous_markers):
+        return True
+
+    return False
+
+
+def _plan_retrieval_with_llm(query: str) -> RetrievalPlan:
+    """Plan retrieval strategy (kg_only/vector_only/hybrid/no_retrieval) using LLM with strict fallback."""
+    default_plan = _default_retrieval_plan(query)
+
+    if not _should_use_llm_planner(query, default_plan.query_type):
+        return default_plan
+
+    client = _get_groq_client()
+    if client is None:
+        return default_plan
+
+    planner_system_prompt = """You are a retrieval planner for an academic QA system.
+Given a user query, output ONLY a JSON object with keys:
+- query_type: one of [teaching, faculty, course, timetable, regulation, general]
+- source_mode: one of [kg_only, vector_only, hybrid, no_retrieval]
+- rewritten_query: short rewritten retrieval query
+- rationale: brief reason
+
+Rules:
+- Queries like 'Who is Dr X', 'Who is Prof Y', or 'Tell me about faculty Z' are faculty/profile queries.
+- Use kg_only only for strict relation lookup queries like 'who teaches X'.
+- Use vector_only for descriptive profile/course/timetable lookups.
+- Use hybrid when relation + context/policy may both be needed, or query is broad.
+- Use no_retrieval for greetings, gratitude, or pure conversational small talk.
+- Do not include markdown or any text outside JSON."""
+
+    planner_user_prompt = f"Query: {query}"
+
+    try:
+        completion = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": planner_system_prompt},
+                {"role": "user", "content": planner_user_prompt},
+            ],
+            model=config.GROQ_MODEL,
+            temperature=0.0,
+            max_tokens=220,
+        )
+        content = (completion.choices[0].message.content or "").strip()
+        parsed = _extract_json_block(content)
+        if not parsed:
+            return default_plan
+        return _normalize_planner_output(parsed, original_query=query)
+    except Exception as exc:
+        logger.warning(f"Planner call failed: {exc}")
+        return default_plan
 
 
 # ========================================================================
@@ -171,6 +345,31 @@ def _retrieve_from_chromadb(
             ))
 
     return chunks
+
+
+def _execute_retrieval_plan(query: str, plan: RetrievalPlan) -> Tuple[Optional[str], List[RetrievedChunk]]:
+    """Execute planner-selected retrieval mode and return (kg_answer, chunks)."""
+    retrieval_query = plan.rewritten_query or query
+
+    if plan.source_mode == "no_retrieval":
+        return None, []
+
+    if plan.source_mode == "kg_only":
+        kg_answer = _retrieve_from_kg(query)
+        if kg_answer:
+            return kg_answer, []
+        # Safety net: if KG misses, recover through routed vector retrieval.
+        return None, _retrieve_from_chromadb(retrieval_query, plan.query_type, n_results=5)
+
+    if plan.source_mode == "vector_only":
+        return None, _retrieve_from_chromadb(retrieval_query, plan.query_type, n_results=5)
+
+    # hybrid
+    kg_answer = None
+    if plan.query_type in {"teaching", "regulation", "general", "course", "faculty", "timetable"}:
+        kg_answer = _retrieve_from_kg(query)
+    chunks = _retrieve_from_chromadb(retrieval_query, plan.query_type, n_results=5)
+    return kg_answer, chunks
 
 
 def _confidence_label(distance: float) -> str:
@@ -276,10 +475,46 @@ Question: {query}"""
             temperature=0.3,
             max_tokens=1024,
         )
-        return chat_completion.choices[0].message.content.strip()
+        content = (chat_completion.choices[0].message.content or "").strip()
+        if not content or content.lower() in {"none", "null", "n/a"}:
+            logger.info("LLM synthesis returned empty/null-like content; using formatted fallback")
+            return _format_chunks_as_answer(query, query_type, chunks, kg_answer)
+        return content
     except Exception as e:
         logger.warning(f"Groq API error: {e}")
         return _format_chunks_as_answer(query, query_type, chunks, kg_answer)
+
+
+def _answer_without_retrieval(query: str) -> str:
+    """Answer direct conversational queries (greetings/small-talk) without retrieval."""
+    client = _get_groq_client()
+    if client is None:
+        q = query.strip().lower()
+        if any(g in q for g in ("hi", "hello", "hey", "good morning", "good evening")):
+            return "Hello! I can help with MBCET CSE info such as faculty, courses, regulations, and timetables."
+        if "thank" in q:
+            return "You're welcome. If you want, ask about any MBCET CSE faculty, course, or regulation detail."
+        return "Hi! Ask me about MBCET CSE faculty, courses, timetables, or regulations."
+
+    system_prompt = """You are a polite assistant for MBCET CSE users.
+The user asked a conversational query that does not require retrieval.
+Reply briefly and naturally (1-3 sentences), and optionally suggest what academic queries you can help with.
+Do not invent factual department details in this mode."""
+
+    try:
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": query},
+            ],
+            model=config.GROQ_MODEL,
+            temperature=0.3,
+            max_tokens=120,
+        )
+        return (chat_completion.choices[0].message.content or "").strip()
+    except Exception as exc:
+        logger.warning(f"Direct no-retrieval response failed: {exc}")
+        return "Hi! I can help with MBCET CSE faculty, courses, timetables, and regulations."
 
 
 def _format_chunks_as_answer(
@@ -337,17 +572,40 @@ def answer_question(query: str) -> ChatResponse:
     """
     start_time = time.time()
 
-    # 1. Classify
-    query_type = classify_query(query)
-    logger.info(f"Query: '{query}'  Type: {query_type}")
+    # 1. Plan retrieval (LLM planner with deterministic fallback)
+    plan = _plan_retrieval_with_llm(query)
+    query_type = plan.query_type
+    logger.info(
+        "Query='%s' planner_mode=%s query_type=%s rewritten='%s' rationale='%s'",
+        query,
+        plan.source_mode,
+        plan.query_type,
+        plan.rewritten_query,
+        plan.rationale,
+    )
 
-    # 2. Knowledge Graph lookup (for teaching/relational queries)
-    kg_answer = None
-    if query_type == "teaching":
-        kg_answer = _retrieve_from_kg(query)
+    # 2. Execute retrieval (or bypass retrieval for conversational queries)
+    if plan.source_mode == "no_retrieval":
+        kg_answer, chunks = None, []
+        quality = "not_applicable"
+        answer = _answer_without_retrieval(query)
+        response_time = (time.time() - start_time) * 1000
+        return ChatResponse(
+            answer=answer,
+            query_type=query_type,
+            source_chunks=chunks,
+            kg_answer=kg_answer,
+            quality=quality,
+            response_time_ms=round(response_time, 2),
+        )
 
-    # 3. ChromaDB retrieval
-    chunks = _retrieve_from_chromadb(query, query_type, n_results=5)
+    kg_answer, chunks = _execute_retrieval_plan(query, plan)
+    logger.info(
+        "Retrieval result: mode=%s kg_hit=%s chunk_count=%d",
+        plan.source_mode,
+        bool(kg_answer),
+        len(chunks),
+    )
 
     # Determine quality
     if chunks:
@@ -363,10 +621,16 @@ def answer_question(query: str) -> ChatResponse:
     else:
         quality = "none"
 
-    # 4. Synthesize answer
+    if chunks:
+        top = sorted(chunks, key=lambda c: c.distance)[:3]
+        top_summary = [f"{c.content_type}:{c.distance:.3f}:{Path(c.source_file).stem}" for c in top]
+        logger.info("Top chunks: %s", " | ".join(top_summary))
+
+    # 3. Synthesize answer
     answer = _synthesize_answer_with_llm(query, query_type, chunks, kg_answer)
 
     response_time = (time.time() - start_time) * 1000
+    logger.info("Answer generated: query_type=%s quality=%s response_time_ms=%.2f", query_type, quality, response_time)
 
     return ChatResponse(
         answer=answer,

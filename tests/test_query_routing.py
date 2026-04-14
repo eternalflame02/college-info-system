@@ -7,7 +7,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from rag_ingestion import classify_query_type, query_chromadb_with_fallback
+from rag_ingestion import classify_query_type, query_chromadb_with_fallback, apply_adaptive_distance_threshold
 
 
 def test_classify_teaching_query():
@@ -188,3 +188,14 @@ def test_regulation_poor_can_fallback(monkeypatch):
     )
     assert results["fallback_triggered"] is True
     assert fake.calls == 2
+
+
+def test_faculty_threshold_allows_sparse_profile_hits():
+    raw = {
+        "ids": [["id1"]],
+        "distances": [[1.30]],
+        "documents": [["profile text"]],
+        "metadatas": [[{"content_type": "profile"}]],
+    }
+    filtered = apply_adaptive_distance_threshold(raw, "faculty")
+    assert filtered["filtered_count"] == 1
