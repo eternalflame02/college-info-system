@@ -1,19 +1,19 @@
 {
-  "validation_timestamp": "2026-03-15T05:07:13Z",
+  "validation_timestamp": "2026-04-15T01:26:58Z",
   "collection_health": {
-    "expected_count": 2203,
-    "actual_count": 2203,
+    "expected_count": 2261,
+    "actual_count": 2261,
     "status": "PASS"
   },
   "content_type_validation": {
     "table": {
-      "expected": 1972,
-      "actual": 1972,
+      "expected": 1971,
+      "actual": 1971,
       "status": "PASS"
     },
     "profile": {
-      "expected": 101,
-      "actual": 101,
+      "expected": 102,
+      "actual": 102,
       "status": "PASS"
     },
     "list": {
@@ -22,13 +22,18 @@
       "status": "PASS"
     },
     "section": {
-      "expected": 69,
-      "actual": 69,
+      "expected": 73,
+      "actual": 73,
       "status": "PASS"
     },
     "regulation": {
       "expected": 50,
       "actual": 50,
+      "status": "PASS"
+    },
+    "knowledge_graph": {
+      "expected": 54,
+      "actual": 54,
       "status": "PASS"
     }
   },
@@ -44,7 +49,7 @@
       "top_result_content_type": "table",
       "top_result_distance": 0.773,
       "results_count": 1,
-      "query_time_ms": 11528.63,
+      "query_time_ms": 11656.05,
       "status": "PASS"
     },
     {
@@ -64,13 +69,17 @@
     },
     {
       "query": "Who teaches Artificial Intelligence?",
-      "status": "FAIL",
-      "error": "No results returned"
+      "expected_content_type": "knowledge_graph",
+      "top_result_content_type": "knowledge_graph",
+      "top_result_distance": 0.847,
+      "results_count": 5,
+      "query_time_ms": 11752.94,
+      "status": "PASS"
     }
   ],
   "performance_metrics": {
-    "average_query_time_ms": 11199.46,
-    "min_query_time_ms": 10772.22,
-    "max_query_time_ms": 11952.39
+    "average_query_time_ms": 13162.27,
+    "min_query_time_ms": 11044.42,
+    "max_query_time_ms": 16774.62
   }
 }

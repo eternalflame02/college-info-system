@@ -1,0 +1,44 @@
+{
+  "embedding_count": 2261,
+  "embedding_dimensions": 768,
+  "norm_stats": {
+    "mean": 1.0,
+    "std": 3.0162620845430865e-08,
+    "min": 0.9999999403953552,
+    "max": 1.0000001192092896
+  },
+  "neighborhood": {
+    "k": 5,
+    "same_content_type_neighbor_ratio": 0.9517912428129146,
+    "mean_neighbor_similarity": 0.829168594553111,
+    "neighbor_similarity_percentiles": {
+      "p10": 0.7265759110450745,
+      "p25": 0.7957712411880493,
+      "p50": 0.8430957794189453,
+      "p75": 0.878879189491272,
+      "p90": 0.9036038517951965
+    }
+  },
+  "centroid_similarity": {
+    "list__profile": 0.8545542359352112,
+    "list__regulation": 0.5607163906097412,
+    "list__section": 0.632506787776947,
+    "list__table": 0.6580430269241333,
+    "list__unknown": 0.5425089597702026,
+    "profile__regulation": 0.7455191016197205,
+    "profile__section": 0.8130179643630981,
+    "profile__table": 0.7209133505821228,
+    "profile__unknown": 0.5673023462295532,
+    "regulation__section": 0.9697120189666748,
+    "regulation__table": 0.7960004210472107,
+    "regulation__unknown": 0.5091085433959961,
+    "section__table": 0.8224523663520813,
+    "section__unknown": 0.551221489906311,
+    "table__unknown": 0.6134839057922363
+  },
+  "outliers": {
+    "threshold_mean_neighbor_similarity": 0.35,
+    "count": 0,
+    "sample_chunk_ids": []
+  }
+}

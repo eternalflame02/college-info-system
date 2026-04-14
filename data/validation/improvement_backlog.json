@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "priority": "P1",
+      "area": "retrieval",
+      "issue": "Hit@k below target",
+      "change": "Retune route-specific thresholds and add fallback broad retrieval when filtered results are empty.",
+      "success_metric": "Hit@k >= 0.85 and MRR >= 0.65 on 75-query benchmark"
+    },
+    {
+      "priority": "P1",
+      "area": "retrieval/perf",
+      "issue": "High average retrieval latency",
+      "change": "Persist loaded embedding model during multi-query evaluation and avoid per-query model initialization in runtime query path.",
+      "success_metric": "Mean query latency < 900ms on same hardware"
+    },
+    {
+      "priority": "P1",
+      "area": "knowledge_graph",
+      "issue": "No prerequisite edges extracted",
+      "change": "Constrain prerequisite extraction to nearest course heading context and resolve ambiguous source course with local window rules.",
+      "success_metric": "Non-zero prerequisite edges with manual precision >= 0.85 on sampled edges"
+    }
+  ]
+}

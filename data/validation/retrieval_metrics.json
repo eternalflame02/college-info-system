@@ -1,0 +1,981 @@
+{
+  "query_count": 30,
+  "top_k": 5,
+  "aggregate_metrics": {
+    "hit_at_k": 0.7666666666666667,
+    "mrr": 0.74,
+    "ndcg_at_k": 0.8406405954188796,
+    "precision_at_k_proxy": 0.6,
+    "recall_at_k_proxy": 0.7333333333333333,
+    "fallback_trigger_ratio": 0.9666666666666667,
+    "latency_ms": {
+      "mean": 25898.18675999947,
+      "min": 13365.31589999504,
+      "max": 37817.61430000188,
+      "percentiles": {
+        "p10": 22265.291015625,
+        "p25": 23575.99609375,
+        "p50": 25610.865234375,
+        "p75": 26975.337890625,
+        "p90": 29331.9921875
+      }
+    }
+  },
+  "per_query_type": {
+    "course": {
+      "query_count": 5,
+      "hit_rate": 1.0,
+      "failure_rate": 0.0
+    },
+    "faculty": {
+      "query_count": 5,
+      "hit_rate": 1.0,
+      "failure_rate": 0.0
+    },
+    "general": {
+      "query_count": 5,
+      "hit_rate": 0.6,
+      "failure_rate": 0.4
+    },
+    "regulation": {
+      "query_count": 5,
+      "hit_rate": 0.0,
+      "failure_rate": 1.0
+    },
+    "teaching": {
+      "query_count": 5,
+      "hit_rate": 1.0,
+      "failure_rate": 0.0
+    },
+    "timetable": {
+      "query_count": 5,
+      "hit_rate": 1.0,
+      "failure_rate": 0.0
+    }
+  },
+  "routing_mismatch_counter": {
+    "faculty->knowledge_graph": 5,
+    "faculty->table": 9,
+    "regulation->section": 1,
+    "regulation->table": 24,
+    "teaching->table": 1
+  },
+  "per_query_logs": [
+    {
+      "query": "Who teaches Discrete Mathematical Structures (23MAL20B)?",
+      "query_type": "teaching",
+      "expected_content_type": "knowledge_graph",
+      "expected_entity_ids": [
+        "faculty_ms_sruthi_janardhanan",
+        "course_23mal20b"
+      ],
+      "top_k": 3,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.6030440330505371,
+        0.6279654502868652,
+        0.797350287437439
+      ],
+      "top_content_types": [
+        "knowledge_graph",
+        "knowledge_graph",
+        "knowledge_graph"
+      ],
+      "relevance_grades": [
+        4,
+        4,
+        2
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 37817.61430000188
+    },
+    {
+      "query": "Who teaches Functional Analysis (MA0M40A)?",
+      "query_type": "teaching",
+      "expected_content_type": "knowledge_graph",
+      "expected_entity_ids": [
+        "faculty_ms_lekshmi_i",
+        "course_ma0m40a"
+      ],
+      "top_k": 1,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.5450654625892639
+      ],
+      "top_content_types": [
+        "knowledge_graph"
+      ],
+      "relevance_grades": [
+        4
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 26262.845500008552
+    },
+    {
+      "query": "Which faculty handles 23CSL20B Computer Organization and Architecture with Ms. RENJITHA RADHAKRISHNAN?",
+      "query_type": "teaching",
+      "expected_content_type": "knowledge_graph",
+      "expected_entity_ids": [
+        "faculty_ms_renjitha_radhakrishnan",
+        "course_23csl20b"
+      ],
+      "top_k": 5,
+      "fallback_triggered": false,
+      "top_distances": [
+        0.482715904712677,
+        0.6625959277153015,
+        0.7147293090820312,
+        0.73204106092453,
+        0.7461340427398682
+      ],
+      "top_content_types": [
+        "knowledge_graph",
+        "knowledge_graph",
+        "knowledge_graph",
+        "knowledge_graph",
+        "knowledge_graph"
+      ],
+      "relevance_grades": [
+        4,
+        1,
+        4,
+        4,
+        1
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 0.9356874411126277,
+      "latency_ms": 13365.31589999504
+    },
+    {
+      "query": "Who teaches Cloud Computing (CS1U41B)?",
+      "query_type": "teaching",
+      "expected_content_type": "knowledge_graph",
+      "expected_entity_ids": [
+        "faculty_ms_prathibha_s_nair",
+        "course_cs1u41b"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.9014358520507812,
+        0.904504120349884,
+        0.9290026426315308,
+        0.9557719230651855,
+        0.9727203249931335
+      ],
+      "top_content_types": [
+        "table",
+        "knowledge_graph",
+        "knowledge_graph",
+        "knowledge_graph",
+        "knowledge_graph"
+      ],
+      "relevance_grades": [
+        3,
+        4,
+        4,
+        1,
+        1
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 0.9434469004225651,
+      "latency_ms": 37233.9340000035
+    },
+    {
+      "query": "Who teaches Artificial Intelligence (CS1U40A)?",
+      "query_type": "teaching",
+      "expected_content_type": "knowledge_graph",
+      "expected_entity_ids": [
+        "faculty_dr_jisha_john",
+        "course_cs1u40a"
+      ],
+      "top_k": 2,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.595008909702301,
+        0.5988932251930237
+      ],
+      "top_content_types": [
+        "knowledge_graph",
+        "knowledge_graph"
+      ],
+      "relevance_grades": [
+        4,
+        4
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 26952.57510000374
+    },
+    {
+      "query": "What is the profile of Ms. Gayathri K. S.?",
+      "query_type": "faculty",
+      "expected_content_type": "profile",
+      "expected_entity_ids": [
+        "faculty_ms_gayathri_k_s"
+      ],
+      "top_k": 1,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.7813806533813477
+      ],
+      "top_content_types": [
+        "table"
+      ],
+      "relevance_grades": [
+        2
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 25757.126399999834
+    },
+    {
+      "query": "What is the profile of Ms. Lino Zachariah?",
+      "query_type": "faculty",
+      "expected_content_type": "profile",
+      "expected_entity_ids": [
+        "faculty_ms_lino_zachariah"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.8095285892486572,
+        0.8385247588157654,
+        1.2137627601623535,
+        1.2317441701889038,
+        1.2809641361236572
+      ],
+      "top_content_types": [
+        "table",
+        "knowledge_graph",
+        "table",
+        "knowledge_graph",
+        "table"
+      ],
+      "relevance_grades": [
+        3,
+        3,
+        3,
+        0,
+        0
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 24215.68350000598
+    },
+    {
+      "query": "What is the profile of Ms. Neethi Narayanan?",
+      "query_type": "faculty",
+      "expected_content_type": "profile",
+      "expected_entity_ids": [
+        "faculty_ms_neethi_narayanan"
+      ],
+      "top_k": 1,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.7600138187408447
+      ],
+      "top_content_types": [
+        "table"
+      ],
+      "relevance_grades": [
+        3
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 26882.524000000558
+    },
+    {
+      "query": "Give details about faculty member Ms. Lino Zachariah",
+      "query_type": "faculty",
+      "expected_content_type": "profile",
+      "expected_entity_ids": [
+        "faculty_ms_lino_zachariah"
+      ],
+      "top_k": 2,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.6844410300254822,
+        0.7511464357376099
+      ],
+      "top_content_types": [
+        "knowledge_graph",
+        "table"
+      ],
+      "relevance_grades": [
+        3,
+        3
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 22786.178599999403
+    },
+    {
+      "query": "What is the profile of Dr SWAPNA P. S?",
+      "query_type": "faculty",
+      "expected_content_type": "profile",
+      "expected_entity_ids": [
+        "faculty_dr_swapna_p_s"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.8339778780937195,
+        1.200891137123108,
+        1.2857261896133423,
+        1.2981467247009277,
+        1.304253101348877
+      ],
+      "top_content_types": [
+        "knowledge_graph",
+        "table",
+        "table",
+        "knowledge_graph",
+        "table"
+      ],
+      "relevance_grades": [
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 22274.580899989814
+    },
+    {
+      "query": "How many credits does CY0U10B ENGINEERING CHEMISTRY-B have?",
+      "query_type": "course",
+      "expected_content_type": "table",
+      "expected_entity_ids": [
+        "course_cy0u10b"
+      ],
+      "top_k": 2,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.6736363768577576,
+        0.7091196775436401
+      ],
+      "top_content_types": [
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        4,
+        2
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 23559.05929999426
+    },
+    {
+      "query": "How many credits does 23CSL40A Compiler Design have?",
+      "query_type": "course",
+      "expected_content_type": "table",
+      "expected_entity_ids": [
+        "course_23csl40a"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.8868818879127502,
+        0.9145375490188599,
+        0.9344214200973511,
+        0.9444905519485474,
+        0.9663915634155273
+      ],
+      "top_content_types": [
+        "table",
+        "table",
+        "table",
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "hit": true,
+      "mrr": 0.2,
+      "ndcg": 0.8447122853992027,
+      "latency_ms": 22181.682299997192
+    },
+    {
+      "query": "How many credits does CS1P61E Cloud Computing have?",
+      "query_type": "course",
+      "expected_content_type": "table",
+      "expected_entity_ids": [
+        "course_cs1p61e"
+      ],
+      "top_k": 2,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.6393858790397644,
+        0.7801607847213745
+      ],
+      "top_content_types": [
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        4,
+        4
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 28808.214000004227
+    },
+    {
+      "query": "Show details for course CS1H30F THEORY OF COMPUTABILITY AND COMPLEXITY",
+      "query_type": "course",
+      "expected_content_type": "table",
+      "expected_entity_ids": [
+        "course_cs1h30f"
+      ],
+      "top_k": 1,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.7910155057907104
+      ],
+      "top_content_types": [
+        "table"
+      ],
+      "relevance_grades": [
+        4
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 31986.659299989697
+    },
+    {
+      "query": "How many credits does CS1U30G Computer Graphics and Image Processing have?",
+      "query_type": "course",
+      "expected_content_type": "table",
+      "expected_entity_ids": [
+        "course_cs1u30g"
+      ],
+      "top_k": 1,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.6190032362937927
+      ],
+      "top_content_types": [
+        "table"
+      ],
+      "relevance_grades": [
+        4
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 27986.724399990635
+    },
+    {
+      "query": "What is the timetable or slot for CS0U41A Introduction to Mobile Computing?",
+      "query_type": "timetable",
+      "expected_content_type": "table",
+      "expected_entity_ids": [
+        "course_cs0u41a"
+      ],
+      "top_k": 2,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.7228853106498718,
+        0.7709017992019653
+      ],
+      "top_content_types": [
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        4,
+        4
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 24699.468199993134
+    },
+    {
+      "query": "What is the timetable or slot for CS0U41 INTRODUCTION TO MOBILE COMPUTING?",
+      "query_type": "timetable",
+      "expected_content_type": "table",
+      "expected_entity_ids": [
+        "course_cs0u41"
+      ],
+      "top_k": 2,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.6911380290985107,
+        0.7042527198791504
+      ],
+      "top_content_types": [
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        4,
+        2
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 26982.926199998474
+    },
+    {
+      "query": "When is 23CSL44D Digital Forensics scheduled?",
+      "query_type": "timetable",
+      "expected_content_type": "table",
+      "expected_entity_ids": [
+        "course_23csl44d"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.9740135669708252,
+        1.058515191078186,
+        1.1599946022033691,
+        1.1767210960388184,
+        1.183976650238037
+      ],
+      "top_content_types": [
+        "table",
+        "table",
+        "table",
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        4,
+        4,
+        1,
+        1,
+        1
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 25115.849800000433
+    },
+    {
+      "query": "What is the timetable or slot for 23CSL2MC Mathematics for Machine Learning?",
+      "query_type": "timetable",
+      "expected_content_type": "table",
+      "expected_entity_ids": [
+        "course_23csl2mc"
+      ],
+      "top_k": 2,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.7636715173721313,
+        0.7928211688995361
+      ],
+      "top_content_types": [
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        4,
+        4
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 22115.594300004886
+    },
+    {
+      "query": "What is the timetable or slot for 23CSL44D Digital Forensics?",
+      "query_type": "timetable",
+      "expected_content_type": "table",
+      "expected_entity_ids": [
+        "course_23csl44d"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.8248892426490784,
+        0.9889228343963623,
+        0.9928926229476929,
+        0.9938919544219971,
+        1.019667387008667
+      ],
+      "top_content_types": [
+        "table",
+        "table",
+        "table",
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        4,
+        1,
+        4,
+        1,
+        1
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 0.949907305355028,
+      "latency_ms": 22553.354200004833
+    },
+    {
+      "query": "What are the exam rules in the current curriculum regulation?",
+      "query_type": "regulation",
+      "expected_content_type": "regulation",
+      "expected_entity_ids": [
+        "prog_btech_cse"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        1.1245543956756592,
+        1.1477901935577393,
+        1.180360198020935,
+        1.182531714439392,
+        1.1829290390014648
+      ],
+      "top_content_types": [
+        "table",
+        "table",
+        "table",
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "hit": false,
+      "mrr": 0.0,
+      "ndcg": 0.43067655807339306,
+      "latency_ms": 23626.805399995646
+    },
+    {
+      "query": "How does the grading policy work according to regulation?",
+      "query_type": "regulation",
+      "expected_content_type": "regulation",
+      "expected_entity_ids": [
+        "prog_btech_cse"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        1.188579797744751,
+        1.2731351852416992,
+        1.287827491760254,
+        1.2952879667282104,
+        1.3007185459136963
+      ],
+      "top_content_types": [
+        "table",
+        "section",
+        "table",
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "hit": false,
+      "mrr": 0.0,
+      "ndcg": 0.6309297535714575,
+      "latency_ms": 24867.57729999954
+    },
+    {
+      "query": "Explain curriculum and scheme under R2023 regulation",
+      "query_type": "regulation",
+      "expected_content_type": "regulation",
+      "expected_entity_ids": [
+        "prog_btech_cse"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        1.0562424659729004,
+        1.0700929164886475,
+        1.0884172916412354,
+        1.1012647151947021,
+        1.1170679330825806
+      ],
+      "top_content_types": [
+        "table",
+        "table",
+        "table",
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "hit": false,
+      "mrr": 0.0,
+      "ndcg": 0.6309297535714575,
+      "latency_ms": 26008.094699995127
+    },
+    {
+      "query": "Regulation details for credit requirements in B.Tech AI",
+      "query_type": "regulation",
+      "expected_content_type": "regulation",
+      "expected_entity_ids": [
+        "prog_btech_cse"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.8192890882492065,
+        0.9191991090774536,
+        0.927112340927124,
+        0.9401533603668213,
+        0.9409376978874207
+      ],
+      "top_content_types": [
+        "table",
+        "table",
+        "table",
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "hit": false,
+      "mrr": 0.0,
+      "ndcg": 0.8529278650606567,
+      "latency_ms": 22789.43309999886
+    },
+    {
+      "query": "Give regulation rules on course registration",
+      "query_type": "regulation",
+      "expected_content_type": "regulation",
+      "expected_entity_ids": [
+        "prog_btech_cse"
+      ],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        1.1501226425170898,
+        1.240142583847046,
+        1.243537187576294,
+        1.2590065002441406,
+        1.259880542755127
+      ],
+      "top_content_types": [
+        "table",
+        "table",
+        "table",
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hit": false,
+      "mrr": 0.0,
+      "ndcg": 0.0,
+      "latency_ms": 25335.13039999525
+    },
+    {
+      "query": "What are important documents for CSE students?",
+      "query_type": "general",
+      "expected_content_type": null,
+      "expected_entity_ids": [],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        1.0211988687515259,
+        1.0660430192947388,
+        1.0352472066879272,
+        1.1050668954849243,
+        1.0743930339813232
+      ],
+      "top_content_types": [
+        "table",
+        "profile",
+        "table",
+        "section",
+        "table"
+      ],
+      "relevance_grades": [
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 28027.730300003896
+    },
+    {
+      "query": "What activities are available in computer science engineering department?",
+      "query_type": "general",
+      "expected_content_type": null,
+      "expected_entity_ids": [],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.8281478881835938,
+        0.9508101940155029,
+        0.9355173707008362,
+        0.956856369972229,
+        0.9805775880813599
+      ],
+      "top_content_types": [
+        "profile",
+        "section",
+        "profile",
+        "profile",
+        "profile"
+      ],
+      "relevance_grades": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 29037.035000001197
+    },
+    {
+      "query": "Where can I find semester wise syllabus links?",
+      "query_type": "general",
+      "expected_content_type": null,
+      "expected_entity_ids": [],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        0.9962748885154724,
+        1.0111141204833984,
+        1.02712082862854,
+        1.0409033298492432,
+        1.0450323820114136
+      ],
+      "top_content_types": [
+        "table",
+        "table",
+        "table",
+        "table",
+        "table"
+      ],
+      "relevance_grades": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hit": false,
+      "mrr": 0.0,
+      "ndcg": 0.0,
+      "latency_ms": 25464.604100008728
+    },
+    {
+      "query": "Summarize recent department announcements",
+      "query_type": "general",
+      "expected_content_type": null,
+      "expected_entity_ids": [],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        1.2207914590835571,
+        1.3055388927459717,
+        1.283825159072876,
+        1.338547706604004,
+        1.3396949768066406
+      ],
+      "top_content_types": [
+        "profile",
+        "table",
+        "profile",
+        "table",
+        "profile"
+      ],
+      "relevance_grades": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hit": false,
+      "mrr": 0.0,
+      "ndcg": 0.0,
+      "latency_ms": 26350.85170000093
+    },
+    {
+      "query": "Summarize department highlights and facilities",
+      "query_type": "general",
+      "expected_content_type": null,
+      "expected_entity_ids": [],
+      "top_k": 5,
+      "fallback_triggered": true,
+      "top_distances": [
+        1.1253279447555542,
+        1.2226366996765137,
+        1.2287464141845703,
+        1.2308522462844849,
+        1.2403004169464111
+      ],
+      "top_content_types": [
+        "section",
+        "section",
+        "section",
+        "section",
+        "section"
+      ],
+      "relevance_grades": [
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hit": true,
+      "mrr": 1.0,
+      "ndcg": 1.0,
+      "latency_ms": 25900.4305999988
+    }
+  ]
+}

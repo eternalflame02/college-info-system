@@ -18,6 +18,7 @@ from chunker.semantic_chunker import (
     remove_frontmatter,
     MarkdownChunker,
 )
+from chunker.content_classifier import classify_content
 
 
 class TestNormalization:
@@ -234,6 +235,19 @@ we have enough content for a valid chunk.
 
         assert metadata["related_faculty_ids"] == "faculty_dr_john_doe"
         assert metadata["related_faculty_names"] == "Dr. John Doe"
+
+
+class TestContentClassificationOrder:
+    def test_profile_precedence_over_table_like_text(self):
+        text = (
+            "Dr. Jisha John\n"
+            "Assistant Professor\n"
+            "Email: jisha@mbcet.ac.in\n"
+            "Qualification: PhD\n"
+            "| delimiter-like text but no real table separator |"
+        )
+        result = classify_content(text, section_hierarchy=["Faculty"])
+        assert result == "profile"
 
 
 class TestChunkReport:

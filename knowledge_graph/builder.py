@@ -58,6 +58,36 @@ def _course_code_tokens(courses: List[dict]) -> Dict[str, str]:
     return mapping
 
 
+def _course_id_to_code(courses: List[dict]) -> Dict[str, str]:
+    mapping: Dict[str, str] = {}
+    for course in courses:
+        cid = course.get("id", "")
+        code = (course.get("code") or "").strip().upper()
+        if cid and code:
+            mapping[cid] = code
+    return mapping
+
+
+def _course_alias_to_id(courses: List[dict]) -> Dict[str, str]:
+    mapping: Dict[str, str] = {}
+    for course in courses:
+        cid = course.get("id", "")
+        if not cid:
+            continue
+        code = (course.get("code") or "").strip().upper()
+        name = _normalize(course.get("name", ""))
+        aliases = [_normalize(a) for a in course.get("aliases", [])]
+
+        if code:
+            mapping[code] = cid
+        if name:
+            mapping[name] = cid
+        for alias in aliases:
+            if alias:
+                mapping[alias] = cid
+    return mapping
+
+
 def _program_from_source(source_file: str) -> Optional[str]:
     source = source_file.lower()
 
@@ -178,6 +208,7 @@ def extract_course_part_of_program_edges(
 def extract_prerequisite_edges(
     chunks: List[dict],
     code_to_course_id: Dict[str, str],
+    courses: List[dict],
 ) -> Tuple[List[dict], Dict[str, int]]:
     edges: Dict[str, dict] = {}
     rejected = defaultdict(int)
@@ -185,21 +216,80 @@ def extract_prerequisite_edges(
     prereq_pat = re.compile(r"pre[\s-]?requisites?\s*[:\-]\s*([^\n]+)", re.IGNORECASE)
     code_pat = re.compile(r"\b[A-Z0-9]{3,10}\b")
 
+    course_id_to_code = _course_id_to_code(courses)
+    alias_to_course_id = _course_alias_to_id(courses)
+
     for chunk in chunks:
         refs = set(chunk.get("entity_refs", []))
         source_courses = sorted([r for r in refs if r.startswith("course_")])
-        if len(source_courses) != 1:
-            if len(source_courses) > 1:
-                rejected["prereq_ambiguous_source_course"] += 1
-            continue
-
-        source_course = source_courses[0]
         text = chunk.get("text", "")
-        matches = prereq_pat.findall(text)
-        if not matches:
+        match_iter = list(prereq_pat.finditer(text))
+        if not match_iter:
             continue
 
-        for matched in matches:
+        for prereq_match in match_iter:
+            matched = prereq_match.group(1)
+            source_course: Optional[str] = None
+
+            if len(source_courses) == 1:
+                source_course = source_courses[0]
+                resolution_rule = "source_course_single_ref"
+            else:
+                resolution_rule = ""
+
+            if source_course is None and source_courses:
+                # Try heading anchor from section hierarchy.
+                hierarchy = chunk.get("section_hierarchy") or []
+                for heading in hierarchy:
+                    h_norm = _normalize(heading)
+                    if not h_norm:
+                        continue
+
+                    heading_tokens = re.findall(r"\b[A-Z0-9]{3,10}\b", heading.upper())
+                    for token in heading_tokens:
+                        candidate = code_to_course_id.get(token)
+                        if candidate in source_courses:
+                            source_course = candidate
+                            break
+                    if source_course:
+                        resolution_rule = "source_course_heading_code"
+                        break
+
+                    for alias, cid in alias_to_course_id.items():
+                        if cid in source_courses and alias and alias in h_norm:
+                            source_course = cid
+                            resolution_rule = "source_course_heading_alias"
+                            break
+                    if source_course:
+                        break
+
+            if source_course is None and len(source_courses) > 1:
+                # Use nearest preceding source-course code before prerequisite marker.
+                nearest_pos = -1
+                nearest_course = None
+                marker_pos = prereq_match.start()
+                upper_text = text.upper()
+
+                for cid in source_courses:
+                    code = course_id_to_code.get(cid, "")
+                    if not code:
+                        continue
+                    pos = upper_text.rfind(code, 0, marker_pos)
+                    if pos > nearest_pos:
+                        nearest_pos = pos
+                        nearest_course = cid
+
+                if nearest_course:
+                    source_course = nearest_course
+                    resolution_rule = "source_course_nearest_preceding"
+
+            if source_course is None:
+                if len(source_courses) > 1:
+                    rejected["prereq_ambiguous_source_course"] += 1
+                else:
+                    rejected["prereq_missing_source_course"] += 1
+                continue
+
             found = False
             for token in code_pat.findall(matched.upper()):
                 if not (any(c.isalpha() for c in token) and any(c.isdigit() for c in token)):
@@ -218,6 +308,7 @@ def extract_prerequisite_edges(
                     "evidence": [
                         f"chunk_id:{chunk.get('chunk_id', '')}",
                         f"source_file:{chunk.get('source_file', '')}",
+                            f"rule:{resolution_rule}",
                         f"text_span:Prerequisite:{matched.strip()}",
                     ],
                 }
@@ -225,6 +316,107 @@ def extract_prerequisite_edges(
                 found = True
             if not found:
                 rejected["prereq_no_mapped_code"] += 1
+
+    return sorted(edges.values(), key=lambda e: e["id"]), dict(rejected)
+
+
+def extract_course_semester_edges(
+    chunks: List[dict],
+    valid_semester_ids: set,
+) -> Tuple[List[dict], Dict[str, int]]:
+    edges: Dict[str, dict] = {}
+    rejected = defaultdict(int)
+
+    sem_pat = re.compile(r"\bsemester\s*([1-8])\b|\bs\s*([1-8])\b", re.IGNORECASE)
+
+    for chunk in chunks:
+        refs = set(chunk.get("entity_refs", []))
+        courses = sorted([r for r in refs if r.startswith("course_")])
+        if not courses:
+            continue
+
+        semesters = sorted([r for r in refs if r in valid_semester_ids])
+        if not semesters:
+            for heading in chunk.get("section_hierarchy") or []:
+                match = sem_pat.search(heading)
+                if not match:
+                    continue
+                sem_num = match.group(1) or match.group(2)
+                sem_id = f"semester_{sem_num}"
+                if sem_id in valid_semester_ids:
+                    semesters.append(sem_id)
+
+        if not semesters:
+            rejected["course_sem_no_semester_signal"] += len(courses)
+            continue
+
+        sem_id = sorted(set(semesters))[0]
+        for course_id in courses:
+            edge = {
+                "id": _edge_id("taught_in", course_id, sem_id),
+                "type": "taught_in",
+                "source": course_id,
+                "target": sem_id,
+                "confidence": 1.0,
+                "deterministic": True,
+                "evidence": [
+                    f"chunk_id:{chunk.get('chunk_id', '')}",
+                    f"source_file:{chunk.get('source_file', '')}",
+                    f"rule:course_semester_link:{sem_id}",
+                ],
+            }
+            edges[edge["id"]] = edge
+
+    return sorted(edges.values(), key=lambda e: e["id"]), dict(rejected)
+
+
+def extract_course_relation_edges(
+    chunks: List[dict],
+    code_to_course_id: Dict[str, str],
+) -> Tuple[List[dict], Dict[str, int]]:
+    edges: Dict[str, dict] = {}
+    rejected = defaultdict(int)
+
+    coreq_pat = re.compile(r"co[\s-]?requisites?\s*[:\-]\s*([^\n]+)", re.IGNORECASE)
+    code_pat = re.compile(r"\b[A-Z0-9]{3,10}\b")
+
+    for chunk in chunks:
+        refs = set(chunk.get("entity_refs", []))
+        source_courses = sorted([r for r in refs if r.startswith("course_")])
+        if len(source_courses) != 1:
+            continue
+
+        source_course = source_courses[0]
+        text = chunk.get("text", "")
+        matches = coreq_pat.findall(text)
+        if not matches:
+            continue
+
+        for matched in matches:
+            found = False
+            for token in code_pat.findall(matched.upper()):
+                target_course = code_to_course_id.get(token)
+                if not target_course or target_course == source_course:
+                    continue
+
+                edge = {
+                    "id": _edge_id("corequisite", source_course, target_course),
+                    "type": "corequisite",
+                    "source": source_course,
+                    "target": target_course,
+                    "confidence": 1.0,
+                    "deterministic": True,
+                    "evidence": [
+                        f"chunk_id:{chunk.get('chunk_id', '')}",
+                        f"source_file:{chunk.get('source_file', '')}",
+                        f"text_span:Corequisite:{matched.strip()}",
+                    ],
+                }
+                edges[edge["id"]] = edge
+                found = True
+
+            if not found:
+                rejected["coreq_no_mapped_code"] += 1
 
     return sorted(edges.values(), key=lambda e: e["id"]), dict(rejected)
 
@@ -349,17 +541,23 @@ def build_knowledge_graph(
     nodes = build_nodes(faculty, courses, programs, chunks)
     node_ids = {n["id"] for n in nodes}
     valid_program_ids = {p["id"] for p in programs if p.get("id")}
+    valid_semester_ids = {n["id"] for n in nodes if n.get("type") == "semester"}
+    code_map = _course_code_tokens(courses)
 
     part_of_edges, part_of_rejected = extract_course_part_of_program_edges(
         chunks, valid_program_ids
     )
     prereq_edges, prereq_rejected = extract_prerequisite_edges(
-        chunks, _course_code_tokens(courses)
+        chunks, code_map, courses
     )
     teaches_edges, teaches_rejected = extract_teaches_edges(chunks, faculty, courses)
+    taught_in_edges, taught_in_rejected = extract_course_semester_edges(
+        chunks, valid_semester_ids
+    )
+    coreq_edges, coreq_rejected = extract_course_relation_edges(chunks, code_map)
 
     all_edges_map = {}
-    for edge in part_of_edges + prereq_edges + teaches_edges:
+    for edge in part_of_edges + prereq_edges + teaches_edges + taught_in_edges + coreq_edges:
         all_edges_map[edge["id"]] = edge
     edges = sorted(all_edges_map.values(), key=lambda e: e["id"])
 
@@ -389,6 +587,8 @@ def build_knowledge_graph(
             "part_of": part_of_rejected,
             "has_prerequisite": prereq_rejected,
             "teaches": teaches_rejected,
+            "taught_in": taught_in_rejected,
+            "corequisite": coreq_rejected,
         },
         "validation_errors": errors,
         "valid": len(errors) == 0,

@@ -546,6 +546,8 @@ def classify_query_type(query: str) -> str:
     # Regulation queries
     regulation_keywords = [
         "regulation", "r2019", "r2023", "curriculum", "scheme", "grading",
+        "attendance", "cgpa", "sgpa", "credit requirement", "exam rule",
+        "supplementary", "probation", "promotion",
     ]
     if any(kw in query_lower for kw in regulation_keywords):
         return "regulation"
@@ -626,6 +628,95 @@ def apply_adaptive_distance_threshold(results: Dict, query_type: str) -> Dict:
     return filtered_results
 
 
+def _extract_semester_query_signal(query_text: str) -> Optional[int]:
+    match = re.search(r"\b(?:semester|sem|s)\s*([1-8])\b", query_text, re.IGNORECASE)
+    if match:
+        return int(match.group(1))
+    return None
+
+
+def _extract_faculty_query_signal(query_text: str) -> Optional[str]:
+    try:
+        from chunker.entity_registry import EntityRegistry
+
+        registry = EntityRegistry()
+        registry.load_all()
+
+        normalized_text = query_text.strip()
+        exact = registry.find_exact_match(normalized_text)
+        if exact and exact.startswith("faculty_"):
+            return exact
+
+        # Try title-based faculty mention extraction.
+        candidates = re.findall(
+            r"(?:dr|prof|mr|ms|mrs)\.?\s+[a-z]+(?:\s+[a-z]+){0,3}",
+            query_text,
+            flags=re.IGNORECASE,
+        )
+        for candidate in candidates:
+            exact = registry.find_exact_match(candidate)
+            if exact and exact.startswith("faculty_"):
+                return exact
+
+            fuzzy = registry.find_fuzzy_match(candidate, entity_type="faculty")
+            if fuzzy and fuzzy.startswith("faculty_"):
+                return fuzzy
+    except Exception:
+        return None
+
+    return None
+
+
+def _rerank_with_query_signals(results: Dict, query_text: str, query_type: str) -> Dict:
+    """
+    Re-rank routed results using lightweight metadata/query signals.
+
+    This improves precision for faculty and semester-specific queries without
+    relying on ChromaDB operator-specific metadata filters.
+    """
+    if not results.get("distances") or not results["distances"][0]:
+        return results
+
+    ids = results["ids"][0]
+    distances = results["distances"][0]
+    docs = results["documents"][0]
+    metas = results["metadatas"][0]
+
+    semester_signal = _extract_semester_query_signal(query_text)
+    faculty_signal = _extract_faculty_query_signal(query_text) if query_type == "faculty" else None
+
+    scored_indices = []
+    for idx, distance in enumerate(distances):
+        meta = metas[idx] or {}
+        score = float(distance)
+
+        if semester_signal is not None:
+            sem_meta = meta.get("semester")
+            try:
+                if sem_meta is not None and int(sem_meta) == semester_signal:
+                    score -= 0.08
+            except (ValueError, TypeError):
+                pass
+
+        if faculty_signal:
+            if meta.get("faculty_id") == faculty_signal:
+                score -= 0.12
+            else:
+                refs = str(meta.get("entity_refs", ""))
+                if faculty_signal in refs:
+                    score -= 0.08
+
+        scored_indices.append((score, idx))
+
+    ranked = [idx for _, idx in sorted(scored_indices, key=lambda x: x[0])]
+    return {
+        "ids": [[ids[i] for i in ranked]],
+        "distances": [[distances[i] for i in ranked]],
+        "documents": [[docs[i] for i in ranked]],
+        "metadatas": [[metas[i] for i in ranked]],
+    }
+
+
 def query_chromadb(
     collection,
     query_text: str,
@@ -633,6 +724,7 @@ def query_chromadb(
     n_results: int = 5,
     content_type_filter: str = None,
     distance_threshold: float = None,
+    query_embedding: Optional[List[List[float]]] = None,
 ) -> Dict:
     """
     Query ChromaDB with routing and adaptive filtering.
@@ -688,19 +780,20 @@ def query_chromadb(
     if content_type_filter:
         where_filter = {"content_type": content_type_filter}
 
-    # Generate query embedding using the same model
-    model = load_embedding_model(device="auto")
-    query_embedding = model.encode(
-        [query_text],
-        convert_to_numpy=True,
-        normalize_embeddings=True,
-    ).tolist()
+    # Generate query embedding if not pre-computed.
+    if query_embedding is None:
+        model = load_embedding_model(device="auto")
+        query_embedding = model.encode(
+            [query_text],
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        ).tolist()
 
-    # Free model
-    del model
-    import torch
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
+        # Free model
+        del model
+        import torch
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     # Execute query with pre-computed embedding
     query_kwargs = {
@@ -712,10 +805,167 @@ def query_chromadb(
 
     results = collection.query(**query_kwargs)
 
+    # Improve ranking precision with query-aware metadata signals before thresholding.
+    results = _rerank_with_query_signals(results, query_text, query_type)
+
     # Apply adaptive distance threshold
     results = apply_adaptive_distance_threshold(results, query_type)
 
     return results
+
+
+def _content_type_distribution(results: Dict) -> Dict[str, int]:
+    distribution: Dict[str, int] = {}
+    metadatas = results.get("metadatas", [[]])
+    if not metadatas or not metadatas[0]:
+        return distribution
+
+    for meta in metadatas[0]:
+        ctype = (meta or {}).get("content_type", "unknown")
+        distribution[ctype] = distribution.get(ctype, 0) + 1
+
+    return distribution
+
+
+def _rerank_mixed_results(results: Dict) -> Dict:
+    """
+    Re-rank fallback results with a lightweight diversity penalty.
+
+    Keeps retrieval deterministic while discouraging repeated single-type outputs.
+    """
+    if not results.get("distances") or not results["distances"][0]:
+        return results
+
+    distances = results["distances"][0]
+    metadatas = results["metadatas"][0]
+
+    seen_type_counts: Dict[str, int] = {}
+    mixed_scores = []
+    diversity_lambda = 0.08
+
+    for idx, distance in enumerate(distances):
+        ctype = (metadatas[idx] or {}).get("content_type", "unknown")
+        prior = seen_type_counts.get(ctype, 0)
+        penalty = diversity_lambda * (prior / max(idx + 1, 1))
+        mixed_scores.append(float(distance + penalty))
+        seen_type_counts[ctype] = prior + 1
+
+    ranked = sorted(range(len(mixed_scores)), key=lambda i: mixed_scores[i])
+    reranked = {
+        "ids": [[results["ids"][0][i] for i in ranked]],
+        "distances": [[results["distances"][0][i] for i in ranked]],
+        "documents": [[results["documents"][0][i] for i in ranked]],
+        "metadatas": [[results["metadatas"][0][i] for i in ranked]],
+        "quality": results.get("quality"),
+        "best_distance": results.get("best_distance"),
+        "threshold_used": results.get("threshold_used"),
+        "original_count": results.get("original_count", 0),
+        "filtered_count": results.get("filtered_count", 0),
+        "mixing_scores": [mixed_scores[i] for i in ranked],
+    }
+    return reranked
+
+
+def query_chromadb_with_fallback(
+    collection,
+    query_text: str,
+    query_type: str = None,
+    n_results: int = 5,
+    enable_fallback: bool = True,
+    rerank_mixed: bool = True,
+) -> Dict:
+    """
+    Run strict routed retrieval first, then fallback to mixed-content retrieval when needed.
+
+    Fallback triggers only for general route or when strict route returns none/poor quality.
+    """
+    if query_type is None:
+        query_type = classify_query_type(query_text)
+
+    # Compute query embedding once and reuse for both primary and fallback retrieval.
+    model = load_embedding_model(device="auto")
+    query_embedding = model.encode(
+        [query_text],
+        convert_to_numpy=True,
+        normalize_embeddings=True,
+    ).tolist()
+    del model
+
+    import torch
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+    primary = query_chromadb(
+        collection,
+        query_text=query_text,
+        query_type=query_type,
+        n_results=n_results,
+        query_embedding=query_embedding,
+    )
+
+    primary_count = primary.get("filtered_count", 0)
+    primary_quality = primary.get("quality")
+
+    # Keep strict routing for non-general queries unless route is empty.
+    # For teaching, allow fallback when route is poor and sparse to avoid false negatives.
+    fallback_needed = False
+    if enable_fallback:
+        if query_type == "general":
+            fallback_needed = True
+        elif primary_count == 0:
+            fallback_needed = True
+        elif query_type == "teaching" and primary_quality == "poor" and primary_count < 2:
+            fallback_needed = True
+        elif query_type == "regulation" and primary_quality == "poor":
+            fallback_needed = True
+
+    if not fallback_needed:
+        return {
+            **primary,
+            "fallback_triggered": False,
+            "fallback_count": 0,
+            "content_type_distribution": _content_type_distribution(primary),
+        }
+
+    fallback_raw = collection.query(
+        query_embeddings=query_embedding,
+        n_results=max(n_results * 2, 8),
+    )
+    fallback = apply_adaptive_distance_threshold(fallback_raw, "general")
+
+    # If adaptive threshold filters everything, keep top broad candidates
+    # to avoid zero-result responses for open-ended general queries.
+    if fallback.get("filtered_count", 0) == 0 and fallback_raw.get("distances"):
+        keep = min(n_results, len(fallback_raw["distances"][0]))
+        fallback = {
+            "ids": [fallback_raw["ids"][0][:keep]],
+            "distances": [fallback_raw["distances"][0][:keep]],
+            "documents": [fallback_raw["documents"][0][:keep]],
+            "metadatas": [fallback_raw["metadatas"][0][:keep]],
+            "quality": "poor",
+            "best_distance": min(fallback_raw["distances"][0]),
+            "threshold_used": None,
+            "original_count": len(fallback_raw["distances"][0]),
+            "filtered_count": keep,
+        }
+
+    if rerank_mixed and fallback.get("filtered_count", 0) > 1:
+        fallback = _rerank_mixed_results(fallback)
+
+    return {
+        "ids": fallback.get("ids", [[]]),
+        "distances": fallback.get("distances", [[]]),
+        "documents": fallback.get("documents", [[]]),
+        "metadatas": fallback.get("metadatas", [[]]),
+        "quality": fallback.get("quality", "none"),
+        "best_distance": fallback.get("best_distance"),
+        "threshold_used": fallback.get("threshold_used"),
+        "original_count": primary.get("filtered_count", 0),
+        "filtered_count": fallback.get("filtered_count", 0),
+        "fallback_triggered": True,
+        "fallback_count": fallback.get("filtered_count", 0),
+        "content_type_distribution": _content_type_distribution(fallback),
+    }
 
 
 # ========================================================================
@@ -1197,13 +1447,23 @@ def run_query(query_text: str) -> None:
     print(f"\nQuery: '{query_text}'")
     print(f"Classified as: {query_type}")
 
-    results = query_chromadb(collection, query_text, query_type=query_type)
+    results = query_chromadb_with_fallback(
+        collection,
+        query_text,
+        query_type=query_type,
+        enable_fallback=True,
+        rerank_mixed=True,
+    )
 
     # Display results
     print(f"\n--- Results ({results['filtered_count']} matches) ---")
     print(f"Quality: {results['quality']}")
     print(f"Best distance: {results['best_distance']}")
     print(f"Threshold used: {results['threshold_used']}")
+    print(f"Fallback triggered: {results.get('fallback_triggered', False)}")
+    if results.get("fallback_triggered"):
+        print(f"Fallback matches: {results.get('fallback_count', 0)}")
+        print(f"Type mix: {results.get('content_type_distribution', {})}")
 
     if results["filtered_count"] > 0:
         for i in range(results["filtered_count"]):

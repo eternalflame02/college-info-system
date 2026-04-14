@@ -34,15 +34,15 @@ def normalize_text(text: str) -> str:
     # Lowercase
     text = text.lower()
     
-    # Normalize "Dr." variations
-    text = re.sub(r'dr\.?\s*', 'dr ', text)
-    text = re.sub(r'prof\.?\s*', 'prof ', text)
-    text = re.sub(r'mr\.?\s*', 'mr ', text)
-    text = re.sub(r'ms\.?\s*', 'ms ', text)
-    text = re.sub(r'mrs\.?\s*', 'mrs ', text)
+    # Normalize title variations while retaining token boundaries
+    text = re.sub(r'\bdr\.?\s*', 'dr ', text)
+    text = re.sub(r'\bprof\.?\s*', 'prof ', text)
+    text = re.sub(r'\bmr\.?\s*', 'mr ', text)
+    text = re.sub(r'\bms\.?\s*', 'ms ', text)
+    text = re.sub(r'\bmrs\.?\s*', 'mrs ', text)
     
-    # Remove special characters except spaces
-    text = re.sub(r'[^\w\s]', '', text)
+    # Remove punctuation but preserve hyphenated terms as single tokens
+    text = re.sub(r'[^\w\s-]', '', text)
     
     # Collapse whitespace
     text = ' '.join(text.split())
@@ -84,6 +84,26 @@ class EntityRegistry:
         self.lookup: Dict[str, str] = {}  # normalized name/alias -> id
         self.faculty_names: Set[str] = set()  # For fuzzy matching
 
+    def _register_alias(self, alias: str, entity_id: str, entity_type: str):
+        normalized = normalize_text(alias)
+        if not normalized:
+            return
+
+        existing = self.lookup.get(normalized)
+        if existing and existing != entity_id:
+            # Keep first-seen deterministic mapping to avoid alias drift.
+            logger.debug(
+                "Alias collision for '%s': keeping %s, skipping %s",
+                normalized,
+                existing,
+                entity_id,
+            )
+            return
+
+        self.lookup[normalized] = entity_id
+        if entity_type == 'faculty':
+            self.faculty_names.add(normalized)
+
     def load_file(self, filepath: Path) -> int:
         """
         Load entities from a JSON file.
@@ -114,19 +134,11 @@ class EntityRegistry:
                 # Add primary name to lookup
                 name = entity.get('name', '')
                 if name:
-                    normalized = normalize_text(name)
-                    self.lookup[normalized] = entity_id
-                    
-                    if entity.get('type') == 'faculty':
-                        self.faculty_names.add(normalized)
+                    self._register_alias(name, entity_id, entity.get('type', ''))
                 
                 # Add aliases to lookup
                 for alias in entity.get('aliases', []):
-                    normalized = normalize_text(alias)
-                    self.lookup[normalized] = entity_id
-                    
-                    if entity.get('type') == 'faculty':
-                        self.faculty_names.add(normalized)
+                    self._register_alias(alias, entity_id, entity.get('type', ''))
                 
                 count += 1
             
@@ -171,7 +183,12 @@ class EntityRegistry:
         normalized = normalize_text(text)
         return self.lookup.get(normalized)
 
-    def find_fuzzy_match(self, text: str, max_distance: int = 1) -> Optional[str]:
+    def find_fuzzy_match(
+        self,
+        text: str,
+        max_distance: int = 1,
+        entity_type: str = 'faculty',
+    ) -> Optional[str]:
         """
         Find fuzzy match for faculty names (only).
         
@@ -183,12 +200,24 @@ class EntityRegistry:
             Entity ID or None
         """
         normalized = normalize_text(text)
-        
-        for faculty_name in self.faculty_names:
-            if _edit_distance(normalized, faculty_name) <= max_distance:
-                return self.lookup.get(faculty_name)
-        
-        return None
+        if not normalized:
+            return None
+
+        candidates: Set[str] = set()
+        if entity_type == 'faculty':
+            candidates = self.faculty_names
+        else:
+            candidates = set(self.lookup.keys())
+
+        best_id = None
+        best_dist = max_distance + 1
+        for candidate in candidates:
+            distance = _edit_distance(normalized, candidate)
+            if distance <= max_distance and distance < best_dist:
+                best_id = self.lookup.get(candidate)
+                best_dist = distance
+
+        return best_id
 
     def find_entities_in_text(self, text: str) -> List[str]:
         """
@@ -205,14 +234,15 @@ class EntityRegistry:
         
         # Check for each known entity name/alias
         for name, entity_id in self.lookup.items():
-            if name in normalized_text:
+            # Use boundaries to avoid substring-only false positives.
+            if re.search(rf'\b{re.escape(name)}\b', normalized_text):
                 found_ids.add(entity_id)
         
         # Fuzzy match for potentially misspelled faculty names
         # Extract potential names using regex
         potential_names = re.findall(
-            r'(?:dr|prof|mr|ms|mrs)\s+[a-z]+(?:\s+[a-z]+){1,3}',
-            normalized_text
+            r'(?:dr|prof|mr|ms|mrs)\s+[a-z]{2,}(?:\s+[a-z]{2,}){0,2}',
+            normalized_text,
         )
         
         for potential in potential_names:

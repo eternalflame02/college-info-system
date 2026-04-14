@@ -1,0 +1,55 @@
+{
+  "build_report": {
+    "total_nodes": 480,
+    "total_edges": 1700,
+    "nodes_by_type": {
+      "course": 405,
+      "faculty": 64,
+      "program": 3,
+      "semester": 8
+    },
+    "edges_by_type": {
+      "part_of": 645,
+      "taught_in": 496,
+      "teaches": 559
+    },
+    "rejected_candidates": {
+      "part_of": {
+        "part_of_no_program": 373,
+        "part_of_ambiguous_programs": 65
+      },
+      "has_prerequisite": {},
+      "teaches": {
+        "teaches_no_assignment_signal": 165
+      },
+      "taught_in": {
+        "course_sem_no_semester_signal": 3377
+      },
+      "corequisite": {}
+    },
+    "validation_errors": [],
+    "valid": true,
+    "known_node_ids": 480
+  },
+  "validator_errors": [],
+  "graph_structure": {
+    "node_count": 480,
+    "edge_count": 1700,
+    "orphan_node_count": 8,
+    "orphan_node_ratio": 0.016666666666666666,
+    "connected_component_count": 9,
+    "largest_component_ratio": 0.9833333333333333
+  },
+  "evidence_quality": {
+    "mean_evidence_per_edge": 3.0,
+    "min_evidence_per_edge": 3,
+    "max_evidence_per_edge": 3
+  },
+  "coverage": {
+    "courses_with_program_link_ratio": 0.9901234567901235,
+    "faculty_with_teaching_link_ratio": 0.890625,
+    "prerequisite_edge_count": 0,
+    "teaches_edge_count": 559,
+    "part_of_edge_count": 645
+  }
+}

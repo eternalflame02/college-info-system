@@ -72,8 +72,12 @@ Allowed edge families in the current implementation:
 
 - `course -> part_of -> program`
   - only when a single explicit/derived deterministic program mapping exists
+- `course -> taught_in -> semester`
+  - only when semester signal is explicit in metadata or section hierarchy
 - `course -> has_prerequisite -> course`
-  - only when explicit prerequisite statement is present in source content
+  - only when explicit prerequisite statement is present and source course is grounded deterministically
+- `course -> corequisite -> course`
+  - only when explicit co-requisite statement is present and mapped
 - `faculty -> teaches -> course`
   - only when faculty and course are explicitly linked in the same assignment-bearing row/text span
 

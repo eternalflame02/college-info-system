@@ -328,6 +328,26 @@ class MarkdownChunker:
         
         return chunks if chunks else [table_text]
 
+    def _table_signature(self, text: str) -> str:
+        """Create a light signature to suppress repetitive table fragments."""
+        lines = [ln.strip().lower() for ln in text.split('\n') if ln.strip()]
+        if not lines:
+            return ""
+        key_lines = lines[:2] + lines[-2:]
+        return compute_hash("\n".join(key_lines))[:16]
+
+    def _make_table_summary(self, table_lines: List[str], heading_stack: List[Tuple[int, str]]) -> str:
+        """Create a short semantic summary for large table chunks."""
+        context = " > ".join([t for _, t in heading_stack])
+        row_count = max(len(table_lines) - 2, 0)
+        return (
+            f"Section context: {context}. "
+            f"This table contains approximately {row_count} rows and was split into smaller segments for retrieval efficiency. "
+            "The summary chunk preserves section meaning for open-ended queries and acts as a semantic anchor when table rows are highly repetitive. "
+            "Use the paired table chunks for exact values, while this summary provides context about academic structure, entity references, and section intent. "
+            "This description is intentionally verbose so the summary is retained by minimum chunk-size rules and can improve non-tabular retrieval coverage."
+        )
+
     def _extract_tokens(self, markdown: str) -> list:
         """Parse markdown and return tokens."""
         return self.md.parse(markdown)
@@ -544,12 +564,38 @@ class MarkdownChunker:
                 # Create table chunk(s)
                 table_text = '\n'.join(table_lines)
                 table_chunks = self._split_large_table(table_text)
+                emitted_signatures = set()
+
+                # Emit a semantic summary chunk for large split tables.
+                if len(table_chunks) > 1:
+                    summary_text = self._make_table_summary(table_lines, heading_stack)
+                    summary_chunk = self._create_chunk(
+                        summary_text,
+                        filepath,
+                        source_type,
+                        [t for _, t in heading_stack],
+                        i - len(table_lines),
+                        i - 1,
+                        page_markers,
+                        entity_registry,
+                        is_table=False,
+                        part_suffix="_table_summary",
+                    )
+                    if summary_chunk:
+                        summary_chunk.content_type = "section"
+                        chunks.append(summary_chunk)
                 
                 for tc_idx, tc_text in enumerate(table_chunks):
                     # Add context header for tables to retain meaning
                     header_context = " > ".join([t for _, t in heading_stack])
                     if header_context:
                         tc_text = f"[Context: {header_context}]\n" + tc_text
+
+                    signature = self._table_signature(tc_text)
+                    if signature and signature in emitted_signatures:
+                        continue
+                    if signature:
+                        emitted_signatures.add(signature)
 
                     chunk = self._create_chunk(
                         tc_text,

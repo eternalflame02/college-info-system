@@ -46,6 +46,16 @@ This folder defines the implementation scope for the phase-1 knowledge graph wor
 - No duplicate node IDs
 - No duplicate edge IDs
 
+## Current Deterministic Edge Families
+
+- `course -> part_of -> program`
+- `faculty -> teaches -> course`
+- `course -> taught_in -> semester`
+- `course -> has_prerequisite -> course` (only when explicit and grounded)
+- `course -> corequisite -> course` (only when explicit and grounded)
+
+Note: prerequisite/corequisite edges are opportunistic and may be zero for a given run if explicit, unambiguous evidence is not present.
+
 ## Phase-1 Document Index
 
 - `phase1-schema.md` — JSON shape for nodes/edges and deterministic edge rules.

@@ -111,47 +111,8 @@ def classify_query(query: str) -> str:
     Returns:
         "teaching" | "faculty" | "course" | "timetable" | "regulation" | "general"
     """
-    q = query.lower().strip()
-
-    # Teaching / relational
-    teaching_patterns = [
-        r"who teaches",
-        r"who taught",
-        r"taught by",
-        r"instructor for",
-        r"handles",
-        r"handled by",
-        r"what does .+ teach",
-        r"courses taught by",
-        r"what courses does .+ handle",
-    ]
-    if any(re.search(p, q) for p in teaching_patterns):
-        return "teaching"
-
-    # Faculty
-    faculty_keywords = [
-        "who is", "faculty", "professor", "hod", "head of department",
-        "dr.", "dr ", "staff", "teacher", "qualification", "research area",
-        "designation", "email",
-    ]
-    if any(kw in q for kw in faculty_keywords):
-        return "faculty"
-
-    # Course / Syllabus
-    course_keywords = ["course", "subject", "syllabus", "credit", "module"]
-    semester_pattern = r"semester\s+\d+|sem\s+\d+|s\d+"
-    if any(kw in q for kw in course_keywords) or re.search(semester_pattern, q):
-        return "course"
-
-    # Timetable
-    if any(kw in q for kw in ["timetable", "schedule", "timing", "class timing", "when is"]):
-        return "timetable"
-
-    # Regulation
-    if any(kw in q for kw in ["regulation", "r2019", "r2023", "curriculum", "scheme", "grading", "attendance", "cgpa"]):
-        return "regulation"
-
-    return "general"
+    from rag_ingestion import classify_query_type
+    return classify_query_type(query)
 
 
 # ========================================================================
@@ -180,44 +141,19 @@ def _retrieve_from_chromadb(
     n_results: int = 5,
 ) -> List[RetrievedChunk]:
     """
-    Retrieve relevant chunks from ChromaDB using the embedding model.
-    Uses content-type filtering with fallback to unfiltered search.
+    Retrieve relevant chunks using routed retrieval with controlled fallback.
     """
     collection = _get_chromadb_collection()
-    model = _get_embedding_model()
+    from rag_ingestion import query_chromadb_with_fallback
 
-    # Generate query embedding
-    query_embedding = model.encode(
-        [query],
-        convert_to_numpy=True,
-        normalize_embeddings=True,
-    ).tolist()
-
-    # Determine content-type filter based on query type
-    content_type_filters = {
-        "faculty": "profile",
-        "teaching": "knowledge_graph",
-        "timetable": "table",
-        "regulation": "regulation",
-    }
-
-    where_filter = None
-    if query_type in content_type_filters:
-        where_filter = {"content_type": content_type_filters[query_type]}
-
-    # Try filtered query first
-    results = collection.query(
-        query_embeddings=query_embedding,
+    results = query_chromadb_with_fallback(
+        collection,
+        query_text=query,
+        query_type=query_type,
         n_results=n_results,
-        where=where_filter if where_filter else None,
+        enable_fallback=True,
+        rerank_mixed=True,
     )
-
-    # Fallback: if filtered returns no results, try unfiltered
-    if (not results["ids"] or len(results["ids"][0]) == 0) and where_filter:
-        results = collection.query(
-            query_embeddings=query_embedding,
-            n_results=n_results,
-        )
 
     # Parse results
     chunks = []
@@ -235,6 +171,31 @@ def _retrieve_from_chromadb(
             ))
 
     return chunks
+
+
+def _confidence_label(distance: float) -> str:
+    if distance < 0.3:
+        return "excellent"
+    if distance < 0.6:
+        return "good"
+    if distance < 1.0:
+        return "fair"
+    return "poor"
+
+
+def _smart_truncate(text: str, max_chars: int = 1400, min_chars: int = 900) -> str:
+    if len(text) <= max_chars:
+        return text
+
+    window = text[:max_chars]
+    boundary = max(window.rfind(". "), window.rfind("\n"))
+    if boundary >= min_chars:
+        clipped = text[: boundary + 1].rstrip()
+    else:
+        clipped = window.rstrip()
+
+    remaining = len(text) - len(clipped)
+    return f"{clipped}\n[truncated {remaining} chars]"
 
 
 # ========================================================================
@@ -278,24 +239,27 @@ def _synthesize_answer_with_llm(
     if kg_answer:
         context_parts.append(f"[Knowledge Graph Result]\n{kg_answer}")
 
-    for i, chunk in enumerate(chunks[:5], 1):
+    sorted_chunks = sorted(chunks[:5], key=lambda c: c.distance)
+    for i, chunk in enumerate(sorted_chunks, 1):
         source = Path(chunk.source_file).stem if chunk.source_file else "unknown"
+        confidence = _confidence_label(chunk.distance)
         context_parts.append(
-            f"[Source {i}: {source} ({chunk.content_type})]\n{chunk.text[:1500]}"
+            f"[Source {i} | confidence:{confidence} | distance:{chunk.distance:.3f} | {source} ({chunk.content_type})]\n"
+            f"{_smart_truncate(chunk.text)}"
         )
 
     context = "\n\n---\n\n".join(context_parts)
 
-    system_prompt = """You are a helpful assistant for the MBCET College CSE (Computer Science and Engineering) department.
-Answer the user's question based ONLY on the provided context. If the context doesn't contain enough information, say so honestly.
+    system_prompt = """You are a helpful assistant for the MBCET CSE department.
+Answer ONLY from the provided context and keep responses factual.
 
 Rules:
-- Be concise and direct
-- If asked about a person, include their designation, qualifications, and email if available
-- If asked about a course, include the course code, name, credits, and syllabus details if available
-- Use bullet points for lists
-- Do NOT make up information not present in the context
-- If the knowledge graph result is available and relevant, prioritize it"""
+- Prioritize higher-confidence sources and reconcile multiple sources explicitly.
+- If information is missing or conflicting, say so clearly.
+- For faculty queries: include designation, qualifications, and email if present.
+- For course/timetable queries: include code/name/credits/schedule details only when present.
+- Use concise bullet points for lists.
+- Never fabricate facts not present in context."""
 
     user_message = f"""Context:
 {context}

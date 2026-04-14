@@ -1,29 +1,32 @@
 {
-  "total_nodes": 458,
-  "total_edges": 918,
+  "total_nodes": 480,
+  "total_edges": 1700,
   "nodes_by_type": {
-    "course": 404,
-    "faculty": 43,
+    "course": 405,
+    "faculty": 64,
     "program": 3,
     "semester": 8
   },
   "edges_by_type": {
-    "part_of": 429,
-    "teaches": 489
+    "part_of": 645,
+    "taught_in": 496,
+    "teaches": 559
   },
   "rejected_candidates": {
     "part_of": {
-      "part_of_no_program": 235,
-      "part_of_ambiguous_programs": 770
+      "part_of_no_program": 373,
+      "part_of_ambiguous_programs": 65
     },
-    "has_prerequisite": {
-      "prereq_ambiguous_source_course": 923
-    },
+    "has_prerequisite": {},
     "teaches": {
-      "teaches_no_assignment_signal": 164
-    }
+      "teaches_no_assignment_signal": 165
+    },
+    "taught_in": {
+      "course_sem_no_semester_signal": 3377
+    },
+    "corequisite": {}
   },
   "validation_errors": [],
   "valid": true,
-  "known_node_ids": 458
+  "known_node_ids": 480
 }

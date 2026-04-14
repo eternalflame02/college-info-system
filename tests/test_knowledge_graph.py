@@ -12,6 +12,7 @@ from knowledge_graph.builder import (
     build_nodes,
     build_knowledge_graph,
     extract_prerequisite_edges,
+    extract_course_semester_edges,
     validate_graph,
 )
 import config
@@ -77,7 +78,11 @@ def test_extract_prerequisite_edges_from_explicit_statement():
     ]
     code_map = {"CS102": "course_cs102"}
 
-    edges, rejected = extract_prerequisite_edges(chunks, code_map)
+    courses = [
+        {"id": "course_cs101", "code": "CS101", "name": "Data Structures", "aliases": []},
+        {"id": "course_cs102", "code": "CS102", "name": "Algorithms", "aliases": []},
+    ]
+    edges, rejected = extract_prerequisite_edges(chunks, code_map, courses)
     assert len(edges) == 1
     assert edges[0]["type"] == "has_prerequisite"
     assert edges[0]["source"] == "course_cs101"
@@ -117,6 +122,25 @@ def test_build_knowledge_graph_creates_deterministic_edges():
     assert "teaches" in edge_types
     assert all(e["confidence"] == 1.0 for e in graph["edges"])
     assert all(e["deterministic"] is True for e in graph["edges"])
+
+
+def test_extract_course_semester_edges_from_entity_refs():
+    chunks = [
+        {
+            "chunk_id": "c-sem",
+            "source_file": "data/markdown/pdfs/sample.md",
+            "entity_refs": ["course_cs101", "semester_3"],
+            "section_hierarchy": ["Semester 3", "Core Courses"],
+            "text": "Course list",
+        }
+    ]
+
+    edges, rejected = extract_course_semester_edges(chunks, {"semester_3"})
+    assert len(edges) == 1
+    assert edges[0]["type"] == "taught_in"
+    assert edges[0]["source"] == "course_cs101"
+    assert edges[0]["target"] == "semester_3"
+    assert rejected == {}
 
 
 def test_validation_fails_for_dangling_edge():

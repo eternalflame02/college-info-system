@@ -57,7 +57,9 @@ Examples of acceptable deterministic rules:
 
 - `faculty -> teaches -> course` when explicit assignment is present in source content.
 - `course -> part_of -> program` when course-program mapping is explicitly listed.
+- `course -> taught_in -> semester` when semester signal is explicit in entity refs or section hierarchy.
 - `course -> has_prerequisite -> course` only when prerequisites are explicitly stated.
+- `course -> corequisite -> course` only when co-requisites are explicitly stated.
 
 If evidence is ambiguous, omit the edge in phase 1.
 
@@ -77,11 +79,34 @@ Rejected when:
 
 Accepted only when:
 - text contains explicit prerequisite marker (for example `Prerequisite:` or `Pre-requisite:`),
-- referenced prerequisite course code can be mapped to a known course node.
+- referenced prerequisite course code can be mapped to a known course node,
+- source course can be deterministically grounded from:
+  - a single `course_*` entity ref, or
+  - section heading code/alias match, or
+  - nearest preceding source-course code before prerequisite marker.
 
 Rejected when:
 - source course is ambiguous in the chunk,
 - prerequisite code cannot be mapped to a known course node.
+
+### `course -> taught_in -> semester`
+
+Accepted only when:
+- course ref exists in the chunk, and
+- semester is deterministically present via `semester_*` entity ref or section heading marker (`semester N`, `sem N`, `sN`).
+
+Rejected when:
+- no semester signal exists for the course-bearing chunk.
+
+### `course -> corequisite -> course`
+
+Accepted only when:
+- text contains explicit co-requisite marker (`Corequisite:` / `Co-requisite:`), and
+- referenced course code maps to a known target course.
+
+Rejected when:
+- source course is ambiguous,
+- target code does not map to a known course.
 
 ### `faculty -> teaches -> course`
 
