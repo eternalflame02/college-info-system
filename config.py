@@ -130,6 +130,10 @@ EMBEDDING_DIMENSIONS = 768
 EMBEDDING_BATCH_SIZE = int(os.getenv("EMBEDDING_BATCH_SIZE", "64"))
 HF_TOKEN = os.getenv("HF_TOKEN", "")
 
+# ========== Chatbot / LLM Configuration (Groq) ==========
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+
 # ========== ChromaDB Configuration ==========
 CHROMADB_DIR = PROJECT_ROOT / "chroma_db"
 CHROMADB_COLLECTION = "mbcet_cse_knowledge"

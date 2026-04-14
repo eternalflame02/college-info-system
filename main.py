@@ -3,16 +3,18 @@
 MBCET CSE Semantic Chunking & RAG Pipeline
 
 Main CLI entry point for scraping, chunking, entity extraction,
-embedding generation, and retrieval.
+embedding generation, retrieval, and chatbot.
 
 Usage:
     python main.py --stage scrape    # Run web scraper
     python main.py --stage chunk     # Run semantic chunker
     python main.py --stage entities  # Build entity registry
+    python main.py --stage kg        # Build canonical knowledge graph (chunker)
     python main.py --stage graph     # Build phase-1 knowledge graph JSON
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
+    python main.py --stage chat      # Launch Streamlit chatbot UI
     python main.py --stage all       # Run complete pipeline
 """
 
@@ -43,7 +45,7 @@ def setup_logging(verbose: bool = False):
 def run_scrape_stage():
     """Run the web scraping stage."""
     print("\n" + "=" * 50)
-    print("🌐 Starting Web Scraping Stage")
+    print(" Starting Web Scraping Stage")
     print("=" * 50)
     
     from scraper.url_discovery import discover_urls
@@ -51,14 +53,14 @@ def run_scrape_stage():
     from scraper.pdf_handler import PDFHandler
     
     # Discover URLs
-    print("\n📍 Discovering URLs...")
+    print("\n Discovering URLs...")
     discovered = discover_urls(max_depth=3, max_urls=100)
     
     print(f"Found {len(discovered['pages'])} pages and {len(discovered['pdfs'])} PDFs")
     
     # Scrape HTML pages
     if discovered['pages']:
-        print(f"\n📄 Scraping {len(discovered['pages'])} HTML pages...")
+        print(f"\n Scraping {len(discovered['pages'])} HTML pages...")
         scraper = HTMLScraper()
         results = scraper.scrape_pages(discovered['pages'])
         print(f"Successfully scraped {len(results)} pages")
@@ -66,19 +68,19 @@ def run_scrape_stage():
     
     # Process PDFs
     if discovered['pdfs']:
-        print(f"\n📑 Processing {len(discovered['pdfs'])} PDFs...")
+        print(f"\n Processing {len(discovered['pdfs'])} PDFs...")
         handler = PDFHandler(use_ocr=True)
         results = handler.process_pdf_urls(discovered['pdfs'])
         print(f"Successfully processed {len(results)} PDFs")
         print(f"Output: {config.MARKDOWN_PDFS_DIR}")
     
-    print("\n✅ Scraping stage complete!")
+    print("\n[OK] Scraping stage complete!")
 
 
 def run_entities_stage():
     """Build entity registry from scraped data."""
     print("\n" + "=" * 50)
-    print("🏷️  Building Entity Registry")
+    print("  Building Entity Registry")
     print("=" * 50)
     
     import json
@@ -86,7 +88,7 @@ def run_entities_stage():
     from scraper.html_scraper import HTMLScraper
     
     # Scrape CSE department page to extract faculty
-    print("\n📍 Extracting faculty from CSE department...")
+    print("\n Extracting faculty from CSE department...")
     scraper = HTMLScraper()
     faculty_list = scraper.extract_faculty_list(config.CSE_DEPARTMENT_URL)
     
@@ -130,13 +132,13 @@ def run_entities_stage():
                 json.dump([], f)
             print(f"Created empty {name} file: {filepath}")
     
-    print("\n✅ Entity registry built!")
+    print("\n[OK] Entity registry built!")
 
 
 def run_chunk_stage():
     """Run the semantic chunking stage."""
     print("\n" + "=" * 50)
-    print("✂️  Starting Semantic Chunking Stage")
+    print("[*]  Starting Semantic Chunking Stage")
     print("=" * 50)
     
     from chunker.semantic_chunker import run_chunking_pipeline
@@ -144,14 +146,14 @@ def run_chunk_stage():
     chunks, report = run_chunking_pipeline()
     
     if not chunks:
-        print("\n⚠️  No chunks generated. Make sure to run scraping first:")
+        print("\n[WARN]  No chunks generated. Make sure to run scraping first:")
         print("    python main.py --stage scrape")
 
 
 def run_embed_stage(force: bool = False):
     """Run the embedding & ChromaDB ingestion stage."""
     print("\n" + "=" * 50)
-    print("🧠 Starting Embedding & Ingestion Stage")
+    print(" Starting Embedding & Ingestion Stage")
     print("=" * 50)
 
     from rag_ingestion import run_ingestion_pipeline
@@ -159,10 +161,25 @@ def run_embed_stage(force: bool = False):
     run_ingestion_pipeline(force_reembed=force)
 
 
+def run_kg_stage():
+    """Build the canonical knowledge graph from entity registries."""
+    print("\n" + "=" * 50)
+    print(" Building Canonical Knowledge Graph")
+    print("=" * 50)
+
+    from chunker.knowledge_graph import build_and_save_knowledge_graph
+
+    graph = build_and_save_knowledge_graph(config.DATA_DIR)
+    summary = graph.get("summary", {})
+    print(f"Nodes: {summary.get('total_nodes', 0)}")
+    print(f"Edges: {summary.get('total_edges', 0)}")
+    print("\n[OK] Canonical knowledge graph built!")
+
+
 def run_graph_stage():
     """Run the phase-1 knowledge graph stage."""
     print("\n" + "=" * 50)
-    print("🕸 Starting Knowledge Graph Stage")
+    print(" Starting Phase-1 Knowledge Graph Stage")
     print("=" * 50)
 
     from knowledge_graph.builder import run_knowledge_graph_pipeline
@@ -177,10 +194,32 @@ def run_query_stage(query_text: str):
     run_query(query_text)
 
 
+def run_chat_stage():
+    """Launch the Streamlit chatbot UI."""
+    import subprocess
+
+    app_path = Path(__file__).parent / "app.py"
+    if not app_path.exists():
+        print("[ERR] app.py not found. Cannot launch chatbot.")
+        sys.exit(1)
+
+    print("\n" + "=" * 50)
+    print(" Launching MBCET CSE Chatbot")
+    print("=" * 50)
+    print(f"Starting Streamlit server...")
+    print(f"Press Ctrl+C to stop.\n")
+
+    subprocess.run(
+        [sys.executable, "-m", "streamlit", "run", str(app_path),
+         "--server.headless", "true"],
+        cwd=str(Path(__file__).parent),
+    )
+
+
 def run_all_stages(force: bool = False):
     """Run complete pipeline."""
     print("\n" + "=" * 50)
-    print("🚀 Running Complete Pipeline")
+    print(" Running Complete Pipeline")
     print("=" * 50)
 
     run_scrape_stage()
@@ -192,7 +231,7 @@ def run_all_stages(force: bool = False):
     run_embed_stage(force=force)
 
     print("\n" + "=" * 50)
-    print("🎉 Complete pipeline finished!")
+    print(" Complete pipeline finished!")
     print("=" * 50)
 
 
@@ -205,18 +244,19 @@ Examples:
     python main.py --stage scrape    # Scrape MBCET website
     python main.py --stage entities  # Build entity registry
     python main.py --stage chunk     # Run semantic chunker
+    python main.py --stage kg        # Build canonical knowledge graph
     python main.py --stage graph     # Build phase-1 knowledge graph JSON
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
-    python main.py --stage kg --text "Who teaches Artificial Intelligence?"
+    python main.py --stage chat      # Launch Streamlit chatbot
     python main.py --stage all       # Run complete pipeline
         """
     )
 
     parser.add_argument(
         '--stage',
-        choices=['scrape', 'entities', 'chunk', 'graph', 'embed', 'query', 'all'],
+        choices=['scrape', 'entities', 'chunk', 'kg', 'graph', 'embed', 'query', 'chat', 'all'],
         required=True,
         help='Pipeline stage to run'
     )
@@ -237,7 +277,7 @@ Examples:
         '--text',
         type=str,
         default=None,
-        help='Query text for --stage query or --stage kg'
+        help='Query text for --stage query'
     )
 
     args = parser.parse_args()
@@ -253,16 +293,20 @@ Examples:
         run_entities_stage()
     elif args.stage == 'chunk':
         run_chunk_stage()
+    elif args.stage == 'kg':
+        run_kg_stage()
     elif args.stage == 'embed':
         run_embed_stage(force=args.force)
     elif args.stage == 'graph':
         run_graph_stage()
     elif args.stage == 'query':
         if not args.text:
-            print("❌ --text is required for query stage")
+            print("[ERR] --text is required for query stage")
             print("   Example: python main.py --stage query --text \"Who is the HOD?\"")
             sys.exit(1)
         run_query_stage(args.text)
+    elif args.stage == 'chat':
+        run_chat_stage()
     elif args.stage == 'all':
         run_all_stages(force=args.force)
     else:

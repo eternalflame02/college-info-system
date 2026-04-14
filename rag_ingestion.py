@@ -16,9 +16,18 @@ import hashlib
 import logging
 import os
 import re
+import sys
 import time
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
+# Fix Windows console encoding for emoji/unicode characters
+if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
 
 import numpy as np
 from tqdm import tqdm
@@ -73,7 +82,7 @@ def load_embedding_model(
         token=hf_token if hf_token else None
     )
 
-    print(f"✅ Model loaded: {model_name}")
+    print(f"[OK] Model loaded: {model_name}")
     print(f"   Device: {device}")
     print(f"   Embedding dimensions: {model.get_sentence_embedding_dimension()}")
 
@@ -123,7 +132,7 @@ def generate_embeddings(
     texts = [t.strip() for t in texts]
 
     # Generate embeddings
-    # Note: prompt_name="Retrieval-document" omitted intentionally —
+    # Note: prompt_name="Retrieval-document" omitted intentionally 
     # it prepends a prefix that dramatically increases token length
     # for already-long table chunks, causing ~30x slowdown on 4GB GPU.
     # Queries still use Retrieval-query prompt for asymmetric search.
@@ -135,7 +144,7 @@ def generate_embeddings(
         normalize_embeddings=True,  # L2 normalization for cosine similarity
     )
 
-    print(f"✅ Generated {len(embeddings)} embeddings")
+    print(f"[OK] Generated {len(embeddings)} embeddings")
     print(f"   Shape: {embeddings.shape}")
     print(f"   Dtype: {embeddings.dtype}")
 
@@ -170,12 +179,12 @@ def generate_embeddings_with_fallback(
 
             if batch_size > 1:
                 new_batch = max(batch_size // 2, 1)
-                print(f"⚠️  GPU OOM detected, retrying with batch_size={new_batch}...")
+                print(f"[WARN]  GPU OOM detected, retrying with batch_size={new_batch}...")
                 return generate_embeddings_with_fallback(
                     model, texts, batch_size=new_batch
                 )
             else:
-                print("⚠️  GPU OOM even with batch_size=1, falling back to CPU...")
+                print("[WARN]  GPU OOM even with batch_size=1, falling back to CPU...")
                 model = model.to("cpu")
                 return generate_embeddings(model, texts, batch_size=8)
         else:
@@ -209,7 +218,7 @@ def cache_embeddings(
     )
 
     file_size_mb = os.path.getsize(output_path) / (1024 * 1024)
-    print(f"✅ Embeddings cached to {output_path}")
+    print(f"[OK] Embeddings cached to {output_path}")
     print(f"   File size: {file_size_mb:.2f} MB")
 
 
@@ -226,7 +235,7 @@ def load_cached_embeddings(
         cache_path = str(config.EMBEDDING_CACHE_FILE)
 
     if not os.path.exists(cache_path):
-        print("⚠️  No embedding cache found")
+        print("[WARN]  No embedding cache found")
         return None, None
 
     print(f"Loading embeddings from cache: {cache_path}")
@@ -235,7 +244,7 @@ def load_cached_embeddings(
     chunk_ids = data["chunk_ids"].tolist()
     embeddings = data["embeddings"]
 
-    print(f"✅ Loaded {len(chunk_ids)} cached embeddings")
+    print(f"[OK] Loaded {len(chunk_ids)} cached embeddings")
     print(f"   Shape: {embeddings.shape}")
 
     return chunk_ids, embeddings
@@ -265,7 +274,7 @@ def initialize_chromadb(persist_directory: str = None):
 
     client = chromadb.PersistentClient(path=persist_directory)
 
-    print(f"✅ ChromaDB initialized")
+    print(f"[OK] ChromaDB initialized")
     print(f"   Storage path: {persist_directory}")
 
     return client
@@ -281,7 +290,7 @@ def initialize_chromadb_safe(persist_directory: str = None, max_retries: int = 3
         except Exception as e:
             if attempt < max_retries - 1:
                 print(
-                    f"⚠️  ChromaDB initialization failed "
+                    f"[WARN]  ChromaDB initialization failed "
                     f"(attempt {attempt + 1}/{max_retries}): {e}"
                 )
                 time.sleep(2)
@@ -310,7 +319,7 @@ def create_collection(client, collection_name: str = None, recreate: bool = Fals
     if recreate:
         try:
             client.delete_collection(name=collection_name)
-            print(f"🗑️  Deleted existing collection: {collection_name}")
+            print(f"  Deleted existing collection: {collection_name}")
         except Exception:
             pass
 
@@ -325,7 +334,7 @@ def create_collection(client, collection_name: str = None, recreate: bool = Fals
         },
     )
 
-    print(f"✅ Collection ready: {collection_name}")
+    print(f"[OK] Collection ready: {collection_name}")
     print(f"   Current document count: {collection.count()}")
 
     return collection
@@ -462,7 +471,7 @@ def ingest_chunks_to_chromadb(
                 metadatas=metadatas,
             )
         except Exception as e:
-            print(f"❌ Failed to ingest batch {i // batch_size + 1}: {e}")
+            print(f"[ERR] Failed to ingest batch {i // batch_size + 1}: {e}")
             failed_chunks.extend(ids)
 
     # Generate stats
@@ -473,7 +482,7 @@ def ingest_chunks_to_chromadb(
         "final_collection_count": collection.count(),
     }
 
-    print(f"✅ Ingestion complete")
+    print(f"[OK] Ingestion complete")
     print(f"   Successfully ingested: {stats['successfully_ingested']}")
     print(f"   Failed: {len(failed_chunks)}")
     print(f"   Final collection size: {stats['final_collection_count']}")
@@ -550,9 +559,9 @@ def apply_adaptive_distance_threshold(results: Dict, query_type: str) -> Dict:
     Filter results based on adaptive distance threshold.
 
     Logic:
-    - best distance < 0.3 (excellent) → threshold = 0.6
-    - best distance 0.3–0.5 (good) → threshold = 0.7
-    - best distance > 0.5 (poor) → threshold = 0.8, warn user
+    - best distance < 0.3 (excellent)  threshold = 0.6
+    - best distance 0.30.5 (good)  threshold = 0.7
+    - best distance > 0.5 (poor)  threshold = 0.8, warn user
 
     Args:
         results: Raw ChromaDB query results.
@@ -608,7 +617,7 @@ def apply_adaptive_distance_threshold(results: Dict, query_type: str) -> Dict:
 
     # Warning for poor matches
     if quality == "poor":
-        print(f"⚠️  Warning: Best match distance is {best_distance:.3f} (poor quality)")
+        print(f"[WARN]  Warning: Best match distance is {best_distance:.3f} (poor quality)")
         print(
             "   Consider rephrasing query or checking if information "
             "exists in knowledge base"
@@ -629,12 +638,12 @@ def query_chromadb(
     Query ChromaDB with routing and adaptive filtering.
 
     Routing Logic:
-    - "teaching" → filter content_type="knowledge_graph", n_results=5
-    - "faculty" → filter content_type="profile", n_results=3
-    - "course" → filter content_type="table", n_results=10
-    - "timetable" → filter content_type="table", n_results=5
-    - "regulation" → filter content_type="regulation", n_results=5
-    - "general" → no filter, n_results=5
+    - "teaching"  filter content_type="knowledge_graph", n_results=5
+    - "faculty"  filter content_type="profile", n_results=3
+    - "course"  filter content_type="table", n_results=10
+    - "timetable"  filter content_type="table", n_results=5
+    - "regulation"  filter content_type="regulation", n_results=5
+    - "general"  no filter, n_results=5
 
     Args:
         collection: ChromaDB collection.
@@ -971,9 +980,9 @@ def run_ingestion_pipeline(
         chunks, chunk_report, config.DATA_DIR
     )
     if kg_added:
-        print(f"✅ Added {kg_added} synthetic knowledge-graph chunks")
+        print(f"[OK] Added {kg_added} synthetic knowledge-graph chunks")
 
-    print(f"✅ Loaded {len(chunks)} chunks")
+    print(f"[OK] Loaded {len(chunks)} chunks")
     print(f"   Distribution: {chunk_report['chunks_by_type']}")
 
     # ========== STEP 2: Check Embedding Cache ==========
@@ -989,13 +998,13 @@ def run_ingestion_pipeline(
         current_ids = [c["chunk_id"] for c in chunks]
 
         if set(cached_ids) == set(current_ids):
-            print("✅ Using cached embeddings (matched)")
+            print("[OK] Using cached embeddings (matched)")
             # Reorder embeddings to match current chunk order
             id_to_idx = {cid: idx for idx, cid in enumerate(cached_ids)}
             reorder = [id_to_idx[cid] for cid in current_ids]
             embeddings = cached_embeddings[reorder]
         else:
-            print("⚠️  Cache mismatch, regenerating embeddings")
+            print("[WARN]  Cache mismatch, regenerating embeddings")
 
     # ========== STEP 3: Generate Embeddings ==========
     if embeddings is None:
@@ -1018,7 +1027,7 @@ def run_ingestion_pipeline(
 
         embed_time = time.time() - embed_start
 
-        print(f"✅ Embedding generation complete in {embed_time:.2f}s")
+        print(f"[OK] Embedding generation complete in {embed_time:.2f}s")
         print(f"   Speed: {len(chunks) / embed_time:.1f} chunks/second")
 
         # Cache embeddings
@@ -1135,7 +1144,7 @@ def run_ingestion_pipeline(
     with open(str(config.VALIDATION_REPORT_FILE), "w", encoding="utf-8") as f:
         json.dump(validation_report, f, indent=2)
 
-    print(f"✅ Reports saved to {config.VALIDATION_DIR}")
+    print(f"[OK] Reports saved to {config.VALIDATION_DIR}")
 
     # ========== STEP 8: Summary ==========
     print("\n" + "=" * 60)
@@ -1176,7 +1185,7 @@ def run_query(query_text: str) -> None:
     try:
         collection = client.get_collection(name=config.CHROMADB_COLLECTION)
     except Exception:
-        print("❌ Collection not found. Run ingestion first:")
+        print("[ERR] Collection not found. Run ingestion first:")
         print("   python main.py --stage embed")
         return
 
