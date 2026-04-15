@@ -45,6 +45,34 @@ _ENTITY_REGISTRY_CACHE: Dict[str, Any] = {
     "registry_cls": None,
 }
 
+_QUALITY_BANDS_BASE: Dict[str, float] = {
+    "excellent": 0.75,
+    "good": 1.00,
+    "fair": 1.20,
+}
+
+_QUALITY_TYPE_ADJUST: Dict[str, float] = {
+    "teaching": 0.00,
+    "faculty": 0.10,
+    "regulation": 0.15,
+}
+
+_QUALITY_MARGIN_BY_LABEL: Dict[str, float] = {
+    "excellent": 0.18,
+    "good": 0.30,
+    "fair": 0.32,
+    "poor": 0.33,
+}
+
+_THRESHOLD_CAP_BY_TYPE: Dict[str, float] = {
+    "general": 1.25,
+    "course": 1.35,
+    "timetable": 1.35,
+    "teaching": 1.35,
+    "faculty": 1.45,
+    "regulation": 1.55,
+}
+
 
 # ========================================================================
 # EMBEDDING FUNCTIONS
@@ -337,6 +365,7 @@ def create_collection(client, collection_name: str = None, recreate: bool = Fals
             "description": "MBCET CSE Department Knowledge Base",
             "embedding_model": config.EMBEDDING_MODEL,
             "embedding_dimensions": config.EMBEDDING_DIMENSIONS,
+            "hnsw:space": "cosine",
             "total_chunks": 2060,
         },
     )
@@ -373,6 +402,7 @@ def get_rag_collections(client, recreate: bool = False, create_missing: bool = F
                     "description": "MBCET CSE Department Knowledge Base",
                     "embedding_model": config.EMBEDDING_MODEL,
                     "embedding_dimensions": config.EMBEDDING_DIMENSIONS,
+                    "hnsw:space": "cosine",
                 },
             )
         return client.get_collection(name=name)
@@ -685,9 +715,9 @@ def apply_adaptive_distance_threshold(results: Dict, query_type: str) -> Dict:
     Filter results based on adaptive distance threshold.
 
     Logic:
-    - best distance < 0.3 (excellent)  threshold = 0.6
-    - best distance 0.30.5 (good)  threshold = 0.7
-    - best distance > 0.5 (poor)  threshold = 0.8, warn user
+    - Determine quality band from corpus-calibrated distance buckets.
+    - Build threshold as best_distance + quality-specific margin.
+    - Apply query-type caps to keep broad fallbacks bounded.
 
     Args:
         results: Raw ChromaDB query results.
@@ -709,32 +739,23 @@ def apply_adaptive_distance_threshold(results: Dict, query_type: str) -> Dict:
     distances = results["distances"][0]
     best_distance = min(distances)
 
-    # Determine threshold based on best result quality
-    if best_distance < 0.3:
-        threshold = 0.6
+    type_adjust = _QUALITY_TYPE_ADJUST.get(query_type, 0.0)
+    excellent_cut = _QUALITY_BANDS_BASE["excellent"] + type_adjust
+    good_cut = _QUALITY_BANDS_BASE["good"] + type_adjust
+    fair_cut = _QUALITY_BANDS_BASE["fair"] + type_adjust
+
+    if best_distance < excellent_cut:
         quality = "excellent"
-    elif best_distance < 0.5:
-        threshold = 0.7
+    elif best_distance < good_cut:
         quality = "good"
+    elif best_distance < fair_cut:
+        quality = "fair"
     else:
-        threshold = 0.8
         quality = "poor"
 
-    # Teaching queries are routed to knowledge_graph chunks, which are compact
-    # synthetic statements and can have slightly higher distances in practice.
-    if query_type == "teaching":
-        threshold = max(threshold, 1.2)
-
-    # Faculty profile text is often sparse/noisy; allow a wider threshold
-    # to avoid dropping valid profile hits and triggering noisy mixed fallback.
-    if query_type == "faculty":
-        threshold = max(threshold, 1.35)
-
-    # Regulation chunks are concise policy snippets and often score higher
-    # distances than table/profile chunks; allow a wider threshold to avoid
-    # false negatives on regulation lookups.
-    if query_type == "regulation":
-        threshold = max(threshold, 1.45)
+    margin = _QUALITY_MARGIN_BY_LABEL[quality]
+    cap = _THRESHOLD_CAP_BY_TYPE.get(query_type, _THRESHOLD_CAP_BY_TYPE["general"])
+    threshold = min(best_distance + margin, cap)
 
     # Filter results
     filtered_indices = [i for i, d in enumerate(distances) if d <= threshold]
@@ -1204,6 +1225,7 @@ def query_chromadb(
         model = load_embedding_model(device="auto")
         query_embedding = model.encode(
             [query_text],
+            prompt_name="Retrieval-query",
             convert_to_numpy=True,
             normalize_embeddings=True,
         ).tolist()
@@ -1321,6 +1343,7 @@ def query_chromadb_with_fallback(
     model = load_embedding_model(device="auto")
     query_embedding = model.encode(
         [query_text],
+        prompt_name="Retrieval-query",
         convert_to_numpy=True,
         normalize_embeddings=True,
     ).tolist()
@@ -1355,7 +1378,7 @@ def query_chromadb_with_fallback(
             fallback_needed = True
         elif query_type == "faculty" and faculty_signal and not _has_faculty_signal_match(primary, faculty_signal):
             fallback_needed = True
-        elif query_type == "teaching" and primary_quality == "poor" and primary_count < 2:
+        elif query_type == "teaching" and primary_quality in {"poor", "fair"} and primary_count < 2:
             fallback_needed = True
         elif query_type == "regulation" and primary_count == 0:
             fallback_needed = True

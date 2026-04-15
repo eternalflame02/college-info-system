@@ -397,11 +397,11 @@ def _execute_retrieval_plan(query: str, plan: RetrievalPlan) -> Tuple[Optional[s
 
 
 def _confidence_label(distance: float) -> str:
-    if distance < 0.3:
+    if distance < 0.75:
         return "excellent"
-    if distance < 0.6:
+    if distance < 1.00:
         return "good"
-    if distance < 1.0:
+    if distance < 1.20:
         return "fair"
     return "poor"
 
@@ -704,11 +704,11 @@ def answer_question(query: str) -> ChatResponse:
     # Determine quality
     if chunks:
         best_distance = min(c.distance for c in chunks)
-        if best_distance < 0.3:
+        if best_distance < 0.75:
             quality = "excellent"
-        elif best_distance < 0.6:
+        elif best_distance < 1.00:
             quality = "good"
-        elif best_distance < 1.0:
+        elif best_distance < 1.20:
             quality = "fair"
         else:
             quality = "poor"
