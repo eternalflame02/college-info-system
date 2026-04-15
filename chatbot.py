@@ -421,6 +421,65 @@ def _smart_truncate(text: str, max_chars: int = 1400, min_chars: int = 900) -> s
     return f"{clipped}\n[truncated {remaining} chars]"
 
 
+def _extract_markdown_table_fields(text: str) -> Dict[str, str]:
+    """Extract key/value pairs from two-column markdown table rows."""
+    fields: Dict[str, str] = {}
+    for raw_key, raw_value in re.findall(r"^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|$", text, flags=re.MULTILINE):
+        key = raw_key.strip().lower()
+        value = raw_value.strip()
+        if not key or key.startswith("---"):
+            continue
+        if value.startswith("---"):
+            continue
+        fields[key] = value
+    return fields
+
+
+def _build_low_confidence_summary(
+    query_type: str,
+    chunks: List[RetrievedChunk],
+    kg_answer: Optional[str] = None,
+) -> Optional[str]:
+    """Create a cleaner deterministic summary when top retrieval confidence is poor."""
+    if not chunks:
+        return None
+
+    best = sorted(chunks, key=lambda c: c.distance)[0]
+
+    if query_type == "faculty":
+        # Prefer dedicated faculty pages for profile-style summaries.
+        dedicated = [
+            c for c in sorted(chunks, key=lambda c: c.distance)
+            if any(token in (c.source_file or "").lower() for token in ["faculty_", "/faculty/", "faculty-"])
+        ]
+        candidate = dedicated[0] if dedicated else best
+
+        context_match = re.search(r"\[Context:\s*([^\]]+)\]", candidate.text)
+        name = context_match.group(1).strip() if context_match else "Faculty profile"
+        fields = _extract_markdown_table_fields(candidate.text)
+
+        quals = fields.get("qualifications", "Not available")
+        email = fields.get("email id", "Not available")
+        interests = fields.get("areas of interest / current research", "Not available")
+        source_name = Path(candidate.source_file).stem if candidate.source_file else "unknown"
+
+        return (
+            "Low-confidence retrieval note: this is the best available faculty profile match.\n\n"
+            f"- Name: {name}\n"
+            f"- Qualifications: {quals}\n"
+            f"- Email: {email}\n"
+            f"- Areas of Interest: {interests}\n"
+            f"- Source: {source_name}"
+        )
+
+    source_name = Path(best.source_file).stem if best.source_file else "unknown"
+    compact = _smart_truncate(best.text, max_chars=500, min_chars=260)
+    preface = "Low-confidence retrieval note: presenting the best available match."
+    if kg_answer:
+        return f"{preface}\n\n- KG Signal: {kg_answer}\n- Source: {source_name}\n- Extract:\n{compact}"
+    return f"{preface}\n\n- Source: {source_name}\n- Extract:\n{compact}"
+
+
 # ========================================================================
 # LLM ANSWER SYNTHESIS
 # ========================================================================
@@ -445,6 +504,7 @@ def _synthesize_answer_with_llm(
     query_type: str,
     chunks: List[RetrievedChunk],
     kg_answer: Optional[str] = None,
+    summary_hint: Optional[str] = None,
 ) -> str:
     """
     Use Groq (Llama 3.3 70B) to synthesize a natural-language answer from retrieved chunks.
@@ -453,6 +513,8 @@ def _synthesize_answer_with_llm(
     client = _get_groq_client()
 
     if client is None:
+        if summary_hint:
+            return summary_hint
         # Fallback: no LLM available, format chunks directly
         return _format_chunks_as_answer(query, query_type, chunks, kg_answer)
 
@@ -461,6 +523,9 @@ def _synthesize_answer_with_llm(
 
     if kg_answer:
         context_parts.append(f"[Knowledge Graph Result]\n{kg_answer}")
+
+    if summary_hint:
+        context_parts.append(f"[Structured Summary Candidate]\n{summary_hint}")
 
     sorted_chunks = sorted(chunks[:5], key=lambda c: c.distance)
     for i, chunk in enumerate(sorted_chunks, 1):
@@ -478,6 +543,7 @@ Answer ONLY from the provided context and keep responses factual.
 
 Rules:
 - Prioritize higher-confidence sources and reconcile multiple sources explicitly.
+- If a structured summary candidate is provided, use it as the answer backbone and verify against sources.
 - If information is missing or conflicting, say so clearly.
 - For faculty queries: include designation, qualifications, and email if present.
 - For course/timetable queries: include code/name/credits/schedule details only when present.
@@ -502,10 +568,14 @@ Question: {query}"""
         content = (chat_completion.choices[0].message.content or "").strip()
         if not content or content.lower() in {"none", "null", "n/a"}:
             logger.info("LLM synthesis returned empty/null-like content; using formatted fallback")
+            if summary_hint:
+                return summary_hint
             return _format_chunks_as_answer(query, query_type, chunks, kg_answer)
         return content
     except Exception as e:
         logger.warning(f"Groq API error: {e}")
+        if summary_hint:
+            return summary_hint
         return _format_chunks_as_answer(query, query_type, chunks, kg_answer)
 
 
@@ -645,13 +715,23 @@ def answer_question(query: str) -> ChatResponse:
     else:
         quality = "none"
 
+    summary_hint = None
+    if quality == "poor" and chunks:
+        summary_hint = _build_low_confidence_summary(query_type, chunks, kg_answer)
+
     if chunks:
         top = sorted(chunks, key=lambda c: c.distance)[:3]
         top_summary = [f"{c.content_type}:{c.distance:.3f}:{Path(c.source_file).stem}" for c in top]
         logger.info("Top chunks: %s", " | ".join(top_summary))
 
     # 3. Synthesize answer
-    answer = _synthesize_answer_with_llm(query, query_type, chunks, kg_answer)
+    answer = _synthesize_answer_with_llm(
+        query,
+        query_type,
+        chunks,
+        kg_answer,
+        summary_hint=summary_hint,
+    )
 
     response_time = (time.time() - start_time) * 1000
     logger.info("Answer generated: query_type=%s quality=%s response_time_ms=%.2f", query_type, quality, response_time)

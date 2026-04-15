@@ -38,6 +38,13 @@ from chunker.knowledge_graph import generate_knowledge_graph_documents
 # Configure module logger
 logger = logging.getLogger(__name__)
 
+# Process-local cache for entity registry to avoid repeated reloads
+# during a single query lifecycle.
+_ENTITY_REGISTRY_CACHE: Dict[str, Any] = {
+    "registry": None,
+    "registry_cls": None,
+}
+
 
 # ========================================================================
 # EMBEDDING FUNCTIONS
@@ -763,12 +770,28 @@ def _extract_semester_query_signal(query_text: str) -> Optional[int]:
     return None
 
 
+def _get_entity_registry_cached():
+    """Return a loaded EntityRegistry instance with lightweight process caching."""
+    from chunker.entity_registry import EntityRegistry
+
+    cached_registry = _ENTITY_REGISTRY_CACHE.get("registry")
+    cached_cls = _ENTITY_REGISTRY_CACHE.get("registry_cls")
+
+    # Reuse only when the underlying class identity is unchanged.
+    # This keeps tests with monkeypatched registries deterministic.
+    if cached_registry is not None and cached_cls is EntityRegistry:
+        return cached_registry
+
+    registry = EntityRegistry()
+    registry.load_all()
+    _ENTITY_REGISTRY_CACHE["registry"] = registry
+    _ENTITY_REGISTRY_CACHE["registry_cls"] = EntityRegistry
+    return registry
+
+
 def _extract_faculty_query_signal(query_text: str) -> Optional[str]:
     try:
-        from chunker.entity_registry import EntityRegistry
-
-        registry = EntityRegistry()
-        registry.load_all()
+        registry = _get_entity_registry_cached()
 
         normalized_text = query_text.strip()
         exact = registry.find_exact_match(normalized_text)
@@ -814,7 +837,12 @@ def _extract_faculty_query_signal(query_text: str) -> Optional[str]:
     return None
 
 
-def _rerank_with_query_signals(results: Dict, query_text: str, query_type: str) -> Dict:
+def _rerank_with_query_signals(
+    results: Dict,
+    query_text: str,
+    query_type: str,
+    faculty_signal: Optional[str] = None,
+) -> Dict:
     """
     Re-rank routed results using lightweight metadata/query signals.
 
@@ -830,7 +858,8 @@ def _rerank_with_query_signals(results: Dict, query_text: str, query_type: str) 
     metas = results["metadatas"][0]
 
     semester_signal = _extract_semester_query_signal(query_text)
-    faculty_signal = _extract_faculty_query_signal(query_text) if query_type == "faculty" else None
+    if query_type == "faculty" and faculty_signal is None:
+        faculty_signal = _extract_faculty_query_signal(query_text)
 
     scored_indices = []
     for idx, distance in enumerate(distances):
@@ -938,9 +967,14 @@ def _merge_raw_results(results_list: List[Dict], max_items: int) -> Dict:
     }
 
 
-def _filter_faculty_linked_candidates(results: Dict, query_text: str) -> Dict:
+def _filter_faculty_linked_candidates(
+    results: Dict,
+    query_text: str,
+    faculty_signal: Optional[str] = None,
+) -> Dict:
     """Prefer faculty-linked fallback candidates when a faculty name signal exists."""
-    faculty_signal = _extract_faculty_query_signal(query_text)
+    if faculty_signal is None:
+        faculty_signal = _extract_faculty_query_signal(query_text)
     if not faculty_signal:
         return results
 
@@ -1191,14 +1225,24 @@ def query_chromadb(
     results = collection.query(**query_kwargs)
 
     # Improve ranking precision with query-aware metadata signals before thresholding.
-    results = _rerank_with_query_signals(results, query_text, query_type)
+    faculty_signal = _extract_faculty_query_signal(query_text) if query_type == "faculty" else None
+    results = _rerank_with_query_signals(
+        results,
+        query_text,
+        query_type,
+        faculty_signal=faculty_signal,
+    )
 
     # Apply adaptive distance threshold
     results = apply_adaptive_distance_threshold(results, query_type)
 
     # Apply strict signal filters after thresholding when query intent is explicit.
     if query_type == "faculty":
-        results = _filter_faculty_linked_candidates(results, query_text)
+        results = _filter_faculty_linked_candidates(
+            results,
+            query_text,
+            faculty_signal=faculty_signal,
+        )
     elif query_type == "regulation":
         results = _filter_regulation_candidates(results)
 
@@ -1355,10 +1399,19 @@ def query_chromadb_with_fallback(
 
     # Re-apply query-signal reranking on fallback results using original query type.
     # This improves partial-name faculty queries (e.g., "Who is Dr Tessy").
-    fallback = _rerank_with_query_signals(fallback, query_text, query_type)
+    fallback = _rerank_with_query_signals(
+        fallback,
+        query_text,
+        query_type,
+        faculty_signal=faculty_signal,
+    )
 
     if query_type == "faculty":
-        fallback = _filter_faculty_linked_candidates(fallback, query_text)
+        fallback = _filter_faculty_linked_candidates(
+            fallback,
+            query_text,
+            faculty_signal=faculty_signal,
+        )
     elif query_type == "regulation":
         fallback = _filter_regulation_candidates(fallback)
 

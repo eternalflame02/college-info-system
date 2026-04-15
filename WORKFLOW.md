@@ -262,6 +262,27 @@ Before step 7, enable multi-collection mode in `.env`:
 3. Re-run chunk, graph, and embed
 4. Launch chat and run query smoke tests
 
+### Fast metadata-only Chroma reindex (no full re-embedding)
+
+Use this when retrieval/routing metadata changes but chunk IDs and cached embeddings are unchanged.
+
+```bash
+python -c "import json, config; from rag_ingestion import append_knowledge_graph_chunks, load_cached_embeddings, initialize_chromadb_safe, get_rag_collections, _split_chunks_for_collections, ingest_chunks_to_chromadb; chunks=json.load(open(str(config.CHUNKS_FILE), encoding='utf-8')); report=json.load(open(str(config.CHUNK_REPORT_FILE), encoding='utf-8')); chunks,report,_=append_knowledge_graph_chunks(chunks, report, config.DATA_DIR); cached_ids,cached_embeddings=load_cached_embeddings(str(config.EMBEDDING_CACHE_FILE)); assert cached_ids is not None and cached_embeddings is not None, 'Embedding cache not found'; current_ids=[c['chunk_id'] for c in chunks]; assert set(cached_ids)==set(current_ids), 'Cache/chunk mismatch'; id_to_idx={cid:i for i,cid in enumerate(cached_ids)}; reorder=[id_to_idx[cid] for cid in current_ids]; embeddings=cached_embeddings[reorder]; client=initialize_chromadb_safe(str(config.CHROMADB_DIR)); coll_map=get_rag_collections(client,recreate=True,create_missing=True); split_payload=_split_chunks_for_collections(chunks, embeddings); [ingest_chunks_to_chromadb(coll_map[k], split_payload.get(k, split_payload['legacy'])['chunks'], split_payload.get(k, split_payload['legacy'])['embeddings'], batch_size=100) for k in coll_map]; print('REINGEST_DONE', {k: coll_map[k].count() for k in coll_map})"
+```
+
+Expected count check from current dataset snapshot:
+
+- `table`: 1971
+- `non_table`: 297
+- `legacy`: 2268
+
+Post-reindex validation:
+
+```bash
+python main.py --stage query --text "Who is Dr Tessy?"
+pytest tests/test_query_routing.py -q
+```
+
 ## 6. Validation and Quality Gates
 
 ### Unit tests
