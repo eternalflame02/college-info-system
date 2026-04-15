@@ -59,11 +59,20 @@ def _get_chromadb_collection():
     """Get or create the ChromaDB collection (cached)."""
     global _chromadb_collection
     if _chromadb_collection is None:
-        import chromadb
-        client = chromadb.PersistentClient(path=str(config.CHROMADB_DIR))
-        _chromadb_collection = client.get_collection(
-            name=config.CHROMADB_COLLECTION,
+        from rag_ingestion import initialize_chromadb_safe, get_rag_collections
+
+        client = initialize_chromadb_safe(str(config.CHROMADB_DIR))
+        _chromadb_collection = get_rag_collections(
+            client,
+            recreate=False,
+            create_missing=False,
         )
+
+        if not _chromadb_collection:
+            raise RuntimeError(
+                "No ChromaDB collection found. Run embedding stage first: python main.py --stage embed"
+            )
+
     return _chromadb_collection
 
 
@@ -327,6 +336,21 @@ def _retrieve_from_chromadb(
         n_results=n_results,
         enable_fallback=True,
         rerank_mixed=True,
+    )
+
+    # Surface collection-level retrieval behavior for runtime debugging.
+    collection_hits: Dict[str, int] = {}
+    metadatas = results.get("metadatas", [[]])
+    if metadatas and metadatas[0]:
+        for meta in metadatas[0]:
+            key = (meta or {}).get("retrieval_collection", "unknown")
+            collection_hits[key] = collection_hits.get(key, 0) + 1
+    logger.info(
+        "Vector retrieval summary: primary_collection=%s fallback=%s type_mix=%s collection_hits=%s",
+        results.get("primary_collection", "legacy"),
+        results.get("fallback_triggered", False),
+        results.get("content_type_distribution", {}),
+        collection_hits,
     )
 
     # Parse results

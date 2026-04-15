@@ -32,8 +32,10 @@ A Python-based pipeline for scraping, processing, and semantically chunking MBCE
 - **Entity Registry**: Extracts and normalizes faculty names with aliases
 - **Semantic Chunking**: Creates semantically meaningful chunks for RAG
 - **Query Routing**: Classifies runtime queries into `teaching`, `faculty`, `course`, `timetable`, `regulation`, and `general`
+- **Multi-Collection Retrieval**: Splits vector storage into table and non-table collections with legacy collection fallback
 - **Fallback Retrieval**: Uses routed retrieval first, then mixed fallback with reranking when route quality is poor
 - **Deterministic KG Edges**: Builds `part_of`, `teaches`, and `taught_in` edges, with optional prerequisite/corequisite edges when explicit evidence exists
+- **Timetable-to-KG Merge**: Derives faculty-course teaching links from timetable chunks and merges with manual assignment registry using deterministic union semantics
 - **Evaluation Pipeline**: Runs wide quality evaluation across chunking, embeddings, retrieval, and graph structure
 - **Duplicate Detection**: SHA-256 based deduplication
 
@@ -139,6 +141,15 @@ cp .env.example .env
 # Edit .env with your settings
 ```
 
+Recommended retrieval rollout flags:
+
+```bash
+CHROMADB_MULTI_COLLECTION_ENABLED=1
+CHROMADB_ENABLE_LEGACY_FALLBACK=1
+CHROMADB_TABLE_COLLECTION=mbcet_cse_table
+CHROMADB_NON_TABLE_COLLECTION=mbcet_cse_non_table
+```
+
 ---
 
 ## 📖 Usage
@@ -240,6 +251,7 @@ python main.py --stage all -v
 - Loads entities from `data/entities/*.json`
 - Loads chunk evidence from `data/chunks/chunks.json`
 - Builds canonical nodes for faculty, courses, programs, and deterministic semester nodes
+- Builds timetable-derived teaching links and merges them with `data/entities/teaching_assignments.json` (many-to-many preserved)
 - Extracts deterministic edges only:
   - `course -> part_of -> program`
   - `faculty -> teaches -> course`
@@ -251,6 +263,7 @@ python main.py --stage all -v
 **Output:**
 - `data/knowledge_graph/graph.json`
 - `data/knowledge_graph/graph_report.json`
+- `data/entities/teaching_assignments.json` (updated merged assignment map)
 
 ---
 

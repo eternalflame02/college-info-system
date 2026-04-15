@@ -1,8 +1,8 @@
 {
-  "validation_timestamp": "2026-04-15T01:26:58Z",
+  "validation_timestamp": "2026-04-15T04:20:19Z",
   "collection_health": {
-    "expected_count": 2261,
-    "actual_count": 2261,
+    "expected_count": 2268,
+    "actual_count": 2268,
     "status": "PASS"
   },
   "content_type_validation": {
@@ -32,16 +32,20 @@
       "status": "PASS"
     },
     "knowledge_graph": {
-      "expected": 54,
-      "actual": 54,
+      "expected": 61,
+      "actual": 61,
       "status": "PASS"
     }
   },
   "sample_query_tests": [
     {
       "query": "Who is the head of CSE department?",
-      "status": "FAIL",
-      "error": "No results returned"
+      "expected_content_type": "profile",
+      "top_result_content_type": "profile",
+      "top_result_distance": 1.016,
+      "results_count": 3,
+      "query_time_ms": 11530.0,
+      "status": "PASS"
     },
     {
       "query": "What courses are in Semester 3?",
@@ -49,7 +53,7 @@
       "top_result_content_type": "table",
       "top_result_distance": 0.773,
       "results_count": 1,
-      "query_time_ms": 11656.05,
+      "query_time_ms": 10770.32,
       "status": "PASS"
     },
     {
@@ -64,22 +68,26 @@
     },
     {
       "query": "faculty specializing in machine learning",
-      "status": "FAIL",
-      "error": "No results returned"
+      "expected_content_type": "profile",
+      "top_result_content_type": "profile",
+      "top_result_distance": 1.159,
+      "results_count": 3,
+      "query_time_ms": 10832.01,
+      "status": "PASS"
     },
     {
       "query": "Who teaches Artificial Intelligence?",
       "expected_content_type": "knowledge_graph",
       "top_result_content_type": "knowledge_graph",
-      "top_result_distance": 0.847,
+      "top_result_distance": 0.945,
       "results_count": 5,
-      "query_time_ms": 11752.94,
+      "query_time_ms": 10851.41,
       "status": "PASS"
     }
   ],
   "performance_metrics": {
-    "average_query_time_ms": 13162.27,
-    "min_query_time_ms": 11044.42,
-    "max_query_time_ms": 16774.62
+    "average_query_time_ms": 11146.83,
+    "min_query_time_ms": 10770.32,
+    "max_query_time_ms": 11715.53
   }
 }

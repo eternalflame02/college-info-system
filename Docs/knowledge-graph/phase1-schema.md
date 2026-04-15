@@ -111,8 +111,14 @@ Rejected when:
 ### `faculty -> teaches -> course`
 
 Accepted only when:
-- faculty and course appear in the same row/span,
-- row/span has assignment signal (assignment cue words or table-row structure).
+- pair exists in deterministic merged assignment map built from:
+  - manual assignment registry (`data/entities/teaching_assignments.json`), and/or
+  - timetable-derived grounded links from timetable chunks.
+
+Recommended evidence markers:
+- `source:teaching_assignments`
+- `source:manual_assignments` when pair comes from manual map
+- `source:timetable` and `rule:timetable_faculty_course` when pair comes from timetable inference
 
 Rejected when:
-- faculty and course only co-occur without assignment signal.
+- faculty or course cannot be grounded to known entity IDs.

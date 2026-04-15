@@ -76,6 +76,45 @@ def _is_table_content(text: str) -> bool:
     return pipe_lines >= 3
 
 
+def classify_table_subtype(
+    text: str,
+    source_file: str = "",
+    section_hierarchy: Optional[list] = None,
+) -> str:
+    """
+    Classify markdown table subtype for routing/metadata.
+
+    Returns:
+        "timetable" or "generic"
+    """
+    section_hierarchy = section_hierarchy or []
+    searchable = " ".join([
+        text.lower(),
+        source_file.lower(),
+        " ".join(section_hierarchy).lower(),
+    ])
+
+    timetable_markers = [
+        "timetable",
+        "time table",
+        "schedule",
+        "period",
+        "slot",
+        "day",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "teacher",
+        "faculty",
+    ]
+
+    if any(marker in searchable for marker in timetable_markers):
+        return "timetable"
+    return "generic"
+
+
 def _is_faculty_profile(text: str, section_hierarchy: list) -> bool:
     """
     Check if text is a faculty profile.

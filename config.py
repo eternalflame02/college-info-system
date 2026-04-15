@@ -137,6 +137,10 @@ GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 # ========== ChromaDB Configuration ==========
 CHROMADB_DIR = PROJECT_ROOT / "chroma_db"
 CHROMADB_COLLECTION = "mbcet_cse_knowledge"
+CHROMADB_MULTI_COLLECTION_ENABLED = os.getenv("CHROMADB_MULTI_COLLECTION_ENABLED", "0") == "1"
+CHROMADB_ENABLE_LEGACY_FALLBACK = os.getenv("CHROMADB_ENABLE_LEGACY_FALLBACK", "1") == "1"
+CHROMADB_TABLE_COLLECTION = os.getenv("CHROMADB_TABLE_COLLECTION", "mbcet_cse_table")
+CHROMADB_NON_TABLE_COLLECTION = os.getenv("CHROMADB_NON_TABLE_COLLECTION", "mbcet_cse_non_table")
 
 # ========== Embedding Cache ==========
 EMBEDDING_CACHE_DIR = DATA_DIR / "embeddings"

@@ -16,7 +16,7 @@ from markdown_it import MarkdownIt
 import config
 from chunker.chunk_models import Chunk, ChunkReport, save_chunks
 from chunker.entity_registry import EntityRegistry, find_entity_refs, load_entity_registry
-from chunker.content_classifier import classify_content
+from chunker.content_classifier import classify_content, classify_table_subtype
 
 logger = logging.getLogger(__name__)
 
@@ -226,6 +226,100 @@ class MarkdownChunker:
         self.min_words = config.MIN_CHUNK_WORDS
         self.max_words = config.MAX_CHUNK_WORDS
         self.soft_limit = config.SOFT_LIMIT_WORDS
+
+    def _course_code_map(self) -> Dict[str, str]:
+        mapping: Dict[str, str] = {}
+        for cid, course in self.course_by_id.items():
+            code = str(course.get("code", "")).strip().upper()
+            if code:
+                mapping[code] = cid
+        return mapping
+
+    def _faculty_alias_map(self) -> Dict[str, str]:
+        from chunker.entity_registry import normalize_text
+
+        mapping: Dict[str, str] = {}
+        for fid, faculty in self.faculty_by_id.items():
+            aliases = [faculty.get("name", "")]
+            aliases.extend(faculty.get("aliases", []) if isinstance(faculty.get("aliases", []), list) else [])
+            for alias in aliases:
+                normalized = normalize_text(str(alias))
+                if normalized and normalized not in mapping:
+                    mapping[normalized] = fid
+        return mapping
+
+    def _extract_timetable_metadata(
+        self,
+        text: str,
+        source_file: str,
+        section_hierarchy: List[str],
+        entity_refs: List[str],
+    ) -> Dict[str, str]:
+        """Extract timetable-oriented normalized metadata signals from table chunks."""
+        from chunker.entity_registry import normalize_text
+
+        metadata: Dict[str, str] = {}
+        table_kind = classify_table_subtype(text, source_file=source_file, section_hierarchy=section_hierarchy)
+        metadata["table_kind"] = table_kind
+        if table_kind != "timetable":
+            return metadata
+
+        metadata["timetable_signal"] = "true"
+
+        lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+        weekdays = [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+        ]
+        present_days = [day for day in weekdays if any(day in ln.lower() for ln in lines)]
+        if present_days:
+            metadata["timetable_days"] = ",".join(sorted(set(present_days)))
+
+        section_text = " ".join(section_hierarchy)
+        sem_match = re.search(r"\b(?:semester|sem|s)\s*([1-8])\b", section_text, flags=re.IGNORECASE)
+        if sem_match:
+            metadata["timetable_semester"] = sem_match.group(1)
+
+        code_map = self._course_code_map()
+        code_pat = re.compile(r"\b[A-Z0-9]{5,10}\b")
+        discovered_codes = sorted(
+            {
+                token
+                for token in code_pat.findall(text.upper())
+                if token in code_map
+            }
+        )
+        if discovered_codes:
+            metadata["timetable_course_codes"] = ",".join(discovered_codes)
+            mapped_ids = [code_map[code] for code in discovered_codes]
+            metadata["timetable_course_ids"] = ",".join(sorted(set(mapped_ids)))
+
+        faculty_ids = sorted({e for e in entity_refs if isinstance(e, str) and e.startswith("faculty_")})
+        if faculty_ids:
+            metadata["timetable_faculty_ids"] = ",".join(faculty_ids)
+
+        # Capture unresolved faculty-like tokens for downstream audit.
+        faculty_alias_map = self._faculty_alias_map()
+        candidate_names = re.findall(
+            r"(?:dr|prof|mr|ms|mrs)\.?\s+[a-z]+(?:\s+[a-z]+){0,3}",
+            text,
+            flags=re.IGNORECASE,
+        )
+        unresolved_tokens: List[str] = []
+        for candidate in candidate_names:
+            norm = normalize_text(candidate)
+            if not norm:
+                continue
+            if norm not in faculty_alias_map:
+                unresolved_tokens.append(candidate.strip())
+        if unresolved_tokens:
+            metadata["timetable_unmatched_faculty_tokens"] = ",".join(sorted(set(unresolved_tokens)))
+
+        return metadata
 
     def _build_relational_metadata(
         self,
@@ -714,6 +808,14 @@ class MarkdownChunker:
             source_file = str(filepath)
 
         relational_metadata = self._build_relational_metadata(content_type, entity_refs)
+        if is_table:
+            timetable_meta = self._extract_timetable_metadata(
+                text,
+                source_file=source_file,
+                section_hierarchy=section_hierarchy,
+                entity_refs=entity_refs,
+            )
+            relational_metadata.update(timetable_meta)
         
         return Chunk(
             chunk_id=chunk_id,

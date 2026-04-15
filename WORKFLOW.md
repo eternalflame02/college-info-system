@@ -153,10 +153,11 @@ Builder: `knowledge_graph/builder.py`
 1. Build graph nodes from faculty/course/program plus deterministic semester nodes
 2. Extract deterministic edges only:
 	- `part_of`
-	- `teaches`
+	- `teaches` (from merged manual assignments + timetable-derived links)
 	- `taught_in`
 	- `has_prerequisite` (when explicitly present and source course is grounded)
 	- `corequisite` (when explicitly present)
+3. Build timetable-derived faculty-course links from timetable chunks and merge into `data/entities/teaching_assignments.json`
 3. Validate schema integrity, deterministic constraints, and node endpoint integrity
 4. Write graph + report
 
@@ -164,6 +165,7 @@ Outputs:
 
 - `data/knowledge_graph/graph.json`
 - `data/knowledge_graph/graph_report.json`
+- `data/entities/teaching_assignments.json` (merged deterministic assignment map)
 
 ### Stage F - Embedding + Chroma Ingestion (`main.py --stage embed`)
 
@@ -173,8 +175,8 @@ Orchestrator: `rag_ingestion.py`
 2. Append synthetic knowledge-graph chunks generated from canonical graph
 3. Use embedding cache when chunk IDs match
 4. Else generate embeddings (GPU auto detect, OOM fallback)
-5. Initialize persistent ChromaDB client and collection
-6. Batch ingest documents + flattened metadata
+5. Initialize persistent ChromaDB client and collections (`table`, `non_table`, optional `legacy`)
+6. Batch ingest documents into routed collections by content family
 7. Run validation suite with representative queries
 8. Save ingestion and validation reports
 
@@ -247,6 +249,11 @@ Then choose one of these sequences.
 5. `python main.py --stage chunk`
 6. `python main.py --stage graph`
 7. `python main.py --stage embed --force`
+
+Before step 7, enable multi-collection mode in `.env`:
+
+- `CHROMADB_MULTI_COLLECTION_ENABLED=1`
+- `CHROMADB_ENABLE_LEGACY_FALLBACK=1`
 
 ### Incremental update sequence (content only)
 
