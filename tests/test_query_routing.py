@@ -7,7 +7,12 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from rag_ingestion import classify_query_type, query_chromadb_with_fallback, apply_adaptive_distance_threshold
+from rag_ingestion import (
+    classify_query_type,
+    query_chromadb,
+    query_chromadb_with_fallback,
+    apply_adaptive_distance_threshold,
+)
 
 
 def test_classify_teaching_query():
@@ -20,6 +25,10 @@ def test_classify_faculty_query():
 
 def test_classify_regulation_query_by_attendance_keyword():
     assert classify_query_type("What is the attendance requirement for exams?") == "regulation"
+
+
+def test_classify_advisory_query():
+    assert classify_query_type("Which elective should I pick if I like practical AI?") == "advisory"
 
 
 class _FakeCollection:
@@ -176,6 +185,28 @@ class _FakeCollectionFacultyNoisy:
         }
 
 
+class _FakeCollectionSyllabusHighDistance:
+    def query(self, **kwargs):
+        return {
+            "ids": [["syl_1", "noise_1"]],
+            "distances": [[1.42, 1.47]],
+            "documents": [["dbms syllabus module details", "generic activity table"]],
+            "metadatas": [[
+                {
+                    "content_type": "table",
+                    "source_type": "pdf",
+                    "source_file": "data/markdown/pdfs/CSE_2020-Revised_S7S8-Syllabus.md",
+                    "timetable_course_codes": "CS1U20E,CS1U20D",
+                },
+                {
+                    "content_type": "table",
+                    "source_type": "html",
+                    "source_file": "data/markdown/pages/computer-science-engineering_activities_c9f3a7.md",
+                },
+            ]],
+        }
+
+
 def test_general_fallback_triggered(monkeypatch):
     class _FakeModel:
         def encode(self, *_args, **_kwargs):
@@ -189,6 +220,21 @@ def test_general_fallback_triggered(monkeypatch):
     assert results["fallback_triggered"] is True
     assert results["filtered_count"] > 0
     assert len(results["content_type_distribution"]) >= 1
+
+
+def test_syllabus_query_keeps_top_candidates_when_threshold_filters_all(monkeypatch):
+    class _FakeModel:
+        def encode(self, *_args, **_kwargs):
+            import numpy as np
+            return np.array([[0.1, 0.2, 0.3]], dtype=float)
+
+    monkeypatch.setattr("rag_ingestion.load_embedding_model", lambda device="auto": _FakeModel())
+
+    fake = _FakeCollectionSyllabusHighDistance()
+    results = query_chromadb(fake, "Database Management Systems syllabus", query_type="course")
+
+    assert results["filtered_count"] >= 1
+    assert any("S7S8-Syllabus" in (m or {}).get("source_file", "") for m in results["metadatas"][0])
 
 
 def test_non_general_keeps_primary_when_non_empty(monkeypatch):
@@ -427,6 +473,31 @@ def test_course_query_prefers_table_collection(monkeypatch):
         collection_map,
         "What courses are in semester 3?",
         query_type="course",
+    )
+
+    assert results["primary_collection"] == "table"
+    assert table.calls >= 1
+
+
+def test_advisory_query_prefers_table_collection(monkeypatch):
+    class _FakeModel:
+        def encode(self, *_args, **_kwargs):
+            import numpy as np
+            return np.array([[0.1, 0.2, 0.3]], dtype=float)
+
+    monkeypatch.setattr("rag_ingestion.load_embedding_model", lambda device="auto": _FakeModel())
+
+    table = _FakeCollectionTrackCalls("table", "table")
+    non_table = _FakeCollectionTrackCalls("non_table", "section")
+    collection_map = {
+        "table": table,
+        "non_table": non_table,
+    }
+
+    results = query_chromadb_with_fallback(
+        collection_map,
+        "Which elective should I pick for practical learning?",
+        query_type="advisory",
     )
 
     assert results["primary_collection"] == "table"

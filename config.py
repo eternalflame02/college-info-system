@@ -128,6 +128,9 @@ TEACHES_ASSIGNMENT_CUES = [
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "google/embeddinggemma-300m")
 EMBEDDING_DIMENSIONS = 768
 EMBEDDING_BATCH_SIZE = int(os.getenv("EMBEDDING_BATCH_SIZE", "64"))
+EMBEDDING_USE_QUERY_DOC_METHODS = os.getenv("EMBEDDING_USE_QUERY_DOC_METHODS", "1") == "1"
+EMBEDDING_DOCUMENT_PROMPT_NAME = os.getenv("EMBEDDING_DOCUMENT_PROMPT_NAME", "Retrieval-document")
+EMBEDDING_QUERY_PROMPT_NAME = os.getenv("EMBEDDING_QUERY_PROMPT_NAME", "Retrieval-query")
 HF_TOKEN = os.getenv("HF_TOKEN", "")
 
 # ========== Chatbot / LLM Configuration (Groq) ==========

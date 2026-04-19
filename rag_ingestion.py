@@ -53,6 +53,7 @@ _QUALITY_BANDS_BASE: Dict[str, float] = {
 
 _QUALITY_TYPE_ADJUST: Dict[str, float] = {
     "teaching": 0.00,
+    "advisory": 0.05,
     "faculty": 0.10,
     "regulation": 0.15,
 }
@@ -66,12 +67,21 @@ _QUALITY_MARGIN_BY_LABEL: Dict[str, float] = {
 
 _THRESHOLD_CAP_BY_TYPE: Dict[str, float] = {
     "general": 1.25,
+    "advisory": 1.40,
     "course": 1.35,
     "timetable": 1.35,
     "teaching": 1.35,
     "faculty": 1.45,
     "regulation": 1.55,
 }
+
+_SYLLABUS_SOURCE_HINTS = (
+    "syllabus",
+    "curriculum",
+    "autonomy",
+    "s5s6",
+    "s7s8",
+)
 
 
 # ========================================================================
@@ -166,18 +176,25 @@ def generate_embeddings(
     # Normalize text
     texts = [t.strip() for t in texts]
 
-    # Generate embeddings
-    # Note: prompt_name="Retrieval-document" omitted intentionally 
-    # it prepends a prefix that dramatically increases token length
-    # for already-long table chunks, causing ~30x slowdown on 4GB GPU.
-    # Queries still use Retrieval-query prompt for asymmetric search.
-    embeddings = model.encode(
-        texts,
-        batch_size=batch_size,
-        show_progress_bar=show_progress,
-        convert_to_numpy=True,
-        normalize_embeddings=True,  # L2 normalization for cosine similarity
-    )
+    # Prefer model-provided document encoding (EmbeddingGemma optimized).
+    # Fall back to prompt_name-based encode for compatibility.
+    if config.EMBEDDING_USE_QUERY_DOC_METHODS and hasattr(model, "encode_document"):
+        embeddings = model.encode_document(
+            texts,
+            batch_size=batch_size,
+            show_progress_bar=show_progress,
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        )
+    else:
+        embeddings = model.encode(
+            texts,
+            prompt_name=config.EMBEDDING_DOCUMENT_PROMPT_NAME,
+            batch_size=batch_size,
+            show_progress_bar=show_progress,
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        )
 
     print(f"[OK] Generated {len(embeddings)} embeddings")
     print(f"   Shape: {embeddings.shape}")
@@ -473,7 +490,7 @@ def _resolve_collection_route(collection_or_map: Any, query_type: str) -> Tuple[
         raise ValueError("No ChromaDB collections available for retrieval")
 
     preferred_primary_key = "non_table"
-    if query_type in {"course", "timetable"}:
+    if query_type in {"course", "timetable", "advisory"}:
         preferred_primary_key = "table"
     elif query_type in {"faculty", "regulation", "general", "teaching"}:
         preferred_primary_key = "non_table"
@@ -657,7 +674,7 @@ def classify_query_type(query: str) -> str:
         query: User query string.
 
     Returns:
-        Query type: "teaching" | "faculty" | "course" | "timetable" | "regulation" | "general"
+        Query type: "teaching" | "faculty" | "advisory" | "course" | "timetable" | "regulation" | "general"
     """
     query_lower = query.lower()
 
@@ -681,6 +698,16 @@ def classify_query_type(query: str) -> str:
     ]
     if any(kw in query_lower for kw in faculty_keywords):
         return "faculty"
+
+    # Student advisory/recommendation queries
+    advisory_keywords = [
+        "elective", "minor", "which one should", "which should i pick",
+        "recommend", "best for", "interested in", "planning to move",
+        "theory", "application", "practical", "hands-on", "common subjects",
+        "common course", "career", "track",
+    ]
+    if any(kw in query_lower for kw in advisory_keywords):
+        return "advisory"
 
     # Course/Syllabus queries
     course_keywords = ["course", "subject", "syllabus", "credit", "semester"]
@@ -791,6 +818,28 @@ def _extract_semester_query_signal(query_text: str) -> Optional[int]:
     return None
 
 
+def _is_syllabus_like_query(query_text: str) -> bool:
+    query_lower = query_text.lower()
+    syllabus_markers = [
+        "syllabus",
+        "module",
+        "course outcome",
+        "course outcomes",
+        "co ",
+        "curriculum",
+    ]
+    return any(marker in query_lower for marker in syllabus_markers)
+
+
+def _extract_course_code_query_signal(query_text: str) -> List[str]:
+    """Extract likely course codes from query text for metadata matching."""
+    matches = re.findall(
+        r"\b(?:\d{2}[A-Z]{2,4}[A-Z]?\d{2}[A-Z]?|[A-Z]{2,4}\d[A-Z]\d{2}[A-Z]?)\b",
+        query_text.upper(),
+    )
+    return sorted(set(matches))
+
+
 def _get_entity_registry_cached():
     """Return a loaded EntityRegistry instance with lightweight process caching."""
     from chunker.entity_registry import EntityRegistry
@@ -879,6 +928,8 @@ def _rerank_with_query_signals(
     metas = results["metadatas"][0]
 
     semester_signal = _extract_semester_query_signal(query_text)
+    syllabus_query = _is_syllabus_like_query(query_text)
+    query_codes = _extract_course_code_query_signal(query_text)
     if query_type == "faculty" and faculty_signal is None:
         faculty_signal = _extract_faculty_query_signal(query_text)
 
@@ -911,6 +962,33 @@ def _rerank_with_query_signals(
         if query_type == "regulation":
             if str(meta.get("content_type", "")).lower() == "regulation":
                 score -= 0.12
+
+        if query_type == "course" and syllabus_query:
+            source_file = str(meta.get("source_file", "")).lower()
+            source_type = str(meta.get("source_type", "")).lower()
+            section_hierarchy = str(meta.get("section_hierarchy", "")).lower()
+            entity_refs = str(meta.get("entity_refs", "")).lower()
+            timetable_codes = str(meta.get("timetable_course_codes", "")).upper()
+
+            if source_type == "pdf":
+                score -= 0.08
+
+            if any(token in source_file for token in _SYLLABUS_SOURCE_HINTS):
+                score -= 0.14
+
+            if any(token in section_hierarchy for token in ["module", "course outcomes", "course outcome"]):
+                score -= 0.05
+
+            if any(token in source_file for token in ["activities", "workshop", "seminar", "blog"]):
+                score += 0.22
+
+            if query_codes:
+                if any(code in timetable_codes for code in query_codes):
+                    score -= 0.10
+                elif any(f"course_{code.lower()}" in entity_refs for code in query_codes):
+                    score -= 0.08
+                else:
+                    score += 0.03
 
         scored_indices.append((score, idx))
 
@@ -1158,6 +1236,7 @@ def query_chromadb(
     Routing Logic:
     - "teaching"  filter content_type="knowledge_graph", n_results=5
     - "faculty"  filter content_type="profile", n_results=3
+    - "advisory"  broad course-oriented retrieval, n_results=12
     - "course"  filter content_type="table", n_results=10
     - "timetable"  filter content_type="table", n_results=5
     - "regulation"  filter content_type="regulation", n_results=5
@@ -1206,6 +1285,9 @@ def query_chromadb(
     elif query_type == "course":
         where_filter = {"content_type": "table"}
         n_results = 10
+    elif query_type == "advisory":
+        where_filter = None
+        n_results = 12
     elif query_type == "timetable":
         where_filter = {"content_type": "table"}
         n_results = 5
@@ -1223,12 +1305,19 @@ def query_chromadb(
     # Generate query embedding if not pre-computed.
     if query_embedding is None:
         model = load_embedding_model(device="auto")
-        query_embedding = model.encode(
-            [query_text],
-            prompt_name="Retrieval-query",
-            convert_to_numpy=True,
-            normalize_embeddings=True,
-        ).tolist()
+        if config.EMBEDDING_USE_QUERY_DOC_METHODS and hasattr(model, "encode_query"):
+            query_embedding = model.encode_query(
+                [query_text],
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+            ).tolist()
+        else:
+            query_embedding = model.encode(
+                [query_text],
+                prompt_name=config.EMBEDDING_QUERY_PROMPT_NAME,
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+            ).tolist()
 
         # Free model
         del model
@@ -1254,9 +1343,32 @@ def query_chromadb(
         query_type,
         faculty_signal=faculty_signal,
     )
+    reranked_results = results
 
     # Apply adaptive distance threshold
     results = apply_adaptive_distance_threshold(results, query_type)
+
+    # Syllabus/detail queries can be overly pruned by strict course thresholds.
+    # Keep a small top-ranked tail when we have candidates but thresholding drops all.
+    if (
+        query_type == "course"
+        and _is_syllabus_like_query(query_text)
+        and results.get("filtered_count", 0) == 0
+        and reranked_results.get("distances")
+        and reranked_results["distances"][0]
+    ):
+        keep = min(max(n_results, 3), len(reranked_results["distances"][0]))
+        results = {
+            "ids": [reranked_results["ids"][0][:keep]],
+            "distances": [reranked_results["distances"][0][:keep]],
+            "documents": [reranked_results["documents"][0][:keep]],
+            "metadatas": [reranked_results["metadatas"][0][:keep]],
+            "quality": "poor",
+            "best_distance": min(reranked_results["distances"][0]),
+            "threshold_used": None,
+            "original_count": len(reranked_results["distances"][0]),
+            "filtered_count": keep,
+        }
 
     # Apply strict signal filters after thresholding when query intent is explicit.
     if query_type == "faculty":
@@ -1341,12 +1453,19 @@ def query_chromadb_with_fallback(
 
     # Compute query embedding once and reuse for both primary and fallback retrieval.
     model = load_embedding_model(device="auto")
-    query_embedding = model.encode(
-        [query_text],
-        prompt_name="Retrieval-query",
-        convert_to_numpy=True,
-        normalize_embeddings=True,
-    ).tolist()
+    if config.EMBEDDING_USE_QUERY_DOC_METHODS and hasattr(model, "encode_query"):
+        query_embedding = model.encode_query(
+            [query_text],
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        ).tolist()
+    else:
+        query_embedding = model.encode(
+            [query_text],
+            prompt_name=config.EMBEDDING_QUERY_PROMPT_NAME,
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        ).tolist()
     del model
 
     import torch
@@ -1375,6 +1494,10 @@ def query_chromadb_with_fallback(
         if query_type == "general":
             fallback_needed = True
         elif primary_count == 0:
+            fallback_needed = True
+        elif query_type == "course" and _is_syllabus_like_query(query_text) and primary_count < 2:
+            fallback_needed = True
+        elif query_type == "advisory" and primary_count < 3:
             fallback_needed = True
         elif query_type == "faculty" and faculty_signal and not _has_faculty_signal_match(primary, faculty_signal):
             fallback_needed = True

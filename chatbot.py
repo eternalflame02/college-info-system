@@ -132,7 +132,7 @@ def classify_query(query: str) -> str:
     Classify query into type for routing.
 
     Returns:
-        "teaching" | "faculty" | "course" | "timetable" | "regulation" | "general"
+        "teaching" | "faculty" | "advisory" | "course" | "timetable" | "regulation" | "general"
     """
     from rag_ingestion import classify_query_type
     return classify_query_type(query)
@@ -155,6 +155,8 @@ def _default_retrieval_plan(query: str) -> RetrievalPlan:
 
     query_type = classify_query(query)
     if query_type == "teaching":
+        mode = "hybrid"
+    elif query_type == "advisory":
         mode = "hybrid"
     elif query_type == "faculty":
         mode = "vector_only"
@@ -211,7 +213,7 @@ def _extract_json_block(raw_text: str) -> Optional[Dict]:
 
 def _normalize_planner_output(plan: Dict, original_query: str) -> RetrievalPlan:
     """Normalize raw planner dictionary into validated RetrievalPlan."""
-    valid_query_types = {"teaching", "faculty", "course", "timetable", "regulation", "general"}
+    valid_query_types = {"teaching", "faculty", "advisory", "course", "timetable", "regulation", "general"}
     valid_modes = {"kg_only", "vector_only", "hybrid", "no_retrieval"}
 
     query_type = str(plan.get("query_type", "")).strip().lower()
@@ -223,7 +225,7 @@ def _normalize_planner_output(plan: Dict, original_query: str) -> RetrievalPlan:
         query_type = classify_query(original_query)
 
     if source_mode not in valid_modes:
-        source_mode = "hybrid" if query_type in {"teaching", "regulation"} else "vector_only"
+        source_mode = "hybrid" if query_type in {"teaching", "regulation", "advisory"} else "vector_only"
 
     if not rewritten_query:
         rewritten_query = original_query
@@ -238,7 +240,7 @@ def _normalize_planner_output(plan: Dict, original_query: str) -> RetrievalPlan:
 
 def _should_use_llm_planner(query: str, default_query_type: str) -> bool:
     """Use planner selectively to balance latency and quality."""
-    if default_query_type in {"general", "regulation", "teaching"}:
+    if default_query_type in {"general", "regulation", "teaching", "advisory"}:
         return True
 
     # Ambiguous intent markers where source choice is uncertain.
@@ -262,19 +264,39 @@ def _plan_retrieval_with_llm(query: str) -> RetrievalPlan:
         return default_plan
 
     planner_system_prompt = """You are a retrieval planner for an academic QA system.
-Given a user query, output ONLY a JSON object with keys:
-- query_type: one of [teaching, faculty, course, timetable, regulation, general]
+Output ONLY one JSON object with keys:
+- query_type: one of [teaching, faculty, advisory, course, timetable, regulation, general]
 - source_mode: one of [kg_only, vector_only, hybrid, no_retrieval]
-- rewritten_query: short rewritten retrieval query
-- rationale: brief reason
+- rewritten_query: compact retrieval query preserving key entities
+- rationale: one short sentence
 
-Rules:
-- Queries like 'Who is Dr X', 'Who is Prof Y', or 'Tell me about faculty Z' are faculty/profile queries.
-- Use kg_only only for strict relation lookup queries like 'who teaches X'.
-- Use vector_only for descriptive profile/course/timetable lookups.
-- Use hybrid when relation + context/policy may both be needed, or query is broad.
-- Use no_retrieval for greetings, gratitude, or pure conversational small talk.
-- Do not include markdown or any text outside JSON."""
+Classification precedence (top to bottom):
+1) teaching: explicit relation lookup such as 'who teaches/handles/instructor for ...'
+2) faculty: profile/about-person requests (designation, email, qualification, bio)
+3) advisory: recommendation/comparison/choice intent (which should I pick, best for, compare, career-fit)
+4) course: syllabus/module/course outcome/course details/credits/semester course list
+5) timetable: schedule/time/day/slot timing queries
+6) regulation: policy/rules (R2019/R2023, attendance, grading, cgpa, exam rules)
+7) general: department info outside above
+
+Source mode rules:
+- kg_only: only for strict relation lookup (teaching assignment style).
+- vector_only: direct factual lookup for single-topic queries.
+- hybrid: broad/ambiguous queries or when comparison + evidence synthesis is needed.
+- no_retrieval: greetings/thanks/small-talk.
+
+Rewritten query rules:
+- Preserve exact course codes, semester tokens (S1..S8/semester N), and branch tokens (CS/CT/AI).
+- Remove filler words and keep 3-12 highly informative tokens.
+
+Examples:
+- 'Who teaches Artificial Intelligence (CS1U40A)?' -> teaching, kg_only
+- 'Who is Dr Tessy?' -> faculty, vector_only
+- 'Database management systems syllabus' -> course, vector_only
+- 'What are common subjects for cs and ct in S6?' -> advisory, hybrid
+- 'Thanks' -> general, no_retrieval
+
+Return strict JSON only. No markdown, no explanations outside JSON."""
 
     planner_user_prompt = f"Query: {query}"
 
@@ -388,6 +410,11 @@ def _execute_retrieval_plan(query: str, plan: RetrievalPlan) -> Tuple[Optional[s
     if plan.source_mode == "vector_only":
         return None, _retrieve_from_chromadb(retrieval_query, plan.query_type, n_results=5)
 
+    if plan.query_type == "advisory":
+        kg_answer = _retrieve_from_kg(query)
+        chunks = _retrieve_from_chromadb(retrieval_query, "advisory", n_results=10)
+        return kg_answer, chunks
+
     # hybrid
     kg_answer = None
     if plan.query_type in {"teaching", "regulation", "general", "course", "faculty", "timetable"}:
@@ -419,6 +446,114 @@ def _smart_truncate(text: str, max_chars: int = 1400, min_chars: int = 900) -> s
 
     remaining = len(text) - len(clipped)
     return f"{clipped}\n[truncated {remaining} chars]"
+
+
+def _extract_advisory_signals(query: str) -> Dict[str, str]:
+    """Extract lightweight intent hints for advisory-style prompts."""
+    query_lower = query.lower()
+    intent = "general_advisory"
+    if "common" in query_lower and ("cs" in query_lower or "ct" in query_lower):
+        intent = "common_subjects"
+    elif any(tok in query_lower for tok in ["theory", "application", "practical", "hands-on"]):
+        intent = "theory_vs_application"
+    elif any(tok in query_lower for tok in ["elective", "which should i pick", "which one should"]):
+        intent = "elective_choice"
+    elif any(tok in query_lower for tok in ["minor", "career", "planning to move", "ui/ux", "uiux"]):
+        intent = "career_fit_minor"
+
+    sem_match = re.search(r"\b(?:semester|sem|s)\s*([1-8])\b", query_lower)
+    semester = sem_match.group(1) if sem_match else ""
+    return {
+        "intent": intent,
+        "semester": semester,
+    }
+
+
+def _extract_course_mentions(text: str) -> List[Tuple[str, str]]:
+    """Extract (course_name, course_code) mentions from chunk text."""
+    mentions: List[Tuple[str, str]] = []
+    for name, code_blob in re.findall(r"([A-Za-z][A-Za-z0-9&/,+\- ]{2,90})\(([^)]+)\)", text):
+        code_match = re.search(r"\b(?:\d{2}[A-Z]{2,4}[A-Z]?\d{2}[A-Z]?|[A-Z]{2,4}\d[A-Z]\d{2}[A-Z]?)\b", code_blob.upper())
+        if not code_match:
+            continue
+        course_name = re.sub(r"\s+", " ", name).strip(" -:\n\t")
+        if len(course_name) < 3:
+            continue
+        mentions.append((course_name, code_match.group(0)))
+    return mentions
+
+
+def _build_advisory_summary(query: str, chunks: List[RetrievedChunk], kg_answer: Optional[str] = None) -> Optional[str]:
+    """Build deterministic advisory evidence packet for student-style recommendations."""
+    if not chunks:
+        return None
+
+    signals = _extract_advisory_signals(query)
+    intent = signals["intent"]
+    semester = signals["semester"]
+
+    mention_map: Dict[str, Dict[str, object]] = {}
+    for chunk in sorted(chunks, key=lambda c: c.distance)[:8]:
+        for course_name, code in _extract_course_mentions(chunk.text):
+            record = mention_map.setdefault(code, {"name": course_name, "count": 0, "application": 0, "theory": 0})
+            record["count"] = int(record["count"]) + 1
+            marker_text = (course_name + " " + chunk.text[:350]).lower()
+            if any(tok in marker_text for tok in ["lab", "project", "workshop", "design", "studio"]):
+                record["application"] = int(record["application"]) + 1
+            if any(tok in marker_text for tok in ["theory", "mathematics", "analysis", "logic", "concept"]):
+                record["theory"] = int(record["theory"]) + 1
+
+    ranked = sorted(mention_map.items(), key=lambda item: (-int(item[1]["count"]), str(item[0])))
+    top = ranked[:6]
+
+    header = "Advisory evidence packet (structured from retrieved syllabus context):"
+    lines = [header]
+    lines.append(f"- Detected intent: {intent}")
+    if semester:
+        lines.append(f"- Semester hint: S{semester}")
+
+    if kg_answer:
+        lines.append(f"- KG signal: {kg_answer}")
+
+    if intent == "common_subjects":
+        commons = [
+            f"{rec['name']} ({code})"
+            for code, rec in ranked
+            if int(rec["count"]) >= 2
+        ][:5]
+        if commons:
+            lines.append("- Candidate common subjects (appearing across multiple evidence chunks):")
+            lines.extend([f"  - {item}" for item in commons])
+        else:
+            lines.append("- Could not robustly confirm common subjects from retrieved context.")
+    elif intent == "theory_vs_application":
+        target = None
+        q_lower = query.lower()
+        for code, rec in ranked:
+            if str(rec["name"]).lower() in q_lower or code.lower() in q_lower:
+                target = (code, rec)
+                break
+        if target is None and top:
+            target = top[0]
+        if target:
+            code, rec = target
+            app = int(rec["application"])
+            theo = int(rec["theory"])
+            tendency = "application-oriented" if app > theo else "theory-oriented" if theo > app else "mixed"
+            lines.append(f"- Estimated subject tendency: {rec['name']} ({code}) -> {tendency}")
+            lines.append(f"- Signal counts: application={app}, theory={theo}")
+    elif intent in {"elective_choice", "career_fit_minor", "general_advisory"}:
+        if top:
+            lines.append("- Candidate subjects from top evidence:")
+            for code, rec in top:
+                app = int(rec["application"])
+                marker = "more application-heavy" if app > 0 else "content-heavy"
+                lines.append(f"  - {rec['name']} ({code}) [{marker}]")
+        if intent == "career_fit_minor":
+            lines.append("- For career-fit advice, prioritize courses with design/lab/project signals when available.")
+
+    lines.append("- Limitations: this packet is derived from retrieved chunks and may miss options not present in top evidence.")
+    return "\n".join(lines)
 
 
 def _extract_markdown_table_fields(text: str) -> Dict[str, str]:
@@ -539,16 +674,32 @@ def _synthesize_answer_with_llm(
     context = "\n\n---\n\n".join(context_parts)
 
     system_prompt = """You are a helpful assistant for the MBCET CSE department.
-Answer ONLY from the provided context and keep responses factual.
+Answer ONLY from the provided context.
 
-Rules:
-- Prioritize higher-confidence sources and reconcile multiple sources explicitly.
-- If a structured summary candidate is provided, use it as the answer backbone and verify against sources.
-- If information is missing or conflicting, say so clearly.
-- For faculty queries: include designation, qualifications, and email if present.
-- For course/timetable queries: include code/name/credits/schedule details only when present.
-- Use concise bullet points for lists.
-- Never fabricate facts not present in context."""
+Hard constraints:
+- Do not invent facts. If context is missing, explicitly say unavailable.
+- Prefer higher-confidence/lower-distance sources.
+- If sources conflict, report conflict and present both possibilities briefly.
+- If a structured summary candidate is provided, use it as backbone and verify with sources.
+
+Output style by query type:
+- faculty:
+    - Provide: name, designation, qualification, email (only if present).
+- course/timetable:
+    - Provide precise fields present in context: course code/name/credits/semester/module/schedule.
+    - Do not output fields not seen in context.
+- advisory:
+    - Provide 2-5 options when available.
+    - For each option include: why it fits, trade-off, and evidence cue.
+    - End with: confidence + limitations.
+
+Evidence discipline:
+- For important claims, attach short evidence tags like '(Source 1)'.
+- If relevant data exists but is partial, provide best-effort answer plus explicit gap note.
+
+Formatting:
+- Use concise bullets for lists.
+- Keep answer structured and easy to scan."""
 
     user_message = f"""Context:
 {context}
@@ -716,7 +867,9 @@ def answer_question(query: str) -> ChatResponse:
         quality = "none"
 
     summary_hint = None
-    if quality == "poor" and chunks:
+    if query_type == "advisory" and chunks:
+        summary_hint = _build_advisory_summary(query, chunks, kg_answer)
+    elif quality == "poor" and chunks:
         summary_hint = _build_low_confidence_summary(query_type, chunks, kg_answer)
 
     if chunks:
