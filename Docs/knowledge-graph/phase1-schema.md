@@ -57,7 +57,9 @@ Examples of acceptable deterministic rules:
 
 - `faculty -> teaches -> course` when explicit assignment is present in source content.
 - `course -> part_of -> program` when course-program mapping is explicitly listed.
+- `course -> taught_in -> semester` when semester signal is explicit in entity refs or section hierarchy.
 - `course -> has_prerequisite -> course` only when prerequisites are explicitly stated.
+- `course -> corequisite -> course` only when co-requisites are explicitly stated.
 
 If evidence is ambiguous, omit the edge in phase 1.
 
@@ -77,17 +79,46 @@ Rejected when:
 
 Accepted only when:
 - text contains explicit prerequisite marker (for example `Prerequisite:` or `Pre-requisite:`),
-- referenced prerequisite course code can be mapped to a known course node.
+- referenced prerequisite course code can be mapped to a known course node,
+- source course can be deterministically grounded from:
+  - a single `course_*` entity ref, or
+  - section heading code/alias match, or
+  - nearest preceding source-course code before prerequisite marker.
 
 Rejected when:
 - source course is ambiguous in the chunk,
 - prerequisite code cannot be mapped to a known course node.
 
+### `course -> taught_in -> semester`
+
+Accepted only when:
+- course ref exists in the chunk, and
+- semester is deterministically present via `semester_*` entity ref or section heading marker (`semester N`, `sem N`, `sN`).
+
+Rejected when:
+- no semester signal exists for the course-bearing chunk.
+
+### `course -> corequisite -> course`
+
+Accepted only when:
+- text contains explicit co-requisite marker (`Corequisite:` / `Co-requisite:`), and
+- referenced course code maps to a known target course.
+
+Rejected when:
+- source course is ambiguous,
+- target code does not map to a known course.
+
 ### `faculty -> teaches -> course`
 
 Accepted only when:
-- faculty and course appear in the same row/span,
-- row/span has assignment signal (assignment cue words or table-row structure).
+- pair exists in deterministic merged assignment map built from:
+  - manual assignment registry (`data/entities/teaching_assignments.json`), and/or
+  - timetable-derived grounded links from timetable chunks.
+
+Recommended evidence markers:
+- `source:teaching_assignments`
+- `source:manual_assignments` when pair comes from manual map
+- `source:timetable` and `rule:timetable_faculty_course` when pair comes from timetable inference
 
 Rejected when:
-- faculty and course only co-occur without assignment signal.
+- faculty or course cannot be grounded to known entity IDs.

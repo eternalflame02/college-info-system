@@ -16,9 +16,18 @@ import hashlib
 import logging
 import os
 import re
+import sys
 import time
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
+
+# Fix Windows console encoding for emoji/unicode characters
+if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
 
 import numpy as np
 from tqdm import tqdm
@@ -28,6 +37,51 @@ from chunker.knowledge_graph import generate_knowledge_graph_documents
 
 # Configure module logger
 logger = logging.getLogger(__name__)
+
+# Process-local cache for entity registry to avoid repeated reloads
+# during a single query lifecycle.
+_ENTITY_REGISTRY_CACHE: Dict[str, Any] = {
+    "registry": None,
+    "registry_cls": None,
+}
+
+_QUALITY_BANDS_BASE: Dict[str, float] = {
+    "excellent": 0.75,
+    "good": 1.00,
+    "fair": 1.20,
+}
+
+_QUALITY_TYPE_ADJUST: Dict[str, float] = {
+    "teaching": 0.00,
+    "advisory": 0.05,
+    "faculty": 0.10,
+    "regulation": 0.15,
+}
+
+_QUALITY_MARGIN_BY_LABEL: Dict[str, float] = {
+    "excellent": 0.18,
+    "good": 0.30,
+    "fair": 0.32,
+    "poor": 0.33,
+}
+
+_THRESHOLD_CAP_BY_TYPE: Dict[str, float] = {
+    "general": 1.25,
+    "advisory": 1.40,
+    "course": 1.35,
+    "timetable": 1.35,
+    "teaching": 1.35,
+    "faculty": 1.45,
+    "regulation": 1.55,
+}
+
+_SYLLABUS_SOURCE_HINTS = (
+    "syllabus",
+    "curriculum",
+    "autonomy",
+    "s5s6",
+    "s7s8",
+)
 
 
 # ========================================================================
@@ -73,7 +127,7 @@ def load_embedding_model(
         token=hf_token if hf_token else None
     )
 
-    print(f"✅ Model loaded: {model_name}")
+    print(f"[OK] Model loaded: {model_name}")
     print(f"   Device: {device}")
     print(f"   Embedding dimensions: {model.get_sentence_embedding_dimension()}")
 
@@ -122,20 +176,27 @@ def generate_embeddings(
     # Normalize text
     texts = [t.strip() for t in texts]
 
-    # Generate embeddings
-    # Note: prompt_name="Retrieval-document" omitted intentionally —
-    # it prepends a prefix that dramatically increases token length
-    # for already-long table chunks, causing ~30x slowdown on 4GB GPU.
-    # Queries still use Retrieval-query prompt for asymmetric search.
-    embeddings = model.encode(
-        texts,
-        batch_size=batch_size,
-        show_progress_bar=show_progress,
-        convert_to_numpy=True,
-        normalize_embeddings=True,  # L2 normalization for cosine similarity
-    )
+    # Prefer model-provided document encoding (EmbeddingGemma optimized).
+    # Fall back to prompt_name-based encode for compatibility.
+    if config.EMBEDDING_USE_QUERY_DOC_METHODS and hasattr(model, "encode_document"):
+        embeddings = model.encode_document(
+            texts,
+            batch_size=batch_size,
+            show_progress_bar=show_progress,
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        )
+    else:
+        embeddings = model.encode(
+            texts,
+            prompt_name=config.EMBEDDING_DOCUMENT_PROMPT_NAME,
+            batch_size=batch_size,
+            show_progress_bar=show_progress,
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        )
 
-    print(f"✅ Generated {len(embeddings)} embeddings")
+    print(f"[OK] Generated {len(embeddings)} embeddings")
     print(f"   Shape: {embeddings.shape}")
     print(f"   Dtype: {embeddings.dtype}")
 
@@ -170,12 +231,12 @@ def generate_embeddings_with_fallback(
 
             if batch_size > 1:
                 new_batch = max(batch_size // 2, 1)
-                print(f"⚠️  GPU OOM detected, retrying with batch_size={new_batch}...")
+                print(f"[WARN]  GPU OOM detected, retrying with batch_size={new_batch}...")
                 return generate_embeddings_with_fallback(
                     model, texts, batch_size=new_batch
                 )
             else:
-                print("⚠️  GPU OOM even with batch_size=1, falling back to CPU...")
+                print("[WARN]  GPU OOM even with batch_size=1, falling back to CPU...")
                 model = model.to("cpu")
                 return generate_embeddings(model, texts, batch_size=8)
         else:
@@ -209,7 +270,7 @@ def cache_embeddings(
     )
 
     file_size_mb = os.path.getsize(output_path) / (1024 * 1024)
-    print(f"✅ Embeddings cached to {output_path}")
+    print(f"[OK] Embeddings cached to {output_path}")
     print(f"   File size: {file_size_mb:.2f} MB")
 
 
@@ -226,7 +287,7 @@ def load_cached_embeddings(
         cache_path = str(config.EMBEDDING_CACHE_FILE)
 
     if not os.path.exists(cache_path):
-        print("⚠️  No embedding cache found")
+        print("[WARN]  No embedding cache found")
         return None, None
 
     print(f"Loading embeddings from cache: {cache_path}")
@@ -235,7 +296,7 @@ def load_cached_embeddings(
     chunk_ids = data["chunk_ids"].tolist()
     embeddings = data["embeddings"]
 
-    print(f"✅ Loaded {len(chunk_ids)} cached embeddings")
+    print(f"[OK] Loaded {len(chunk_ids)} cached embeddings")
     print(f"   Shape: {embeddings.shape}")
 
     return chunk_ids, embeddings
@@ -265,7 +326,7 @@ def initialize_chromadb(persist_directory: str = None):
 
     client = chromadb.PersistentClient(path=persist_directory)
 
-    print(f"✅ ChromaDB initialized")
+    print(f"[OK] ChromaDB initialized")
     print(f"   Storage path: {persist_directory}")
 
     return client
@@ -281,7 +342,7 @@ def initialize_chromadb_safe(persist_directory: str = None, max_retries: int = 3
         except Exception as e:
             if attempt < max_retries - 1:
                 print(
-                    f"⚠️  ChromaDB initialization failed "
+                    f"[WARN]  ChromaDB initialization failed "
                     f"(attempt {attempt + 1}/{max_retries}): {e}"
                 )
                 time.sleep(2)
@@ -310,7 +371,7 @@ def create_collection(client, collection_name: str = None, recreate: bool = Fals
     if recreate:
         try:
             client.delete_collection(name=collection_name)
-            print(f"🗑️  Deleted existing collection: {collection_name}")
+            print(f"  Deleted existing collection: {collection_name}")
         except Exception:
             pass
 
@@ -321,14 +382,133 @@ def create_collection(client, collection_name: str = None, recreate: bool = Fals
             "description": "MBCET CSE Department Knowledge Base",
             "embedding_model": config.EMBEDDING_MODEL,
             "embedding_dimensions": config.EMBEDDING_DIMENSIONS,
+            "hnsw:space": "cosine",
             "total_chunks": 2060,
         },
     )
 
-    print(f"✅ Collection ready: {collection_name}")
+    print(f"[OK] Collection ready: {collection_name}")
     print(f"   Current document count: {collection.count()}")
 
     return collection
+
+
+def get_rag_collections(client, recreate: bool = False, create_missing: bool = False) -> Dict[str, Any]:
+    """
+    Build collection handles for retrieval/ingestion.
+
+    Keys:
+    - table
+    - non_table
+    - legacy
+    """
+    collections: Dict[str, Any] = {}
+
+    def _get_or_create(name: str):
+        if recreate:
+            try:
+                client.delete_collection(name=name)
+                print(f"  Deleted existing collection: {name}")
+            except Exception:
+                pass
+
+        if create_missing:
+            return client.get_or_create_collection(
+                name=name,
+                metadata={
+                    "description": "MBCET CSE Department Knowledge Base",
+                    "embedding_model": config.EMBEDDING_MODEL,
+                    "embedding_dimensions": config.EMBEDDING_DIMENSIONS,
+                    "hnsw:space": "cosine",
+                },
+            )
+        return client.get_collection(name=name)
+
+    if config.CHROMADB_MULTI_COLLECTION_ENABLED:
+        try:
+            collections["table"] = _get_or_create(config.CHROMADB_TABLE_COLLECTION)
+        except Exception:
+            pass
+        try:
+            collections["non_table"] = _get_or_create(config.CHROMADB_NON_TABLE_COLLECTION)
+        except Exception:
+            pass
+
+    if config.CHROMADB_ENABLE_LEGACY_FALLBACK or not collections:
+        try:
+            target_name = config.CHROMADB_COLLECTION
+            if recreate and create_missing:
+                collections["legacy"] = create_collection(client, target_name, recreate=True)
+            elif create_missing:
+                collections["legacy"] = create_collection(client, target_name, recreate=False)
+            else:
+                collections["legacy"] = client.get_collection(name=target_name)
+        except Exception:
+            pass
+
+    return collections
+
+
+def _split_chunks_for_collections(chunks: List[Dict], embeddings: np.ndarray) -> Dict[str, Dict[str, Any]]:
+    """Split chunk/embedding streams by collection family."""
+    table_indices = [i for i, chunk in enumerate(chunks) if chunk.get("content_type") == "table"]
+    non_table_indices = [i for i, chunk in enumerate(chunks) if chunk.get("content_type") != "table"]
+
+    def _select(indices: List[int]) -> Tuple[List[Dict], np.ndarray]:
+        if not indices:
+            return [], np.zeros((0, embeddings.shape[1]), dtype=embeddings.dtype)
+        selected_chunks = [chunks[i] for i in indices]
+        selected_embeddings = embeddings[indices]
+        return selected_chunks, selected_embeddings
+
+    table_chunks, table_embeddings = _select(table_indices)
+    non_table_chunks, non_table_embeddings = _select(non_table_indices)
+
+    return {
+        "table": {
+            "chunks": table_chunks,
+            "embeddings": table_embeddings,
+        },
+        "non_table": {
+            "chunks": non_table_chunks,
+            "embeddings": non_table_embeddings,
+        },
+        "legacy": {
+            "chunks": chunks,
+            "embeddings": embeddings,
+        },
+    }
+
+
+def _resolve_collection_route(collection_or_map: Any, query_type: str) -> Tuple[Any, List[Any], str]:
+    """Resolve primary + fallback collections for a query type."""
+    if not isinstance(collection_or_map, dict):
+        return collection_or_map, [], "legacy"
+
+    collection_map = {k: v for k, v in collection_or_map.items() if v is not None}
+    if not collection_map:
+        raise ValueError("No ChromaDB collections available for retrieval")
+
+    preferred_primary_key = "non_table"
+    if query_type in {"course", "timetable", "advisory"}:
+        preferred_primary_key = "table"
+    elif query_type in {"faculty", "regulation", "general", "teaching"}:
+        preferred_primary_key = "non_table"
+
+    if preferred_primary_key not in collection_map:
+        if "legacy" in collection_map:
+            preferred_primary_key = "legacy"
+        else:
+            preferred_primary_key = next(iter(collection_map.keys()))
+
+    primary = collection_map[preferred_primary_key]
+    fallback = [
+        coll
+        for key, coll in collection_map.items()
+        if key != preferred_primary_key
+    ]
+
+    return primary, fallback, preferred_primary_key
 
 
 def prepare_metadata(chunk: Dict) -> Dict:
@@ -391,13 +571,13 @@ def prepare_metadata(chunk: Dict) -> Dict:
                 1 for e in chunk["entity_refs"] if e.startswith("course_")
             )
 
-    # For profile chunks, extract faculty info
-    if chunk["content_type"] == "profile":
-        faculty_entities = [
-            e for e in chunk["entity_refs"] if e.startswith("faculty_")
-        ]
-        if faculty_entities:
-            metadata["faculty_id"] = faculty_entities[0]
+    # Extract faculty info from entity refs for all chunk types.
+    # Faculty pages are often represented as markdown tables, not "profile" chunks.
+    faculty_entities = [
+        e for e in chunk["entity_refs"] if e.startswith("faculty_")
+    ]
+    if faculty_entities:
+        metadata["faculty_id"] = faculty_entities[0]
 
     return metadata
 
@@ -462,7 +642,7 @@ def ingest_chunks_to_chromadb(
                 metadatas=metadatas,
             )
         except Exception as e:
-            print(f"❌ Failed to ingest batch {i // batch_size + 1}: {e}")
+            print(f"[ERR] Failed to ingest batch {i // batch_size + 1}: {e}")
             failed_chunks.extend(ids)
 
     # Generate stats
@@ -473,7 +653,7 @@ def ingest_chunks_to_chromadb(
         "final_collection_count": collection.count(),
     }
 
-    print(f"✅ Ingestion complete")
+    print(f"[OK] Ingestion complete")
     print(f"   Successfully ingested: {stats['successfully_ingested']}")
     print(f"   Failed: {len(failed_chunks)}")
     print(f"   Final collection size: {stats['final_collection_count']}")
@@ -494,7 +674,7 @@ def classify_query_type(query: str) -> str:
         query: User query string.
 
     Returns:
-        Query type: "teaching" | "faculty" | "course" | "timetable" | "regulation" | "general"
+        Query type: "teaching" | "faculty" | "advisory" | "course" | "timetable" | "regulation" | "general"
     """
     query_lower = query.lower()
 
@@ -519,6 +699,16 @@ def classify_query_type(query: str) -> str:
     if any(kw in query_lower for kw in faculty_keywords):
         return "faculty"
 
+    # Student advisory/recommendation queries
+    advisory_keywords = [
+        "elective", "minor", "which one should", "which should i pick",
+        "recommend", "best for", "interested in", "planning to move",
+        "theory", "application", "practical", "hands-on", "common subjects",
+        "common course", "career", "track",
+    ]
+    if any(kw in query_lower for kw in advisory_keywords):
+        return "advisory"
+
     # Course/Syllabus queries
     course_keywords = ["course", "subject", "syllabus", "credit", "semester"]
     semester_pattern = r"semester\s+\d+|sem\s+\d+|s\d+"
@@ -537,6 +727,8 @@ def classify_query_type(query: str) -> str:
     # Regulation queries
     regulation_keywords = [
         "regulation", "r2019", "r2023", "curriculum", "scheme", "grading",
+        "attendance", "cgpa", "sgpa", "credit requirement", "exam rule",
+        "supplementary", "probation", "promotion",
     ]
     if any(kw in query_lower for kw in regulation_keywords):
         return "regulation"
@@ -550,9 +742,9 @@ def apply_adaptive_distance_threshold(results: Dict, query_type: str) -> Dict:
     Filter results based on adaptive distance threshold.
 
     Logic:
-    - best distance < 0.3 (excellent) → threshold = 0.6
-    - best distance 0.3–0.5 (good) → threshold = 0.7
-    - best distance > 0.5 (poor) → threshold = 0.8, warn user
+    - Determine quality band from corpus-calibrated distance buckets.
+    - Build threshold as best_distance + quality-specific margin.
+    - Apply query-type caps to keep broad fallbacks bounded.
 
     Args:
         results: Raw ChromaDB query results.
@@ -574,21 +766,23 @@ def apply_adaptive_distance_threshold(results: Dict, query_type: str) -> Dict:
     distances = results["distances"][0]
     best_distance = min(distances)
 
-    # Determine threshold based on best result quality
-    if best_distance < 0.3:
-        threshold = 0.6
+    type_adjust = _QUALITY_TYPE_ADJUST.get(query_type, 0.0)
+    excellent_cut = _QUALITY_BANDS_BASE["excellent"] + type_adjust
+    good_cut = _QUALITY_BANDS_BASE["good"] + type_adjust
+    fair_cut = _QUALITY_BANDS_BASE["fair"] + type_adjust
+
+    if best_distance < excellent_cut:
         quality = "excellent"
-    elif best_distance < 0.5:
-        threshold = 0.7
+    elif best_distance < good_cut:
         quality = "good"
+    elif best_distance < fair_cut:
+        quality = "fair"
     else:
-        threshold = 0.8
         quality = "poor"
 
-    # Teaching queries are routed to knowledge_graph chunks, which are compact
-    # synthetic statements and can have slightly higher distances in practice.
-    if query_type == "teaching":
-        threshold = max(threshold, 1.2)
+    margin = _QUALITY_MARGIN_BY_LABEL[quality]
+    cap = _THRESHOLD_CAP_BY_TYPE.get(query_type, _THRESHOLD_CAP_BY_TYPE["general"])
+    threshold = min(best_distance + margin, cap)
 
     # Filter results
     filtered_indices = [i for i, d in enumerate(distances) if d <= threshold]
@@ -608,13 +802,423 @@ def apply_adaptive_distance_threshold(results: Dict, query_type: str) -> Dict:
 
     # Warning for poor matches
     if quality == "poor":
-        print(f"⚠️  Warning: Best match distance is {best_distance:.3f} (poor quality)")
+        print(f"[WARN]  Warning: Best match distance is {best_distance:.3f} (poor quality)")
         print(
             "   Consider rephrasing query or checking if information "
             "exists in knowledge base"
         )
 
     return filtered_results
+
+
+def _extract_semester_query_signal(query_text: str) -> Optional[int]:
+    match = re.search(r"\b(?:semester|sem|s)\s*([1-8])\b", query_text, re.IGNORECASE)
+    if match:
+        return int(match.group(1))
+    return None
+
+
+def _is_syllabus_like_query(query_text: str) -> bool:
+    query_lower = query_text.lower()
+    syllabus_markers = [
+        "syllabus",
+        "module",
+        "course outcome",
+        "course outcomes",
+        "co ",
+        "curriculum",
+    ]
+    return any(marker in query_lower for marker in syllabus_markers)
+
+
+def _extract_course_code_query_signal(query_text: str) -> List[str]:
+    """Extract likely course codes from query text for metadata matching."""
+    matches = re.findall(
+        r"\b(?:\d{2}[A-Z]{2,4}[A-Z]?\d{2}[A-Z]?|[A-Z]{2,4}\d[A-Z]\d{2}[A-Z]?)\b",
+        query_text.upper(),
+    )
+    return sorted(set(matches))
+
+
+def _get_entity_registry_cached():
+    """Return a loaded EntityRegistry instance with lightweight process caching."""
+    from chunker.entity_registry import EntityRegistry
+
+    cached_registry = _ENTITY_REGISTRY_CACHE.get("registry")
+    cached_cls = _ENTITY_REGISTRY_CACHE.get("registry_cls")
+
+    # Reuse only when the underlying class identity is unchanged.
+    # This keeps tests with monkeypatched registries deterministic.
+    if cached_registry is not None and cached_cls is EntityRegistry:
+        return cached_registry
+
+    registry = EntityRegistry()
+    registry.load_all()
+    _ENTITY_REGISTRY_CACHE["registry"] = registry
+    _ENTITY_REGISTRY_CACHE["registry_cls"] = EntityRegistry
+    return registry
+
+
+def _extract_faculty_query_signal(query_text: str) -> Optional[str]:
+    try:
+        registry = _get_entity_registry_cached()
+
+        normalized_text = query_text.strip()
+        exact = registry.find_exact_match(normalized_text)
+        if exact and exact.startswith("faculty_"):
+            return exact
+
+        # Try title-based faculty mention extraction.
+        candidates = re.findall(
+            r"(?:dr|prof|mr|ms|mrs)\.?\s+[a-z]+(?:\s+[a-z]+){0,3}",
+            query_text,
+            flags=re.IGNORECASE,
+        )
+        for candidate in candidates:
+            exact = registry.find_exact_match(candidate)
+            if exact and exact.startswith("faculty_"):
+                return exact
+
+            fuzzy = registry.find_fuzzy_match(candidate, entity_type="faculty")
+            if fuzzy and fuzzy.startswith("faculty_"):
+                return fuzzy
+
+            # Partial-name backoff (for queries like "Who is Dr Tessy?"):
+            # match candidate tokens against known normalized aliases.
+            candidate_norm = re.sub(r"\s+", " ", candidate.strip().lower())
+            candidate_norm = re.sub(r"\b(dr|prof|mr|ms|mrs)\.?\s+", "", candidate_norm)
+            tokens = [tok for tok in candidate_norm.split() if tok]
+            if not tokens:
+                continue
+
+            alias_lookup = getattr(registry, "lookup", {}) or {}
+            matches = []
+            for alias_norm, entity_id in alias_lookup.items():
+                if not str(entity_id).startswith("faculty_"):
+                    continue
+                alias_text = str(alias_norm)
+                if all(tok in alias_text for tok in tokens):
+                    matches.append(str(entity_id))
+            if matches:
+                return sorted(set(matches))[0]
+    except Exception:
+        return None
+
+    return None
+
+
+def _rerank_with_query_signals(
+    results: Dict,
+    query_text: str,
+    query_type: str,
+    faculty_signal: Optional[str] = None,
+) -> Dict:
+    """
+    Re-rank routed results using lightweight metadata/query signals.
+
+    This improves precision for faculty and semester-specific queries without
+    relying on ChromaDB operator-specific metadata filters.
+    """
+    if not results.get("distances") or not results["distances"][0]:
+        return results
+
+    ids = results["ids"][0]
+    distances = results["distances"][0]
+    docs = results["documents"][0]
+    metas = results["metadatas"][0]
+
+    semester_signal = _extract_semester_query_signal(query_text)
+    syllabus_query = _is_syllabus_like_query(query_text)
+    query_codes = _extract_course_code_query_signal(query_text)
+    if query_type == "faculty" and faculty_signal is None:
+        faculty_signal = _extract_faculty_query_signal(query_text)
+
+    scored_indices = []
+    for idx, distance in enumerate(distances):
+        meta = metas[idx] or {}
+        score = float(distance)
+
+        if semester_signal is not None:
+            sem_meta = meta.get("semester")
+            try:
+                if sem_meta is not None and int(sem_meta) == semester_signal:
+                    score -= 0.08
+            except (ValueError, TypeError):
+                pass
+
+        if faculty_signal:
+            if meta.get("faculty_id") == faculty_signal:
+                score -= 0.12
+
+            source_file = str(meta.get("source_file", "")).lower()
+            section_hierarchy = str(meta.get("section_hierarchy", "")).lower()
+            if any(token in source_file for token in ["workshop", "seminar", "activities"]):
+                score += 0.15
+            if any(token in section_hierarchy for token in ["workshop", "seminar"]):
+                score += 0.12
+            if any(token in source_file for token in ["faculty_", "/faculty/", "faculty-"]):
+                score -= 0.12
+
+        if query_type == "regulation":
+            if str(meta.get("content_type", "")).lower() == "regulation":
+                score -= 0.12
+
+        if query_type == "course" and syllabus_query:
+            source_file = str(meta.get("source_file", "")).lower()
+            source_type = str(meta.get("source_type", "")).lower()
+            section_hierarchy = str(meta.get("section_hierarchy", "")).lower()
+            entity_refs = str(meta.get("entity_refs", "")).lower()
+            timetable_codes = str(meta.get("timetable_course_codes", "")).upper()
+
+            if source_type == "pdf":
+                score -= 0.08
+
+            if any(token in source_file for token in _SYLLABUS_SOURCE_HINTS):
+                score -= 0.14
+
+            if any(token in section_hierarchy for token in ["module", "course outcomes", "course outcome"]):
+                score -= 0.05
+
+            if any(token in source_file for token in ["activities", "workshop", "seminar", "blog"]):
+                score += 0.22
+
+            if query_codes:
+                if any(code in timetable_codes for code in query_codes):
+                    score -= 0.10
+                elif any(f"course_{code.lower()}" in entity_refs for code in query_codes):
+                    score -= 0.08
+                else:
+                    score += 0.03
+
+        scored_indices.append((score, idx))
+
+    ranked = [idx for _, idx in sorted(scored_indices, key=lambda x: x[0])]
+    reranked = {
+        "ids": [[ids[i] for i in ranked]],
+        "distances": [[distances[i] for i in ranked]],
+        "documents": [[docs[i] for i in ranked]],
+        "metadatas": [[metas[i] for i in ranked]],
+    }
+    for passthrough_key in [
+        "quality",
+        "best_distance",
+        "threshold_used",
+        "original_count",
+        "filtered_count",
+    ]:
+        if passthrough_key in results:
+            reranked[passthrough_key] = results[passthrough_key]
+    return reranked
+
+
+def _tag_results_collection(results: Dict, collection_key: str) -> Dict:
+    """Attach retrieval collection key to each metadata record."""
+    tagged = {
+        "ids": [list(results.get("ids", [[]])[0])],
+        "distances": [list(results.get("distances", [[]])[0])],
+        "documents": [list(results.get("documents", [[]])[0])],
+        "metadatas": [[]],
+    }
+    metas = results.get("metadatas", [[]])
+    meta_items = metas[0] if metas and metas[0] else []
+    for meta in meta_items:
+        meta_copy = dict(meta or {})
+        meta_copy["retrieval_collection"] = collection_key
+        tagged["metadatas"][0].append(meta_copy)
+    for passthrough_key in [
+        "quality",
+        "best_distance",
+        "threshold_used",
+        "original_count",
+        "filtered_count",
+    ]:
+        if passthrough_key in results:
+            tagged[passthrough_key] = results[passthrough_key]
+    return tagged
+
+
+def _merge_raw_results(results_list: List[Dict], max_items: int) -> Dict:
+    """Merge raw Chroma-style results from multiple collections by best distance."""
+    merged: Dict[str, Dict[str, Any]] = {}
+
+    for res in results_list:
+        ids = res.get("ids", [[]])[0] if res.get("ids") else []
+        distances = res.get("distances", [[]])[0] if res.get("distances") else []
+        docs = res.get("documents", [[]])[0] if res.get("documents") else []
+        metas = res.get("metadatas", [[]])[0] if res.get("metadatas") else []
+
+        for idx, chunk_id in enumerate(ids):
+            distance = float(distances[idx])
+            if chunk_id in merged and merged[chunk_id]["distance"] <= distance:
+                continue
+            merged[chunk_id] = {
+                "distance": distance,
+                "document": docs[idx],
+                "metadata": metas[idx] if idx < len(metas) else {},
+            }
+
+    ranked = sorted(merged.items(), key=lambda item: item[1]["distance"])[:max_items]
+    return {
+        "ids": [[chunk_id for chunk_id, _ in ranked]],
+        "distances": [[payload["distance"] for _, payload in ranked]],
+        "documents": [[payload["document"] for _, payload in ranked]],
+        "metadatas": [[payload["metadata"] for _, payload in ranked]],
+    }
+
+
+def _filter_faculty_linked_candidates(
+    results: Dict,
+    query_text: str,
+    faculty_signal: Optional[str] = None,
+) -> Dict:
+    """Prefer faculty-linked fallback candidates when a faculty name signal exists."""
+    if faculty_signal is None:
+        faculty_signal = _extract_faculty_query_signal(query_text)
+    if not faculty_signal:
+        return results
+
+    ids = results.get("ids", [[]])
+    if not ids or not ids[0]:
+        return results
+
+    keep_indices: List[int] = []
+    metas = results.get("metadatas", [[]])[0]
+    docs = results.get("documents", [[]])[0]
+    for idx, meta in enumerate(metas):
+        meta_obj = meta or {}
+        refs = [
+            token.strip()
+            for token in str(meta_obj.get("entity_refs", "")).split(",")
+            if token.strip().startswith("faculty_")
+        ]
+        is_signal_match = meta_obj.get("faculty_id") == faculty_signal or faculty_signal in refs
+        if is_signal_match:
+            source_file = str(meta_obj.get("source_file", "")).lower()
+            is_dedicated_faculty_page = any(
+                token in source_file for token in ["faculty_", "/faculty/", "faculty-"]
+            )
+            if any(token in source_file for token in ["workshop", "seminar", "activities"]) and not is_dedicated_faculty_page:
+                continue
+            # Reject aggregate chunks (workshops/seminars) that mention many faculty.
+            if len(set(refs)) > 1 and not is_dedicated_faculty_page:
+                continue
+            keep_indices.append(idx)
+
+    # If no strict metadata match exists, allow a conservative fallback:
+    # dedicated faculty-page chunks whose text appears to contain a titled name.
+    if not keep_indices:
+        for idx, meta in enumerate(metas):
+            meta_obj = meta or {}
+            source_file = str(meta_obj.get("source_file", "")).lower()
+            if not any(token in source_file for token in ["faculty_", "/faculty/", "faculty-"]):
+                continue
+            doc_text = str(docs[idx]).lower() if idx < len(docs) else ""
+            if re.search(r"\b(dr|prof|mr|ms|mrs)\.?\s+[a-z]+", doc_text):
+                keep_indices.append(idx)
+
+    if not keep_indices:
+        empty = {
+            "ids": [[]],
+            "distances": [[]],
+            "documents": [[]],
+            "metadatas": [[]],
+        }
+        for passthrough_key in [
+            "quality",
+            "best_distance",
+            "threshold_used",
+            "original_count",
+        ]:
+            if passthrough_key in results:
+                empty[passthrough_key] = results[passthrough_key]
+        empty["filtered_count"] = 0
+        return empty
+
+    # Prefer dedicated faculty profile pages when available.
+    profile_page_indices = []
+    for idx in keep_indices:
+        meta_obj = metas[idx] or {}
+        source_file = str(meta_obj.get("source_file", "")).lower()
+        if any(token in source_file for token in ["faculty_", "/faculty/", "faculty-"]):
+            profile_page_indices.append(idx)
+    if profile_page_indices:
+        keep_indices = profile_page_indices
+
+    filtered = {
+        "ids": [[results["ids"][0][i] for i in keep_indices]],
+        "distances": [[results["distances"][0][i] for i in keep_indices]],
+        "documents": [[results["documents"][0][i] for i in keep_indices]],
+        "metadatas": [[results["metadatas"][0][i] for i in keep_indices]],
+    }
+    for passthrough_key in [
+        "quality",
+        "best_distance",
+        "threshold_used",
+        "original_count",
+    ]:
+        if passthrough_key in results:
+            filtered[passthrough_key] = results[passthrough_key]
+    filtered["filtered_count"] = len(keep_indices)
+    return filtered
+
+
+def _has_faculty_signal_match(results: Dict, faculty_signal: Optional[str]) -> bool:
+    """Return True when at least one result appears linked to the requested faculty."""
+    if not faculty_signal:
+        return False
+
+    ids = results.get("ids", [[]])
+    if not ids or not ids[0]:
+        return False
+
+    metas = results.get("metadatas", [[]])[0]
+    for meta in metas:
+        meta_obj = meta or {}
+        if meta_obj.get("faculty_id") == faculty_signal:
+            return True
+
+        refs = [
+            token.strip()
+            for token in str(meta_obj.get("entity_refs", "")).split(",")
+            if token.strip().startswith("faculty_")
+        ]
+        if faculty_signal in refs:
+            return True
+
+    return False
+
+
+def _filter_regulation_candidates(results: Dict) -> Dict:
+    """Keep regulation-typed candidates when present for regulation queries."""
+    ids = results.get("ids", [[]])
+    if not ids or not ids[0]:
+        return results
+
+    metas = results.get("metadatas", [[]])[0]
+    keep_indices = [
+        idx
+        for idx, meta in enumerate(metas)
+        if str((meta or {}).get("content_type", "")).lower() == "regulation"
+    ]
+    if not keep_indices:
+        return results
+
+    filtered = {
+        "ids": [[results["ids"][0][i] for i in keep_indices]],
+        "distances": [[results["distances"][0][i] for i in keep_indices]],
+        "documents": [[results["documents"][0][i] for i in keep_indices]],
+        "metadatas": [[results["metadatas"][0][i] for i in keep_indices]],
+    }
+    for passthrough_key in [
+        "quality",
+        "best_distance",
+        "threshold_used",
+        "original_count",
+    ]:
+        if passthrough_key in results:
+            filtered[passthrough_key] = results[passthrough_key]
+    filtered["filtered_count"] = len(keep_indices)
+    return filtered
 
 
 def query_chromadb(
@@ -624,17 +1228,19 @@ def query_chromadb(
     n_results: int = 5,
     content_type_filter: str = None,
     distance_threshold: float = None,
+    query_embedding: Optional[List[List[float]]] = None,
 ) -> Dict:
     """
     Query ChromaDB with routing and adaptive filtering.
 
     Routing Logic:
-    - "teaching" → filter content_type="knowledge_graph", n_results=5
-    - "faculty" → filter content_type="profile", n_results=3
-    - "course" → filter content_type="table", n_results=10
-    - "timetable" → filter content_type="table", n_results=5
-    - "regulation" → filter content_type="regulation", n_results=5
-    - "general" → no filter, n_results=5
+    - "teaching"  filter content_type="knowledge_graph", n_results=5
+    - "faculty"  filter content_type="profile", n_results=3
+    - "advisory"  broad course-oriented retrieval, n_results=12
+    - "course"  filter content_type="table", n_results=10
+    - "timetable"  filter content_type="table", n_results=5
+    - "regulation"  filter content_type="regulation", n_results=5
+    - "general"  no filter, n_results=5
 
     Args:
         collection: ChromaDB collection.
@@ -651,6 +1257,20 @@ def query_chromadb(
     if query_type is None:
         query_type = classify_query_type(query_text)
 
+    if isinstance(collection, dict):
+        primary, _fallback, primary_key = _resolve_collection_route(collection, query_type)
+        tagged = query_chromadb(
+            primary,
+            query_text=query_text,
+            query_type=query_type,
+            n_results=n_results,
+            content_type_filter=content_type_filter,
+            distance_threshold=distance_threshold,
+            query_embedding=query_embedding,
+        )
+        tagged["retrieval_primary_collection"] = primary_key
+        return tagged
+
     print(f"Query type: {query_type}")
 
     # Routing logic
@@ -665,6 +1285,9 @@ def query_chromadb(
     elif query_type == "course":
         where_filter = {"content_type": "table"}
         n_results = 10
+    elif query_type == "advisory":
+        where_filter = None
+        n_results = 12
     elif query_type == "timetable":
         where_filter = {"content_type": "table"}
         n_results = 5
@@ -679,19 +1302,28 @@ def query_chromadb(
     if content_type_filter:
         where_filter = {"content_type": content_type_filter}
 
-    # Generate query embedding using the same model
-    model = load_embedding_model(device="auto")
-    query_embedding = model.encode(
-        [query_text],
-        convert_to_numpy=True,
-        normalize_embeddings=True,
-    ).tolist()
+    # Generate query embedding if not pre-computed.
+    if query_embedding is None:
+        model = load_embedding_model(device="auto")
+        if config.EMBEDDING_USE_QUERY_DOC_METHODS and hasattr(model, "encode_query"):
+            query_embedding = model.encode_query(
+                [query_text],
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+            ).tolist()
+        else:
+            query_embedding = model.encode(
+                [query_text],
+                prompt_name=config.EMBEDDING_QUERY_PROMPT_NAME,
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+            ).tolist()
 
-    # Free model
-    del model
-    import torch
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
+        # Free model
+        del model
+        import torch
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     # Execute query with pre-computed embedding
     query_kwargs = {
@@ -703,10 +1335,270 @@ def query_chromadb(
 
     results = collection.query(**query_kwargs)
 
+    # Improve ranking precision with query-aware metadata signals before thresholding.
+    faculty_signal = _extract_faculty_query_signal(query_text) if query_type == "faculty" else None
+    results = _rerank_with_query_signals(
+        results,
+        query_text,
+        query_type,
+        faculty_signal=faculty_signal,
+    )
+    reranked_results = results
+
     # Apply adaptive distance threshold
     results = apply_adaptive_distance_threshold(results, query_type)
 
+    # Syllabus/detail queries can be overly pruned by strict course thresholds.
+    # Keep a small top-ranked tail when we have candidates but thresholding drops all.
+    if (
+        query_type == "course"
+        and _is_syllabus_like_query(query_text)
+        and results.get("filtered_count", 0) == 0
+        and reranked_results.get("distances")
+        and reranked_results["distances"][0]
+    ):
+        keep = min(max(n_results, 3), len(reranked_results["distances"][0]))
+        results = {
+            "ids": [reranked_results["ids"][0][:keep]],
+            "distances": [reranked_results["distances"][0][:keep]],
+            "documents": [reranked_results["documents"][0][:keep]],
+            "metadatas": [reranked_results["metadatas"][0][:keep]],
+            "quality": "poor",
+            "best_distance": min(reranked_results["distances"][0]),
+            "threshold_used": None,
+            "original_count": len(reranked_results["distances"][0]),
+            "filtered_count": keep,
+        }
+
+    # Apply strict signal filters after thresholding when query intent is explicit.
+    if query_type == "faculty":
+        results = _filter_faculty_linked_candidates(
+            results,
+            query_text,
+            faculty_signal=faculty_signal,
+        )
+    elif query_type == "regulation":
+        results = _filter_regulation_candidates(results)
+
     return results
+
+
+def _content_type_distribution(results: Dict) -> Dict[str, int]:
+    distribution: Dict[str, int] = {}
+    metadatas = results.get("metadatas", [[]])
+    if not metadatas or not metadatas[0]:
+        return distribution
+
+    for meta in metadatas[0]:
+        ctype = (meta or {}).get("content_type", "unknown")
+        distribution[ctype] = distribution.get(ctype, 0) + 1
+
+    return distribution
+
+
+def _rerank_mixed_results(results: Dict) -> Dict:
+    """
+    Re-rank fallback results with a lightweight diversity penalty.
+
+    Keeps retrieval deterministic while discouraging repeated single-type outputs.
+    """
+    if not results.get("distances") or not results["distances"][0]:
+        return results
+
+    distances = results["distances"][0]
+    metadatas = results["metadatas"][0]
+
+    seen_type_counts: Dict[str, int] = {}
+    mixed_scores = []
+    diversity_lambda = 0.08
+
+    for idx, distance in enumerate(distances):
+        ctype = (metadatas[idx] or {}).get("content_type", "unknown")
+        prior = seen_type_counts.get(ctype, 0)
+        penalty = diversity_lambda * (prior / max(idx + 1, 1))
+        mixed_scores.append(float(distance + penalty))
+        seen_type_counts[ctype] = prior + 1
+
+    ranked = sorted(range(len(mixed_scores)), key=lambda i: mixed_scores[i])
+    reranked = {
+        "ids": [[results["ids"][0][i] for i in ranked]],
+        "distances": [[results["distances"][0][i] for i in ranked]],
+        "documents": [[results["documents"][0][i] for i in ranked]],
+        "metadatas": [[results["metadatas"][0][i] for i in ranked]],
+        "quality": results.get("quality"),
+        "best_distance": results.get("best_distance"),
+        "threshold_used": results.get("threshold_used"),
+        "original_count": results.get("original_count", 0),
+        "filtered_count": results.get("filtered_count", 0),
+        "mixing_scores": [mixed_scores[i] for i in ranked],
+    }
+    return reranked
+
+
+def query_chromadb_with_fallback(
+    collection,
+    query_text: str,
+    query_type: str = None,
+    n_results: int = 5,
+    enable_fallback: bool = True,
+    rerank_mixed: bool = True,
+) -> Dict:
+    """
+    Run strict routed retrieval first, then fallback to mixed-content retrieval when needed.
+
+    Fallback triggers only for general route or when strict route returns none/poor quality.
+    """
+    if query_type is None:
+        query_type = classify_query_type(query_text)
+
+    # Compute query embedding once and reuse for both primary and fallback retrieval.
+    model = load_embedding_model(device="auto")
+    if config.EMBEDDING_USE_QUERY_DOC_METHODS and hasattr(model, "encode_query"):
+        query_embedding = model.encode_query(
+            [query_text],
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        ).tolist()
+    else:
+        query_embedding = model.encode(
+            [query_text],
+            prompt_name=config.EMBEDDING_QUERY_PROMPT_NAME,
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        ).tolist()
+    del model
+
+    import torch
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+    primary_collection, fallback_collections, primary_collection_key = _resolve_collection_route(collection, query_type)
+
+    primary = query_chromadb(
+        primary_collection,
+        query_text=query_text,
+        query_type=query_type,
+        n_results=n_results,
+        query_embedding=query_embedding,
+    )
+    primary = _tag_results_collection(primary, primary_collection_key)
+
+    primary_count = primary.get("filtered_count", 0)
+    primary_quality = primary.get("quality")
+    faculty_signal = _extract_faculty_query_signal(query_text) if query_type == "faculty" else None
+
+    # Keep strict routing for non-general queries unless route is empty.
+    # For teaching, allow fallback when route is poor and sparse to avoid false negatives.
+    fallback_needed = False
+    if enable_fallback:
+        if query_type == "general":
+            fallback_needed = True
+        elif primary_count == 0:
+            fallback_needed = True
+        elif query_type == "course" and _is_syllabus_like_query(query_text) and primary_count < 2:
+            fallback_needed = True
+        elif query_type == "advisory" and primary_count < 3:
+            fallback_needed = True
+        elif query_type == "faculty" and faculty_signal and not _has_faculty_signal_match(primary, faculty_signal):
+            fallback_needed = True
+        elif query_type == "teaching" and primary_quality in {"poor", "fair"} and primary_count < 2:
+            fallback_needed = True
+        elif query_type == "regulation" and primary_count == 0:
+            fallback_needed = True
+
+    if not fallback_needed:
+        return {
+            **primary,
+            "fallback_triggered": False,
+            "fallback_count": 0,
+            "primary_collection": primary_collection_key,
+            "content_type_distribution": _content_type_distribution(primary),
+        }
+
+    fallback_raw_candidates = [
+        _tag_results_collection(
+            primary_collection.query(
+                query_embeddings=query_embedding,
+                n_results=max(n_results * 2, 8),
+            ),
+            primary_collection_key,
+        )
+    ]
+
+    for index, fallback_collection in enumerate(fallback_collections):
+        fallback_raw_candidates.append(
+            _tag_results_collection(
+                fallback_collection.query(
+                    query_embeddings=query_embedding,
+                    n_results=max(n_results * 2, 8),
+                ),
+                f"fallback_{index + 1}",
+            )
+        )
+
+    fallback_raw = _merge_raw_results(
+        fallback_raw_candidates,
+        max_items=max(n_results * 3, 12),
+    )
+    fallback_threshold_type = query_type if query_type else "general"
+    fallback = apply_adaptive_distance_threshold(fallback_raw, fallback_threshold_type)
+
+    # Re-apply query-signal reranking on fallback results using original query type.
+    # This improves partial-name faculty queries (e.g., "Who is Dr Tessy").
+    fallback = _rerank_with_query_signals(
+        fallback,
+        query_text,
+        query_type,
+        faculty_signal=faculty_signal,
+    )
+
+    if query_type == "faculty":
+        fallback = _filter_faculty_linked_candidates(
+            fallback,
+            query_text,
+            faculty_signal=faculty_signal,
+        )
+    elif query_type == "regulation":
+        fallback = _filter_regulation_candidates(fallback)
+
+    # If adaptive threshold filters everything, keep top broad candidates
+    # to avoid zero-result responses for open-ended general queries.
+    if (
+        query_type != "faculty"
+        and fallback.get("filtered_count", 0) == 0
+        and fallback_raw.get("distances")
+    ):
+        keep = min(n_results, len(fallback_raw["distances"][0]))
+        fallback = {
+            "ids": [fallback_raw["ids"][0][:keep]],
+            "distances": [fallback_raw["distances"][0][:keep]],
+            "documents": [fallback_raw["documents"][0][:keep]],
+            "metadatas": [fallback_raw["metadatas"][0][:keep]],
+            "quality": "poor",
+            "best_distance": min(fallback_raw["distances"][0]),
+            "threshold_used": None,
+            "original_count": len(fallback_raw["distances"][0]),
+            "filtered_count": keep,
+        }
+
+    if rerank_mixed and fallback.get("filtered_count", 0) > 1:
+        fallback = _rerank_mixed_results(fallback)
+
+    return {
+        "ids": fallback.get("ids", [[]]),
+        "distances": fallback.get("distances", [[]]),
+        "documents": fallback.get("documents", [[]]),
+        "metadatas": fallback.get("metadatas", [[]]),
+        "quality": fallback.get("quality", "none"),
+        "best_distance": fallback.get("best_distance"),
+        "threshold_used": fallback.get("threshold_used"),
+        "original_count": primary.get("filtered_count", 0),
+        "filtered_count": fallback.get("filtered_count", 0),
+        "fallback_triggered": True,
+        "fallback_count": fallback.get("filtered_count", 0),
+        "primary_collection": primary_collection_key,
+        "content_type_distribution": _content_type_distribution(fallback),
+    }
 
 
 # ========================================================================
@@ -971,9 +1863,9 @@ def run_ingestion_pipeline(
         chunks, chunk_report, config.DATA_DIR
     )
     if kg_added:
-        print(f"✅ Added {kg_added} synthetic knowledge-graph chunks")
+        print(f"[OK] Added {kg_added} synthetic knowledge-graph chunks")
 
-    print(f"✅ Loaded {len(chunks)} chunks")
+    print(f"[OK] Loaded {len(chunks)} chunks")
     print(f"   Distribution: {chunk_report['chunks_by_type']}")
 
     # ========== STEP 2: Check Embedding Cache ==========
@@ -989,13 +1881,13 @@ def run_ingestion_pipeline(
         current_ids = [c["chunk_id"] for c in chunks]
 
         if set(cached_ids) == set(current_ids):
-            print("✅ Using cached embeddings (matched)")
+            print("[OK] Using cached embeddings (matched)")
             # Reorder embeddings to match current chunk order
             id_to_idx = {cid: idx for idx, cid in enumerate(cached_ids)}
             reorder = [id_to_idx[cid] for cid in current_ids]
             embeddings = cached_embeddings[reorder]
         else:
-            print("⚠️  Cache mismatch, regenerating embeddings")
+            print("[WARN]  Cache mismatch, regenerating embeddings")
 
     # ========== STEP 3: Generate Embeddings ==========
     if embeddings is None:
@@ -1018,7 +1910,7 @@ def run_ingestion_pipeline(
 
         embed_time = time.time() - embed_start
 
-        print(f"✅ Embedding generation complete in {embed_time:.2f}s")
+        print(f"[OK] Embedding generation complete in {embed_time:.2f}s")
         print(f"   Speed: {len(chunks) / embed_time:.1f} chunks/second")
 
         # Cache embeddings
@@ -1037,24 +1929,96 @@ def run_ingestion_pipeline(
     print("\n[STEP 4] Initializing ChromaDB...")
 
     client = initialize_chromadb_safe(str(config.CHROMADB_DIR))
-    collection = create_collection(
-        client, config.CHROMADB_COLLECTION, recreate=force_reembed
+    collection_map = get_rag_collections(
+        client,
+        recreate=force_reembed,
+        create_missing=True,
+    )
+
+    if not collection_map:
+        raise RuntimeError("No ChromaDB collections available. Check collection configuration.")
+
+    print("[OK] Collection handles ready:")
+    for key, coll in collection_map.items():
+        try:
+            count = coll.count()
+        except Exception:
+            count = "unknown"
+        print(f"   {key}: {count}")
+
+    primary_validation_collection = (
+        collection_map.get("legacy")
+        or collection_map.get("non_table")
+        or next(iter(collection_map.values()))
     )
 
     # ========== STEP 5: Ingest Chunks ==========
-    if collection.count() == 0 or force_reembed:
+    if any((coll.count() == 0 or force_reembed) for coll in collection_map.values()):
         print("\n[STEP 5] Ingesting chunks into ChromaDB...")
 
-        ingest_stats = ingest_chunks_to_chromadb(
-            collection, chunks, embeddings, batch_size=100
+        split_payload = _split_chunks_for_collections(chunks, embeddings)
+        ingest_stats_by_collection: Dict[str, Dict] = {}
+
+        for key, coll in collection_map.items():
+            payload = split_payload.get(key, split_payload["legacy"])
+            payload_chunks = payload["chunks"]
+            payload_embeddings = payload["embeddings"]
+
+            if not payload_chunks:
+                ingest_stats_by_collection[key] = {
+                    "total_processed": 0,
+                    "successfully_ingested": 0,
+                    "failed_chunks": [],
+                    "final_collection_count": coll.count(),
+                }
+                continue
+
+            if coll.count() > 0 and not force_reembed:
+                ingest_stats_by_collection[key] = {
+                    "total_processed": len(payload_chunks),
+                    "successfully_ingested": len(payload_chunks),
+                    "failed_chunks": [],
+                    "final_collection_count": coll.count(),
+                }
+                continue
+
+            ingest_stats_by_collection[key] = ingest_chunks_to_chromadb(
+                coll,
+                payload_chunks,
+                payload_embeddings,
+                batch_size=100,
+            )
+
+        aggregate_failed = sorted(
+            {
+                chunk_id
+                for stats in ingest_stats_by_collection.values()
+                for chunk_id in stats.get("failed_chunks", [])
+            }
         )
+        ingest_stats = {
+            "total_processed": len(chunks),
+            "successfully_ingested": len(chunks) - len(aggregate_failed),
+            "failed_chunks": aggregate_failed,
+            "final_collection_count": primary_validation_collection.count(),
+            "collections": ingest_stats_by_collection,
+        }
     else:
         print("\n[STEP 5] Skipped (collection already populated)")
         ingest_stats = {
             "total_processed": len(chunks),
             "successfully_ingested": len(chunks),
             "failed_chunks": [],
-            "final_collection_count": collection.count(),
+            "final_collection_count": primary_validation_collection.count(),
+            "collections": {
+                key: {
+                    "total_processed": len(chunks),
+                    "successfully_ingested": len(chunks),
+                    "failed_chunks": [],
+                    "final_collection_count": coll.count(),
+                }
+                for key, coll in collection_map.items()
+            },
         }
 
     # ========== STEP 6: Validation ==========
@@ -1094,7 +2058,9 @@ def run_ingestion_pipeline(
     ]
 
     validation_report = validate_chromadb_ingestion(
-        collection, chunk_report, test_queries
+        primary_validation_collection,
+        chunk_report,
+        test_queries,
     )
 
     # ========== STEP 7: Generate Reports ==========
@@ -1120,8 +2086,11 @@ def run_ingestion_pipeline(
         },
         "chromadb_stats": {
             "collection_name": config.CHROMADB_COLLECTION,
-            "total_documents": collection.count(),
+            "total_documents": primary_validation_collection.count(),
             "chunks_by_type": chunk_report["chunks_by_type"],
+            "collection_counts": {
+                key: coll.count() for key, coll in collection_map.items()
+            },
         },
         "total_pipeline_time_seconds": round(total_time, 2),
     }
@@ -1135,7 +2104,7 @@ def run_ingestion_pipeline(
     with open(str(config.VALIDATION_REPORT_FILE), "w", encoding="utf-8") as f:
         json.dump(validation_report, f, indent=2)
 
-    print(f"✅ Reports saved to {config.VALIDATION_DIR}")
+    print(f"[OK] Reports saved to {config.VALIDATION_DIR}")
 
     # ========== STEP 8: Summary ==========
     print("\n" + "=" * 60)
@@ -1173,28 +2142,42 @@ def run_query(query_text: str) -> None:
     # Initialize ChromaDB
     client = initialize_chromadb_safe(str(config.CHROMADB_DIR))
 
-    try:
-        collection = client.get_collection(name=config.CHROMADB_COLLECTION)
-    except Exception:
-        print("❌ Collection not found. Run ingestion first:")
+    collection_map = get_rag_collections(
+        client,
+        recreate=False,
+        create_missing=False,
+    )
+    if not collection_map:
+        print("[ERR] Collection not found. Run ingestion first:")
         print("   python main.py --stage embed")
         return
 
     print(f"Collection: {config.CHROMADB_COLLECTION}")
-    print(f"Documents: {collection.count()}")
+    for key, coll in collection_map.items():
+        print(f"Documents ({key}): {coll.count()}")
 
     # Classify and query
     query_type = classify_query_type(query_text)
     print(f"\nQuery: '{query_text}'")
     print(f"Classified as: {query_type}")
 
-    results = query_chromadb(collection, query_text, query_type=query_type)
+    results = query_chromadb_with_fallback(
+        collection_map,
+        query_text,
+        query_type=query_type,
+        enable_fallback=True,
+        rerank_mixed=True,
+    )
 
     # Display results
     print(f"\n--- Results ({results['filtered_count']} matches) ---")
     print(f"Quality: {results['quality']}")
     print(f"Best distance: {results['best_distance']}")
     print(f"Threshold used: {results['threshold_used']}")
+    print(f"Fallback triggered: {results.get('fallback_triggered', False)}")
+    if results.get("fallback_triggered"):
+        print(f"Fallback matches: {results.get('fallback_count', 0)}")
+        print(f"Type mix: {results.get('content_type_distribution', {})}")
 
     if results["filtered_count"] > 0:
         for i in range(results["filtered_count"]):

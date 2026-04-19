@@ -12,6 +12,10 @@ from knowledge_graph.builder import (
     build_nodes,
     build_knowledge_graph,
     extract_prerequisite_edges,
+    extract_course_semester_edges,
+    extract_timetable_teaching_links,
+    merge_teaching_assignments,
+    extract_assignment_teaches_edges,
     validate_graph,
 )
 import config
@@ -77,7 +81,11 @@ def test_extract_prerequisite_edges_from_explicit_statement():
     ]
     code_map = {"CS102": "course_cs102"}
 
-    edges, rejected = extract_prerequisite_edges(chunks, code_map)
+    courses = [
+        {"id": "course_cs101", "code": "CS101", "name": "Data Structures", "aliases": []},
+        {"id": "course_cs102", "code": "CS102", "name": "Algorithms", "aliases": []},
+    ]
+    edges, rejected = extract_prerequisite_edges(chunks, code_map, courses)
     assert len(edges) == 1
     assert edges[0]["type"] == "has_prerequisite"
     assert edges[0]["source"] == "course_cs101"
@@ -119,6 +127,25 @@ def test_build_knowledge_graph_creates_deterministic_edges():
     assert all(e["deterministic"] is True for e in graph["edges"])
 
 
+def test_extract_course_semester_edges_from_entity_refs():
+    chunks = [
+        {
+            "chunk_id": "c-sem",
+            "source_file": "data/markdown/pdfs/sample.md",
+            "entity_refs": ["course_cs101", "semester_3"],
+            "section_hierarchy": ["Semester 3", "Core Courses"],
+            "text": "Course list",
+        }
+    ]
+
+    edges, rejected = extract_course_semester_edges(chunks, {"semester_3"})
+    assert len(edges) == 1
+    assert edges[0]["type"] == "taught_in"
+    assert edges[0]["source"] == "course_cs101"
+    assert edges[0]["target"] == "semester_3"
+    assert rejected == {}
+
+
 def test_validation_fails_for_dangling_edge():
     graph = {
         "version": "1.0",
@@ -147,6 +174,57 @@ def test_validation_fails_for_dangling_edge():
 
     errors = validate_graph(graph)
     assert any("Dangling edge target" in err for err in errors)
+
+
+def test_extract_timetable_teaching_links_many_to_many():
+    faculty, courses, _ = _sample_entities()
+    chunks = [
+        {
+            "chunk_id": "tt1",
+            "source_file": "data/markdown/pdfs/semester3_timetable.md",
+            "content_type": "table",
+            "section_hierarchy": ["Semester 3 Timetable"],
+            "entity_refs": ["faculty_dr_john_doe", "course_cs101", "course_cs102"],
+            "metadata": {
+                "table_kind": "timetable",
+                "timetable_signal": "true",
+                "timetable_course_ids": "course_cs101,course_cs102",
+                "timetable_faculty_ids": "faculty_dr_john_doe",
+            },
+            "text": "| Monday | CS101 | CS102 | Dr. John Doe |",
+        }
+    ]
+
+    assignments, pair_sources, audit = extract_timetable_teaching_links(chunks, faculty, courses)
+
+    assert assignments["faculty_dr_john_doe"] == {"course_cs101", "course_cs102"}
+    assert pair_sources["faculty_dr_john_doe|course_cs101"] == {"timetable"}
+    assert audit["timetable_pairs_added"] == 2
+
+
+def test_merge_assignments_preserves_many_to_many_and_provenance():
+    manual = {
+        "faculty_dr_john_doe": ["course_cs101"],
+    }
+    timetable = {
+        "faculty_dr_john_doe": {"course_cs102"},
+    }
+    valid_faculty = {"faculty_dr_john_doe"}
+    valid_courses = {"course_cs101", "course_cs102"}
+
+    merged, pair_sources, _audit = merge_teaching_assignments(
+        manual,
+        timetable,
+        valid_faculty,
+        valid_courses,
+    )
+
+    assert merged["faculty_dr_john_doe"] == ["course_cs101", "course_cs102"]
+    edges = extract_assignment_teaches_edges(merged, pair_sources)
+    evidence = {e["target"]: e["evidence"] for e in edges}
+    assert "source:manual_assignments" in evidence["course_cs101"]
+    assert "source:timetable" in evidence["course_cs102"]
+    assert "rule:timetable_faculty_course" in evidence["course_cs102"]
 
 
 def test_real_data_graph_structure_smoke():

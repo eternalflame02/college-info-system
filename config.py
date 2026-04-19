@@ -128,11 +128,22 @@ TEACHES_ASSIGNMENT_CUES = [
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "google/embeddinggemma-300m")
 EMBEDDING_DIMENSIONS = 768
 EMBEDDING_BATCH_SIZE = int(os.getenv("EMBEDDING_BATCH_SIZE", "64"))
+EMBEDDING_USE_QUERY_DOC_METHODS = os.getenv("EMBEDDING_USE_QUERY_DOC_METHODS", "1") == "1"
+EMBEDDING_DOCUMENT_PROMPT_NAME = os.getenv("EMBEDDING_DOCUMENT_PROMPT_NAME", "Retrieval-document")
+EMBEDDING_QUERY_PROMPT_NAME = os.getenv("EMBEDDING_QUERY_PROMPT_NAME", "Retrieval-query")
 HF_TOKEN = os.getenv("HF_TOKEN", "")
+
+# ========== Chatbot / LLM Configuration (Groq) ==========
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 # ========== ChromaDB Configuration ==========
 CHROMADB_DIR = PROJECT_ROOT / "chroma_db"
 CHROMADB_COLLECTION = "mbcet_cse_knowledge"
+CHROMADB_MULTI_COLLECTION_ENABLED = os.getenv("CHROMADB_MULTI_COLLECTION_ENABLED", "0") == "1"
+CHROMADB_ENABLE_LEGACY_FALLBACK = os.getenv("CHROMADB_ENABLE_LEGACY_FALLBACK", "1") == "1"
+CHROMADB_TABLE_COLLECTION = os.getenv("CHROMADB_TABLE_COLLECTION", "mbcet_cse_table")
+CHROMADB_NON_TABLE_COLLECTION = os.getenv("CHROMADB_NON_TABLE_COLLECTION", "mbcet_cse_non_table")
 
 # ========== Embedding Cache ==========
 EMBEDDING_CACHE_DIR = DATA_DIR / "embeddings"

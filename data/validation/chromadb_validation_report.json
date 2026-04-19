@@ -1,19 +1,19 @@
 {
-  "validation_timestamp": "2026-03-15T05:07:13Z",
+  "validation_timestamp": "2026-04-15T04:20:19Z",
   "collection_health": {
-    "expected_count": 2203,
-    "actual_count": 2203,
+    "expected_count": 2268,
+    "actual_count": 2268,
     "status": "PASS"
   },
   "content_type_validation": {
     "table": {
-      "expected": 1972,
-      "actual": 1972,
+      "expected": 1971,
+      "actual": 1971,
       "status": "PASS"
     },
     "profile": {
-      "expected": 101,
-      "actual": 101,
+      "expected": 102,
+      "actual": 102,
       "status": "PASS"
     },
     "list": {
@@ -22,21 +22,30 @@
       "status": "PASS"
     },
     "section": {
-      "expected": 69,
-      "actual": 69,
+      "expected": 73,
+      "actual": 73,
       "status": "PASS"
     },
     "regulation": {
       "expected": 50,
       "actual": 50,
       "status": "PASS"
+    },
+    "knowledge_graph": {
+      "expected": 61,
+      "actual": 61,
+      "status": "PASS"
     }
   },
   "sample_query_tests": [
     {
       "query": "Who is the head of CSE department?",
-      "status": "FAIL",
-      "error": "No results returned"
+      "expected_content_type": "profile",
+      "top_result_content_type": "profile",
+      "top_result_distance": 1.016,
+      "results_count": 3,
+      "query_time_ms": 11530.0,
+      "status": "PASS"
     },
     {
       "query": "What courses are in Semester 3?",
@@ -44,7 +53,7 @@
       "top_result_content_type": "table",
       "top_result_distance": 0.773,
       "results_count": 1,
-      "query_time_ms": 11528.63,
+      "query_time_ms": 10770.32,
       "status": "PASS"
     },
     {
@@ -59,18 +68,26 @@
     },
     {
       "query": "faculty specializing in machine learning",
-      "status": "FAIL",
-      "error": "No results returned"
+      "expected_content_type": "profile",
+      "top_result_content_type": "profile",
+      "top_result_distance": 1.159,
+      "results_count": 3,
+      "query_time_ms": 10832.01,
+      "status": "PASS"
     },
     {
       "query": "Who teaches Artificial Intelligence?",
-      "status": "FAIL",
-      "error": "No results returned"
+      "expected_content_type": "knowledge_graph",
+      "top_result_content_type": "knowledge_graph",
+      "top_result_distance": 0.945,
+      "results_count": 5,
+      "query_time_ms": 10851.41,
+      "status": "PASS"
     }
   ],
   "performance_metrics": {
-    "average_query_time_ms": 11199.46,
-    "min_query_time_ms": 10772.22,
-    "max_query_time_ms": 11952.39
+    "average_query_time_ms": 11146.83,
+    "min_query_time_ms": 10770.32,
+    "max_query_time_ms": 11715.53
   }
 }

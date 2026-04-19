@@ -1,0 +1,60 @@
+{
+  "total_chunks": 2207,
+  "word_count": {
+    "min": 10,
+    "max": 4798,
+    "mean": 179.07294970548256,
+    "median": 120.0,
+    "percentiles": {
+      "p10": 53.0,
+      "p25": 80.0,
+      "p50": 120.0,
+      "p75": 218.0,
+      "p90": 339.0
+    }
+  },
+  "distribution": {
+    "content_type_counts": {
+      "list": 11,
+      "profile": 102,
+      "regulation": 50,
+      "section": 73,
+      "table": 1971
+    },
+    "source_type_counts": {
+      "html": 195,
+      "pdf": 2012
+    }
+  },
+  "metadata_completeness": {
+    "missing_section_hierarchy": 0,
+    "missing_content_type": 0,
+    "missing_source_file": 0,
+    "completeness_ratio": 1.0
+  },
+  "redundancy": {
+    "exact_duplicate_chunk_count": 0,
+    "near_duplicate_proxy_count": 422,
+    "exact_duplicate_ratio": 0.0,
+    "near_duplicate_proxy_ratio": 0.19120978704123245
+  },
+  "entity_coverage": {
+    "chunks_with_entity_refs": 1604,
+    "ratio_with_entity_refs": 0.7267784322609878,
+    "entity_refs_per_chunk_percentiles": {
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 1.0,
+      "p75": 3.0,
+      "p90": 7.0
+    }
+  },
+  "type_quality": {
+    "table_has_pipe_ratio": 1.0,
+    "profile_has_faculty_ref_ratio": 0.696078431372549,
+    "regulation_keyword_ratio": 0.32,
+    "table_chunk_count": 1971,
+    "profile_chunk_count": 102,
+    "regulation_chunk_count": 50
+  }
+}

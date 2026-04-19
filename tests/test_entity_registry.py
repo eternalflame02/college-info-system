@@ -40,6 +40,10 @@ class TestNormalizeText:
         assert "'" not in result
         assert "(" not in result
 
+    def test_preserve_hyphenated_token(self):
+        result = normalize_text("Data-Structures")
+        assert result == "data-structures"
+
 
 class TestEditDistance:
     """Test edit distance calculation."""
@@ -121,6 +125,14 @@ class TestEntityRegistry:
         # Fuzzy match with 1 char difference
         result = registry.find_fuzzy_match("Dr. John Dor")  # 'Dor' instead of 'Doe'
         assert result == "faculty_dr_john_doe"
+        sample_entities_file.unlink()
+
+    def test_fuzzy_match_all_entities(self, sample_entities_file):
+        registry = EntityRegistry()
+        registry.load_file(sample_entities_file)
+
+        result = registry.find_fuzzy_match("Data Structres", entity_type="all")
+        assert result == "course_cs101"
         sample_entities_file.unlink()
 
     def test_find_entities_in_text(self, sample_entities_file):

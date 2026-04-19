@@ -18,10 +18,10 @@ def classify_content(
     Classify content type based on heuristics.
     
     Priority order:
-    1. Table (if contains Markdown table)
-    2. Profile (if contains faculty info)
-    3. Regulation (if source is regulation PDF and contains regulation identifiers)
-    4. List (if >50% of lines are list items)
+    1. Profile (if contains faculty info)
+    2. Regulation (if source is regulation PDF and contains regulation identifiers)
+    3. List (if >50% of lines are list items)
+    4. Table (if contains Markdown table)
     5. Section (default)
     
     Args:
@@ -37,21 +37,21 @@ def classify_content(
     
     section_hierarchy = section_hierarchy or []
     
-    # 1. Check for tables
-    if _is_table_content(text):
-        return "table"
-    
-    # 2. Check for faculty profile
+    # 1. Check for faculty profile
     if _is_faculty_profile(text, section_hierarchy):
         return "profile"
     
-    # 3. Check for regulations
+    # 2. Check for regulations
     if _is_regulation_content(text, source_file, section_hierarchy):
         return "regulation"
     
-    # 4. Check for lists
+    # 3. Check for lists
     if _is_list_content(text):
         return "list"
+
+    # 4. Check for tables
+    if _is_table_content(text):
+        return "table"
     
     # 5. Default to section
     return "section"
@@ -65,15 +65,54 @@ def _is_table_content(text: str) -> bool:
     - Table separator rows: |---|---|
     - Multiple pipe characters in lines
     """
-    # Check for table separator pattern
-    if re.search(r'\|[\s\-:]+\|', text):
+    # Require Markdown table separator row to avoid classifying profile snippets as tables.
+    if re.search(r'^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$', text, re.MULTILINE):
         return True
     
     # Check for multiple lines with pipe characters
     lines = text.split('\n')
     pipe_lines = sum(1 for line in lines if '|' in line and line.count('|') >= 2)
     
-    return pipe_lines >= 2
+    return pipe_lines >= 3
+
+
+def classify_table_subtype(
+    text: str,
+    source_file: str = "",
+    section_hierarchy: Optional[list] = None,
+) -> str:
+    """
+    Classify markdown table subtype for routing/metadata.
+
+    Returns:
+        "timetable" or "generic"
+    """
+    section_hierarchy = section_hierarchy or []
+    searchable = " ".join([
+        text.lower(),
+        source_file.lower(),
+        " ".join(section_hierarchy).lower(),
+    ])
+
+    timetable_markers = [
+        "timetable",
+        "time table",
+        "schedule",
+        "period",
+        "slot",
+        "day",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "teacher",
+        "faculty",
+    ]
+
+    if any(marker in searchable for marker in timetable_markers):
+        return "timetable"
+    return "generic"
 
 
 def _is_faculty_profile(text: str, section_hierarchy: list) -> bool:

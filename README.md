@@ -31,6 +31,12 @@ A Python-based pipeline for scraping, processing, and semantically chunking MBCE
 - **Table Extraction**: Preserves tabular data as structured Markdown tables
 - **Entity Registry**: Extracts and normalizes faculty names with aliases
 - **Semantic Chunking**: Creates semantically meaningful chunks for RAG
+- **Query Routing**: Classifies runtime queries into `teaching`, `faculty`, `course`, `timetable`, `regulation`, and `general`
+- **Multi-Collection Retrieval**: Splits vector storage into table and non-table collections with legacy collection fallback
+- **Fallback Retrieval**: Uses routed retrieval first, then mixed fallback with reranking when route quality is poor
+- **Deterministic KG Edges**: Builds `part_of`, `teaches`, and `taught_in` edges, with optional prerequisite/corequisite edges when explicit evidence exists
+- **Timetable-to-KG Merge**: Derives faculty-course teaching links from timetable chunks and merges with manual assignment registry using deterministic union semantics
+- **Evaluation Pipeline**: Runs wide quality evaluation across chunking, embeddings, retrieval, and graph structure
 - **Duplicate Detection**: SHA-256 based deduplication
 
 ---
@@ -135,6 +141,15 @@ cp .env.example .env
 # Edit .env with your settings
 ```
 
+Recommended retrieval rollout flags:
+
+```bash
+CHROMADB_MULTI_COLLECTION_ENABLED=1
+CHROMADB_ENABLE_LEGACY_FALLBACK=1
+CHROMADB_TABLE_COLLECTION=mbcet_cse_table
+CHROMADB_NON_TABLE_COLLECTION=mbcet_cse_non_table
+```
+
 ---
 
 ## 📖 Usage
@@ -160,8 +175,17 @@ python main.py --stage kg
 # Stage 4: Run semantic chunker
 python main.py --stage chunk
 
-# Stage 4: Build phase-1 knowledge graph
+# Stage 5: Build phase-1 knowledge graph
 python main.py --stage graph
+
+# Stage 6: Embed and ingest into ChromaDB
+python main.py --stage embed --force
+
+# Runtime query check
+python main.py --stage query --text "Who teaches Artificial Intelligence?"
+
+# Chatbot
+python main.py --stage chat
 ```
 
 ### Verbose Mode
@@ -201,8 +225,8 @@ python main.py --stage all -v
 
 **Output:**
 - `data/entities/faculty.json` - 43 faculty entities
-- `data/entities/courses.json` - Course entities (planned)
-- `data/entities/programs.json` - Program entities (planned)
+- `data/entities/courses.json` - Course entities
+- `data/entities/programs.json` - Program entities
 
 ### 3. Semantic Chunking (`--stage chunk`)
 
@@ -216,7 +240,7 @@ python main.py --stage all -v
 - Tracks page ranges for PDF sources
 
 **Output:**
-- `data/chunks/chunks.json` - 640 semantic chunks
+- `data/chunks/chunks.json` - semantic chunks with metadata and entity links
 - `data/chunks/chunk_report.json` - Statistics and summary
 
 ### 4. Knowledge Graph (`--stage graph`)
@@ -227,15 +251,19 @@ python main.py --stage all -v
 - Loads entities from `data/entities/*.json`
 - Loads chunk evidence from `data/chunks/chunks.json`
 - Builds canonical nodes for faculty, courses, programs, and deterministic semester nodes
+- Builds timetable-derived teaching links and merges them with `data/entities/teaching_assignments.json` (many-to-many preserved)
 - Extracts deterministic edges only:
   - `course -> part_of -> program`
-  - `course -> has_prerequisite -> course`
   - `faculty -> teaches -> course`
+  - `course -> taught_in -> semester`
+  - `course -> has_prerequisite -> course` (only when explicit and grounded)
+  - `course -> corequisite -> course` (only when explicit and grounded)
 - Validates output constraints (deterministic edges, endpoint integrity, evidence presence)
 
 **Output:**
 - `data/knowledge_graph/graph.json`
 - `data/knowledge_graph/graph_report.json`
+- `data/entities/teaching_assignments.json` (updated merged assignment map)
 
 ---
 
@@ -274,17 +302,24 @@ mbcet-chunking-pipeline/
 ├── chunker/                # Semantic chunking module
 │   ├── __init__.py
 │   ├── semantic_chunker.py # Main chunking logic
+│   ├── content_classifier.py # Content type classification
 │   ├── entity_registry.py  # Entity extraction and normalization
-│   └── chunk_classifiers.py # Content type classification
+│   └── knowledge_graph.py  # Canonical graph generation
 │
 ├── knowledge_graph/        # Phase-1 knowledge graph construction
 │   ├── __init__.py
 │   └── builder.py
 │
+├── rag_ingestion.py        # Embeddings, ChromaDB ingestion, retrieval routing
+├── chatbot.py              # Retrieval + synthesis runtime
+├── app.py                  # Streamlit frontend
+│
 ├── tests/                  # Unit tests
 │   ├── test_scraper.py
 │   ├── test_chunker.py
-│   └── test_entities.py
+│   ├── test_entity_registry.py
+│   ├── test_query_routing.py
+│   └── test_knowledge_graph.py
 │
 ├── data/                   # Generated data (gitignored)
 │   ├── raw/                # Downloaded PDFs
@@ -412,6 +447,9 @@ pytest --cov=scraper --cov=chunker --cov-report=html
 ```bash
 pytest tests/test_scraper.py -v
 pytest tests/test_chunker.py -v
+pytest tests/test_entity_registry.py -v
+pytest tests/test_query_routing.py -v
+pytest tests/test_knowledge_graph.py -v
 ```
 
 ---
@@ -432,16 +470,17 @@ pytest tests/test_chunker.py -v
 
 ---
 
-## 📊 Performance Metrics
+## 📊 Validation Artifacts
 
-| Metric | Value |
-|--------|-------|
-| Total pages scraped | 60 |
-| Total PDFs processed | 10 |
-| Chunks generated | 640 |
-| Duplicates detected | 1 |
-| Faculty entities | 43 |
-| Test coverage | 50 tests passing |
+The latest pipeline and quality metrics are written to `data/validation/`:
+
+- `chromadb_ingestion_report.json`
+- `chromadb_validation_report.json`
+- `retrieval_metrics.json`
+- `kg_quality_metrics.json`
+- `wide_eval_summary.md`
+
+These files are run-specific and update whenever the pipeline is re-ingested or re-evaluated.
 
 ---
 

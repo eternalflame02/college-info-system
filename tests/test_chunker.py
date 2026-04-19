@@ -18,6 +18,8 @@ from chunker.semantic_chunker import (
     remove_frontmatter,
     MarkdownChunker,
 )
+from chunker.content_classifier import classify_content
+from chunker.content_classifier import classify_table_subtype
 
 
 class TestNormalization:
@@ -234,6 +236,68 @@ we have enough content for a valid chunk.
 
         assert metadata["related_faculty_ids"] == "faculty_dr_john_doe"
         assert metadata["related_faculty_names"] == "Dr. John Doe"
+
+
+class TestContentClassificationOrder:
+    def test_profile_precedence_over_table_like_text(self):
+        text = (
+            "Dr. Jisha John\n"
+            "Assistant Professor\n"
+            "Email: jisha@mbcet.ac.in\n"
+            "Qualification: PhD\n"
+            "| delimiter-like text but no real table separator |"
+        )
+        result = classify_content(text, section_hierarchy=["Faculty"])
+        assert result == "profile"
+
+    def test_timetable_table_subtype_detection(self):
+        text = (
+            "| Day | Period 1 | Period 2 |\n"
+            "|---|---|---|\n"
+            "| Monday | CS1U20A | Dr. John Doe |"
+        )
+        subtype = classify_table_subtype(
+            text,
+            source_file="data/markdown/pdfs/timetable_sem3.md",
+            section_hierarchy=["Semester 3 Timetable"],
+        )
+        assert subtype == "timetable"
+
+
+class TestTimetableMetadata:
+    def test_extracts_timetable_metadata_for_table_chunk(self):
+        chunker = MarkdownChunker(
+            teaching_assignments={},
+            faculty_by_id={
+                "faculty_dr_john_doe": {
+                    "name": "Dr. John Doe",
+                    "aliases": ["John Doe"],
+                }
+            },
+            course_by_id={
+                "course_cs1u20a": {
+                    "code": "CS1U20A",
+                    "name": "Data Structures",
+                }
+            },
+        )
+
+        metadata = chunker._extract_timetable_metadata(
+            text=(
+                "| Day | Course | Faculty |\n"
+                "|---|---|---|\n"
+                "| Monday | CS1U20A | Dr. John Doe |"
+            ),
+            source_file="data/markdown/pdfs/semester3_timetable.md",
+            section_hierarchy=["Semester 3 Timetable"],
+            entity_refs=["course_cs1u20a", "faculty_dr_john_doe"],
+        )
+
+        assert metadata["table_kind"] == "timetable"
+        assert metadata["timetable_signal"] == "true"
+        assert "CS1U20A" in metadata.get("timetable_course_codes", "")
+        assert "course_cs1u20a" in metadata.get("timetable_course_ids", "")
+        assert "faculty_dr_john_doe" in metadata.get("timetable_faculty_ids", "")
 
 
 class TestChunkReport:
