@@ -216,6 +216,29 @@ def run_chat_stage():
     )
 
 
+def run_serve_stage():
+    """Run the FastAPI-based HTTP server for the chatbot using uvicorn.
+
+    This provides a lightweight replacement for the Streamlit frontend
+    and exposes `POST /chat` for the single-file HTML widget to call.
+    """
+    import subprocess
+
+    print("\n" + "=" * 50)
+    print(" Starting FastAPI server (api_server:app) on http://127.0.0.1:8000")
+    print("=" * 50)
+
+    try:
+        import uvicorn
+        uvicorn.run("api_server:app", host="127.0.0.1", port=8000, log_level="info")
+    except Exception:
+        # Fallback to subprocess invocation of uvicorn
+        subprocess.run(
+            [sys.executable, "-m", "uvicorn", "api_server:app", "--host", "127.0.0.1", "--port", "8000"],
+            cwd=str(Path(__file__).parent),
+        )
+
+
 def run_all_stages(force: bool = False):
     """Run complete pipeline."""
     print("\n" + "=" * 50)
@@ -256,7 +279,7 @@ Examples:
 
     parser.add_argument(
         '--stage',
-        choices=['scrape', 'entities', 'chunk', 'kg', 'graph', 'embed', 'query', 'chat', 'all'],
+        choices=['scrape', 'entities', 'chunk', 'kg', 'graph', 'embed', 'query', 'chat', 'serve', 'all'],
         required=True,
         help='Pipeline stage to run'
     )
@@ -307,6 +330,8 @@ Examples:
         run_query_stage(args.text)
     elif args.stage == 'chat':
         run_chat_stage()
+    elif args.stage == 'serve':
+        run_serve_stage()
     elif args.stage == 'all':
         run_all_stages(force=args.force)
     else:

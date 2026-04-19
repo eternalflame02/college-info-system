@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="https://gmpg.org/xfn/11">
+<link rel="pingback" href="https://mbcet.ac.in/xmlrpc.php">
+
+<title>Computer Science &#038; Engineering &#8211; Mar Baselios College of Engineering And Technology</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel="alternate" type="application/rss+xml" title="Mar Baselios College of Engineering And Technology &raquo; Feed" href="https://mbcet.ac.in/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://mbcet.ac.in/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fmbcet.ac.in%2Fdepartments%2Fcomputer-science-engineering%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://mbcet.ac.in/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fmbcet.ac.in%2Fdepartments%2Fcomputer-science-engineering%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<link rel='stylesheet' id='wp-block-library-css' href='https://mbcet.ac.in/wp-includes/css/dist/block-library/style.min.css?ver=6.9.4' type='text/css' media='all' />
+
+<!-- (trimmed other remote styles for brevity) -->
+<link rel='stylesheet' id='mbcet-css' href='https://mbcet.ac.in/wp-content/themes/mbcet/assets/css/app.min.css?ver=6.9.4' type='text/css' media='all' />
+<script type="text/javascript" src="https://mbcet.ac.in/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script type="text/javascript" src="https://mbcet.ac.in/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+
+<!-- Add chat widget CSS -->
+<style>
+  :root{--primary:#243964;--accent:#f0c237}
+  /* Chat widget */
+  #chat-toggle{position:fixed;right:28px;bottom:28px;width:58px;height:58px;border-radius:50%;background:var(--primary);color:#fff;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;z-index:99999;transition:transform .2s ease,background .2s ease;}
+  #chat-toggle:hover{transform:scale(1.05);background:#1f3255;}
+  #chat-toggle:focus{outline:2px solid rgba(255,255,255,0.75);outline-offset:3px;}
+  #chat-window{position:fixed;right:28px;bottom:100px;width:360px;max-width:calc(100% - 56px);min-height:420px;height:auto;max-height:calc(100% - 120px);border-radius:18px;box-shadow:0 16px 40px rgba(0,0,0,0.25);background:#fff;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(28px);transition:transform .25s ease,opacity .25s ease;visibility:hidden;z-index:99999}
+  #chat-window.open{opacity:1;transform:translateY(0);visibility:visible}
+  .chat-header{background:var(--primary);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .chat-header .chat-label{display:flex;align-items:center;gap:10px}
+  .chat-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;letter-spacing:0.02em;text-transform:none}
+  .chat-messages{flex:1;overflow:auto;padding:14px;background:#f6f8ff;-webkit-overflow-scrolling:touch}
+  .chat-input{display:flex;padding:12px;border-top:1px solid #e6e8f0;background:#fff}
+  .chat-input input{flex:1;padding:12px 14px;border-radius:999px;border:1px solid #d7dbe8;margin-right:10px;min-width:0;font-size:14px;color:#212121;background:#fff;box-shadow:inset 0 1px 2px rgba(16,24,40,0.05)}
+  .chat-input input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(36,57,100,0.12)}
+  .chat-input button{background:var(--primary);color:#fff;border:none;padding:12px 18px;border-radius:999px;cursor:pointer;font-weight:600;transition:background .2s ease,transform .2s ease;}
+  .chat-input button:hover{background:#1f3255;}
+  .chat-input button:disabled{background:#a0a8bf;cursor:not-allowed;}
+  .msg{display:block;max-width:86%;padding:12px 14px;border-radius:18px;margin-bottom:10px;white-space:pre-wrap;line-height:1.55;font-size:14px;box-shadow:0 1px 2px rgba(16,24,40,0.05)}
+  .msg.bot{background:#fff;border:1px solid #e7eaf2;border-radius:18px 18px 18px 4px;color:#1f2937;}
+  .msg.user{margin-left:auto;background:var(--primary);color:#fff;border-radius:18px 18px 4px 18px;}
+  .msg.user small, .msg.bot small{display:block;margin-top:8px;opacity:.75;font-size:12px;}
+  .typing{display:flex;align-items:center;gap:6px;padding:10px 12px;border-radius:18px;background:#fff;border:1px solid #e7eaf2;}
+  .typing .dot{width:8px;height:8px;border-radius:50%;background:#667085;opacity:0;animation:blink 1.2s infinite both}
+  .typing .dot:nth-child(1){animation-delay:0s}
+  .typing .dot:nth-child(2){animation-delay:0.15s}
+  .typing .dot:nth-child(3){animation-delay:0.3s}
+  @keyframes blink{0%,100%{opacity:0.25}50%{opacity:1}}
+
+  /* Responsive tweaks */
+  @media (max-width: 480px){
+    #chat-toggle{right:16px;bottom:16px;width:52px;height:52px}
+    #chat-window{right:16px;left:16px;bottom:72px;width:auto;height:70vh;max-height:calc(100% - 84px);border-radius:16px}
+    .chat-header .chat-title{font-size:14px}
+    .chat-input{padding:10px}
+    .chat-input input{font-size:14px;margin-right:8px}
+    .msg{max-width:100%}
+  }
+
+  .menu-toggle, .drop-navigation{
+    display: none;
+  }
+
+  @media (min-width: 1025px){
+    .menu-toggle, .drop-navigation{
+      display: block;
+    }
+    .menu-toggle{
+      border: 1px solid #243964;
+      display: flex;
+      align-items: center;
+      padding: 4px 8px;
+      gap: 10px;
+      color: #243964;
+      font-weight: 600;
+      float: right;
+      position: relative;
+      margin-top: 7px;
+    }
+    .menu-toggle:hover, .menu-toggle:focus{
+      color: #243964;
+      text-decoration: none;
+    }
+    .menu-toggle svg{
+      max-width: 20px;
+      height: auto;
+      fill: #243964;
+    }
+    .menu-toggle.on{
+      background: #243964;
+      color: #fff;
+    }
+    .menu-toggle.on svg{
+      fill: #fff;
+    }
+    .drop-menu-main{
+      float: right;
+      position: relative;
+    }
+    .drop-navigation{
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 10px;
+      width: 280px;
+      background: #fff;
+      padding: 14px 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      opacity: 0;
+      visibility: hidden;
+      z-index: 100;
+    }
+    .drop-navigation.open{
+      opacity: 1;
+      visibility: visible;
+    }
+    .drop-navigation ul{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .drop-navigation ul li{
+      margin: 0 !important;
+    }
+    .drop-navigation ul a{
+      display: block;
+      padding: 5px 0;
+    }
+  }
+
+  /* Sources styling inside chat */
+  details.sources{margin-top:8px;border-top:1px dashed #e6e6e6;padding-top:8px}
+  details.sources summary{cursor:pointer;color:var(--primary);font-weight:600;list-style:none}
+  details.sources ul{margin:8px 0 0 18px;padding:0;font-size:13px}
+  details.sources li{margin-bottom:6px}
+</style>
+</head>
+
+<body class="wp-singular page-template page-template-page-department-single page-template-page-department-single-php page page-id-226 page-parent page-child parent-pageid-11 wp-theme-mbcet page-department group-blog">
+<div id="page" class="hfeed site">
+  <a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+  <header id="masthead" class="site-header" role="banner">
+    <div class="container-fluid">
+      <div class="header-inner">
+        <div class="clearfix">
+          <div class="site-branding">
+            <p class="site-title"><a href="https://mbcet.ac.in/" rel="home">Mar Baselios College of Engineering And Technology</a></p>
+          </div>
+          <div class="site-navigation clearfix">
+            <span class="icon-search search-toggle"></span>
+            <nav class="top-navigation clearfix" role="navigation">
+              <a class="back-home pull-right" href="https://mbcet.ac.in/"><i class="icon-arrow-left"></i>Back home</a>
+            </nav>
+          </div>
+          <span class="nav-toggle"><span></span><span></span><span></span></span>
+        </div>
+        <div class="department-sub-menu clearfix">
+          <h3><a href="https://mbcet.ac.in/departments/computer-science-engineering/">Computer Science &#038; Engineering</a></h3>
+          <div class="drop-menu-main">
+            <a href="#" class="menu-toggle">
+              <svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 0 7.5 L 0 12.5 L 50 12.5 L 50 7.5 Z M 0 22.5 L 0 27.5 L 50 27.5 L 50 22.5 Z M 0 37.5 L 0 42.5 L 50 42.5 L 50 37.5 Z"/></svg>Menu
+            </a>
+            <nav id="site-navigation" class="drop-navigation" role="navigation">
+              <ul>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/bos/">BoS</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/the-people/">The People</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/department-advisory-board/">Department Advisory Board</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/facilities/">Facilities</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/news-events/">News & Events</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/workshops-seminars/">Workshops & Seminars</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/research-consultancy/">Research and Consultancy</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/placement/">Placements</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/activities/">Activities</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/academic-resources/">Video Lectures</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/peos-pos/">B. Tech PEOs POs & PSOs</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/syllabus/">Syllabus</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/time-table/">Time Table</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/computer-society-of-india/">Computer Society of India</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/cse-blog/">CSE Blog</a></li>
+                <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/former-hods/">Former HoDs</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function($) {
+        $(document).on('click', '.menu-toggle', function(e){
+          $(this).toggleClass('on');
+          $('.drop-navigation').toggleClass('open');
+          $('#page').toggleClass('menu-open');
+        });
+        $(document).on('click', '.menu-open', function(event){
+          $el = $('.drop-navigation');
+          if ($el.has(event.target).length == 0  && !$el.is(event.target)){
+            $('.drop-navigation').removeClass('open');
+            $('.menu-toggle').removeClass('on');
+            $('#page').removeClass('menu-open');
+          }
+        });
+      })(jQuery);
+    </script>
+  </header>
+
+  <div id="content" class="site-content">
+    <div class="mbcet-serach">
+      <form class="search-input-wrap" action="https://mbcet.ac.in/">
+        <input type="text" class="search-autocomplete" id="s" name="s" placeholder="Type hit enter">
+        <i class="icon-close search-close"></i>
+      </form>
+    </div>
+    <main id="main" class="site-main" role="main">
+      <div class="banner-slider page-banner-slider full-banner carousel-felx">
+        <div class="slider-item flex-inner">
+          <div class="slider-image flex-inner" style="background-image: url(https://mbcet.ac.in/wp-content/uploads/2019/05/IMG_7862.jpg);"></div>
+        </div>
+        <div class="slider-item flex-inner">
+          <div class="slider-image flex-inner" style="background-image: url(https://mbcet.ac.in/wp-content/uploads/2019/05/IMG_7761-e1559033053694.jpg);"></div>
+        </div>
+        <div class="slider-item flex-inner">
+          <div class="slider-image flex-inner" style="background-image: url(https://mbcet.ac.in/wp-content/uploads/2019/05/IMG_7784.jpg);"></div>
+        </div>
+      </div>
+
+      <div class="page-content-main">
+        <!-- Full content restored from reference: programmes, contact, mission, full faculty and lab coordinators -->
+        <div class="container-fluid">
+          <div class="bread-crumbs" typeof="BreadcrumbList" vocab="https://schema.org/">
+            <span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to Mar Baselios College of Engineering And Technology." href="https://mbcet.ac.in" class="home"><span property="name">Home</span></a><meta property="position" content="1"></span> &gt; <span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to Departments." href="https://mbcet.ac.in/departments/" class="post post-page"><span property="name">Departments</span></a><meta property="position" content="2"></span> &gt; <span class="post post-page current-item">Computer Science &#038; Engineering</span>
+          </div>
+
+          <div class="department-landing-main">
+            <div class="row">
+              <div class="col-xs-12 col-md-8">
+                <div class="department-landing-head clearfix animate-it">
+                  <img src="https://mbcet.ac.in/wp-content/uploads/2018/12/computer.svg" alt="computer">
+                  <h1>Computer Science &#038; Engineering</h1>
+                </div>
+                <div class="entry-content animate-it">
+                  <p style="text-align: justify;">The Department offers courses that emphasize the fundamental concepts of Computer Science and Engineering, treating today&#8217;s systems as current examples of the underlying concepts. By educating students to think conceptually, we are preparing them to adapt themselves to the developments in this dynamic field. Our alumni have moved on to a wide range of careers that include software development and design, software testing, artificial intelligence, and other technical computing professions.</p>
+                  <p style="text-align: justify;">The Department of Computer Science and Engineering was established in 2002, with the objective of imparting quality education in the field of Computer Science and Engineering. With rapidly evolving technology and the continuous need for innovation, the Department has always produced quality professionals, holding important positions in Information Technology and other Industries in India and abroad.</p>
+                  <p style="text-align: justify;">The department has around 720 students, 32 teaching faculty members and 5 technical staff members who teach how to think rather what to think. Staff members from other supporting departments also handle classes for our students. The students are not only trained in attaining academic excellence but are also encouraged to acquire industry exposure through industrial visits, in-plant training and projects .The learning atmosphere being more practical oriented makes the transition from an educational institution to an industry, effortless.</p>
+                  <p style="text-align: justify;">Our Faculty and staff are dedicated in providing our students with the best possible education by offering courses in the latest technology and providing the attention and support that is needed to produce talented graduates in the fields of Computer science and Engineering.</p>
+                  <ul class="list">
+                    <li class="rtejustify" style="text-align: justify;">MoU’s with various R&amp;D organizations and MNC’s for skill development and for taking-up collaborative projects in the following specialized areas:
+                      <ol class="list">
+                        <li class="rteindent1"><strong>Big Data / Data Science</strong></li>
+                        <li class="rteindent1"><strong>Internet / Cyber Security</strong></li>
+                        <li class="rteindent1"><strong>Cloud Computing</strong></li>
+                      </ol>
+                    </li>
+                  </ul>
+                  <ul class="list">
+                    <li class="rtejustify" style="text-align: justify;">Also have long term agreement with foreign universities for academic exchange and cooperation for the advancement and dissemination of learning in the field of computer science and engineering.</li>
+                  </ul>
+                  <p><strong>Contact Information</strong></p>
+                  <p><strong>HoD</strong>: Dr.Jisha John<br /><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fa92959e9989ba9798999f8ed49b99d49394">[email&#160;protected]</a></p>
+                  <p><strong>List of Faculty 2025-2026</strong></p>
+                  <!-- Staff PDF viewer intentionally omitted per request -->
+                </div>
+                <div class="courses-offered">
+                  <h2 class="animate-it">Programmes Offered</h2>
+                  <div class="courses-offered-in">
+                    <div class="courses-offered-item animate-it">
+                      <span class="course-id"></span>
+                      <span class="course-name">B.Tech<span>Computer Science &amp; Engineering</span></span>
+                      <span class="course-seats">120<span>Seats</span></span>
+                    </div>
+                    <div class="courses-offered-item animate-it">
+                      <span class="course-id"></span>
+                      <span class="course-name">B.Tech<span>Computer Science and Engineering (Artificial Intelligence)</span></span>
+                      <span class="course-seats">60<span>Seats</span></span>
+                    </div>
+                    <div class="courses-offered-item animate-it">
+                      <span class="course-id"></span>
+                      <span class="course-name">M.Tech<span>Computer Science &amp; Engineering</span></span>
+                      <span class="course-seats">18<span>Seats</span></span>
+                    </div>
+                    <div class="courses-offered-item animate-it">
+                      <span class="course-id"></span>
+                      <span class="course-name">Ph. D<span>Computer Science &amp; Engineering</span></span>
+                      <span class="course-seats"><span>Seats</span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-md-4">
+                <div class="col-2-sidebar">
+                  <div class="course-single-nav widget-item">
+                    <ul class="animate-it">
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/bos/"><i class="icon-arrow-right"></i>BoS</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/the-people/"><i class="icon-arrow-right"></i>The People</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/department-advisory-board/"><i class="icon-arrow-right"></i>Department Advisory Board</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/facilities/"><i class="icon-arrow-right"></i>Facilities</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/news-events/"><i class="icon-arrow-right"></i>News & Events</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/workshops-seminars/"><i class="icon-arrow-right"></i>Workshops & Seminars</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/research-consultancy/"><i class="icon-arrow-right"></i>Research and Consultancy</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/placement/"><i class="icon-arrow-right"></i>Placements</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/activities/"><i class="icon-arrow-right"></i>Activities</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/academic-resources/"><i class="icon-arrow-right"></i>Video Lectures</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/peos-pos/"><i class="icon-arrow-right"></i>B. Tech PEOs POs & PSOs</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/syllabus/"><i class="icon-arrow-right"></i>Syllabus</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/time-table/"><i class="icon-arrow-right"></i>Time Table</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/computer-society-of-india/"><i class="icon-arrow-right"></i>Computer Society of India</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/cse-blog/"><i class="icon-arrow-right"></i>CSE Blog</a></li>
+                      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/former-hods/"><i class="icon-arrow-right"></i>Former HoDs</a></li>
+                    </ul>
+                  </div>
+                  <div class="course-vission-mission widget-item animate-it">
+                    <h3>Vision</h3>
+                    <p>To be a Centre of Excellence in Computer Science and Engineering providing quality education and research for the betterment of the society.</p>
+                    <div class="course-vission-sep"></div>
+                    <h3>Mission</h3>
+                    <p>To impart sound knowledge in theoretical and applied foundations of Computer Science and Engineering, and to train the students to solve real life issues to effectively define and shape life.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Full faculty & lab coordinators from reference -->
+          <div class="department-faculties" id="faculties">
+            <div class="container-fluid">
+              <div class="faculty-list">
+                <h2>Faculty</h2>
+                <div class="flex-row">
+                  <!-- full faculty list copied from reference -->
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/prof-raju-k-gopal/">
+                        <img width="179" height="218" src="https://mbcet.ac.in/wp-content/uploads/2019/01/Prof.-Raju-K-Gopal.png" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/prof-raju-k-gopal/" rel="bookmark">Prof. Raju K Gopal</a></h3>
+                        <p class="designation">Professor & Head ITMS</p>
+                        <p>Qualification : M.Tech<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f486959e81da939b849598b49996979180da9597da9d9a">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-1487584023</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/prof-raju-k-gopal/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/mr-g-l-praveen/">
+                        <img width="152" height="170" src="https://mbcet.ac.in/wp-content/uploads/2019/01/GLP_Photo.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/mr-g-l-praveen/" rel="bookmark">Mr. G. L. Praveen</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.Tech (Pursuing Ph. D)<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="83f3f1e2f5e6e6edade4efc3eee1e0e6f7ade2e0adeaed">[email&#160;protected]</a></p>
+                        <p>AICTE ID:- <strong>1-770113924</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/mr-g-l-praveen/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/mr-v-s-shibu/">
+                        <img width="378" height="496" src="https://mbcet.ac.in/wp-content/uploads/2019/01/Mr-Shibu.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/mr-v-s-shibu/" rel="bookmark">Mr. V. S. Shibu</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.Tech (Pursuing Ph. D)<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d6e75747f68336b6e5d707f7e7869337c7e337473">[email&#160;protected]</a></p>
+                        <p>AICTE ID:- <strong>1-759731842</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/mr-v-s-shibu/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-gayathri-k-s/">
+                        <img width="420" height="540" src="https://mbcet.ac.in/wp-content/uploads/2019/01/1821-copy.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-gayathri-k-s/" rel="bookmark">Ms. Gayathri K. S.</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.Tech (Pursuing Ph. D)<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c1a6a0b8a0b5a9b3a8efaab281aca3a2a4b5efa0a2efa8af">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-7498090415</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-gayathri-k-s/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-jisha-jose/">
+                        <img width="1080" height="1107" src="https://mbcet.ac.in/wp-content/uploads/2019/01/photo-jisha.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-jisha-jose/" rel="bookmark">Ms. Jisha Jose</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.E (Pursuing Ph. D)<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="503a392338317e3a3f2335103d323335247e31337e393e">[email&#160;protected]</a></p>
+                        <p>AICTE ID :-<strong> 1-7498090647</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-jisha-jose/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-sreeja-s-r/">
+                        <img width="128" height="163" src="https://mbcet.ac.in/wp-content/uploads/2022/10/Sreeja_photo.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-sreeja-s-r/" rel="bookmark">Ms. SREEJA S R</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualifications : M.Tech (Pursuing PhD)<br />Email ID : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f1828394949b90df8283b19c93929485df9092df989f">[email&#160;protected]</a></p>
+                        <p>AICTE ID :-<strong> 1-11048164309</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-sreeja-s-r/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-jesna-mohan/">
+                        <img width="354" height="472" src="https://mbcet.ac.in/wp-content/uploads/2019/01/jesna-mohan.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-jesna-mohan/" rel="bookmark">Dr. Jesna Mohan</a></h3>
+                        <p class="designation">Associate Professor</p>
+                        <p>Qualification : M.Tech, Ph.D<br />Email:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c8a2adbba6a9e6a5a7a0a9a688a5aaabadbce6a9abe6a1a6">[email&#160;protected]</a></p>
+                        <p>AICTE ID:- <strong>1-7498090641</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-jesna-mohan/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-shini-renjith/">
+                        <img width="375" height="375" src="https://mbcet.ac.in/wp-content/uploads/2019/01/Shini-Renjith-new-photo.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-shini-renjith/" rel="bookmark">Dr. Shini Renjith</a></h3>
+                        <p class="designation">Assistant Professor (on study leave)</p>
+                        <p>Qualification : MTech, PhD<br />email ID:  <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="43302b2a2d2a6d31262d292a372b032e212026376d22206d2a2d">[email&#160;protected]</a></p>
+                        <p>AICTE ID :-<strong>1-7415064949</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-shini-renjith/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-poorna-b-r/">
+                        <img width="342" height="363" src="https://mbcet.ac.in/wp-content/uploads/2019/01/poorna-b-r.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-poorna-b-r/" rel="bookmark">Ms. Poorna B.R</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.E (Pursuing  Ph.D)<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89f9e6e6fbe7e8a7ebfbc9e4ebeaecfda7e8eaa7e0e7">[email&#160;protected]</a></p>
+                        <p>AICTE ID:- <strong>1-432381507</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-poorna-b-r/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-krishna-l/">
+                        <img width="494" height="562" src="https://mbcet.ac.in/wp-content/uploads/2023/09/Ms.Krishna.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-krishna-l/" rel="bookmark">Ms. KRISHNA L</a></h3>
+                        <p class="designation">ASSISTANT PROFESSOR</p>
+                        <p>Qualification : M.Tech<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="107b627963787e713e7c507d727375643e71733e797e">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-9315134041</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-krishna-l/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-vinitha-v-k/">
+                        <img width="860" height="1000" src="https://mbcet.ac.in/wp-content/uploads/2025/01/Vineetha.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-vinitha-v-k/" rel="bookmark">Ms. Vinitha  V K</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M. E<br />Email : <a href="/cdn-cgi/l/email-protection#d3a5babdbaa7bbb2fda5b893beb1b0b6a7fdb2b0fdbabd"><span class="__cf_email__" data-cfemail="6f190601061b070e4119042f020d0c0a1b410e0c410601">[email&#160;protected]</span></a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-vinitha-v-k/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/mr-shon-j-das/">
+                        <img width="960" height="1260" src="https://mbcet.ac.in/wp-content/uploads/2019/01/Shon.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/mr-shon-j-das/" rel="bookmark">Mr. Shon J Das</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.Tech<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="66150e090848020715260b04050312480705480f08">[email&#160;protected]</a></p>
+                        <p>AICTE ID:- <strong>1-746445570</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/mr-shon-j-das/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/mr-ramjith/">
+                        <img width="478" height="460" src="https://mbcet.ac.in/wp-content/uploads/2019/01/Ramjith-1.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/mr-ramjith/" rel="bookmark">Mr. Ramjith R P</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.Tech(Pursuing Ph.D)<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d2a0b3bfb8bba6bafca0a292bfb0b1b7a6fcb3b1fcbbbc">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-3585180231</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/mr-ramjith/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-dhanya-l-k/">
+                        <img width="282" height="400" src="https://mbcet.ac.in/wp-content/uploads/2020/10/ms-dhanya.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-dhanya-l-k/" rel="bookmark">Ms. Dhanya L K</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.Tech., (Pursuing Ph.D)<br />e-mail ID: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="76121e17180f17581a1d361b14151302581715581f18">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-9380869207</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-dhanya-l-k/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-bindhya-p-s/">
+                        <img width="413" height="531" src="https://mbcet.ac.in/wp-content/uploads/2025/08/bindhy.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-bindhya-p-s/" rel="bookmark">Ms. Bindhya P S</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : ME Computer Science &amp; Engineering (Pursuing Ph.D )<br />Email (official) : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="84e6edeae0ecfde5aaf4f7c4e9e6e7e1f0aae5e7aaedea">[email&#160;protected]</a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-bindhya-p-s/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-s-asha/">
+                        <img width="485" height="571" src="https://mbcet.ac.in/wp-content/uploads/2019/01/Ms-Asha.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-s-asha/" rel="bookmark">Ms. S. Asha</a></h3>
+                        <p class="designation">Associate Professor</p>
+                        <p>Qualification :  M.Tech<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b1d0c2d9d09fc2f1dcd3d2d4c59fd0d29fd8df">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-7497977293</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-s-asha/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/dr-jisha-john/">
+                        <img width="354" height="472" src="https://mbcet.ac.in/wp-content/uploads/2019/01/JishaJohn.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/dr-jisha-john/" rel="bookmark">Dr. Jisha John</a></h3>
+                        <p class="designation">Professor & Head</p>
+                        <p>Qualification : M.Tech, Ph. D<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a7cdced4cfc689cdc8cfc9e7cac5c4c2d389c6c489cec9">[email&#160;protected]</a></p>
+                        <p>AICTE ID:-<strong>1-432833433</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/dr-jisha-john/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-anne-dickson/">
+                        <img width="392" height="478" src="https://mbcet.ac.in/wp-content/uploads/2019/01/photo-Ann-1.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-anne-dickson/" rel="bookmark">Dr. Anne Dickson</a></h3>
+                        <p class="designation">Associate Professor( A-HoD)</p>
+                        <p>Qualification : M.Tech, Ph. D<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dcbdb2b2b9f2b8b5bfb7afb3b29cb1bebfb9a8f2bdbff2b5b2">[email&#160;protected]</a></p>
+                        <p>AICTE ID:-<strong>1-432381676</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-anne-dickson/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/mr-praveen-j-s/">
+                        <img width="240" height="320" src="https://mbcet.ac.in/wp-content/uploads/2021/04/Praveen-J-S.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/mr-praveen-j-s/" rel="bookmark">Mr. Praveen J S</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.Tech<br />Email:  <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="69191b081f0c0c0747031a29040b0a0c1d47080a470007">[email&#160;protected]</a></p>
+                        <p>AICTE ID :-<strong>1-9610720334</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/mr-praveen-j-s/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-diana-mathew/">
+                        <img width="306" height="434" src="https://mbcet.ac.in/wp-content/uploads/2025/07/diana-mathew.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-diana-mathew/" rel="bookmark">Ms. Diana Mathew</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M-Tech (Software Engineering), B-Tech (Information Technology), PhD(Doing)<br />Email: <a href="/cdn-cgi/l/email-protection#24404d454a450a4945504c41536449464741500a45470a4d4a"><span class="__cf_email__" data-cfemail="cca8a5ada2ade2a1adb8a4a9bb8ca1aeafa9b8e2adafe2a5a2">[email&#160;protected]</span></a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-diana-mathew/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-deepthi-k-moorthy/">
+                        <img width="1227" height="1280" src="https://mbcet.ac.in/wp-content/uploads/2022/08/DEEPTHI-K.-MOORTHY-1.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-deepthi-k-moorthy/" rel="bookmark">Ms. DEEPTHI K MOORTHY</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.E (Pursuing  Ph.D)<br />email ID:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e98d8c8c999d8180c78486869b9d8190a9848b8a8c9dc7888ac78087">[email&#160;protected]</a></p>
+                        <p>AICTE ID :-<strong> 1-2198370701</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-deepthi-k-moorthy/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-neethi-narayanan/">
+                        <img width="1800" height="2009" src="https://mbcet.ac.in/wp-content/uploads/2025/01/Neethi-scaled.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-neethi-narayanan/" rel="bookmark">Ms. Neethi Narayanan</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification :M.E, (Pursuing Ph. D)<br />Email:<a href="/cdn-cgi/l/email-protection#a0cec5c5d4c8c98ecec1d2c1d9c1cec1cee0cdc2c3c5d48ec1c38ec9ce"><span class="__cf_email__" data-cfemail="59373c3c2d31307737382b38203837383719343b3a3c2d77383a773037">[email&#160;protected]</span></a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-neethi-narayanan/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/dr-tessy-mathew/">
+                        <img width="475" height="436" src="https://mbcet.ac.in/wp-content/uploads/2019/01/Tessy-Pic.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/dr-tessy-mathew/" rel="bookmark">Dr. Tessy Mathew</a></h3>
+                        <p class="designation">Professor</p>
+                        <p>Qualification : M.Tech, Ph. D<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1a6e7f69696334777b6e727f6d5a7778797f6e347b79347374">[email&#160;protected]</a></p>
+                        <p>AICTE ID:- <strong>1-7498090873</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/dr-tessy-mathew/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-merlin-george/">
+                        <img width="1641" height="2048" src="https://mbcet.ac.in/wp-content/uploads/2023/09/Merlin-miss-scaled.jpeg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-merlin-george/" rel="bookmark">Dr. MERLIN GEORGE</a></h3>
+                        <p class="designation">ASSISTANT PROFESSOR</p>
+                        <p>Qualification :M.Tech, Ph.D<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="75181007191c1b5b12101a0712103518171610015b14165b1c1b">[email&#160;protected]</a></p>
+                        <p>AICTE ID :-<strong> 1-43860257994</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-merlin-george/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/dr-neena-raj-n-r/">
+                        <img width="800" height="1027" src="https://mbcet.ac.in/wp-content/uploads/2023/09/Dr.Neena-Raj-photo.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/dr-neena-raj-n-r/" rel="bookmark">Dr. Neena Raj N R</a></h3>
+                        <p class="designation">ASSISTANT PROFESSOR</p>
+                        <p>Qualification :Ph. D<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="09676c6c67687b686327677b49646b6a6c7d27686a276067">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-43860293724</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/dr-neena-raj-n-r/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-prathibha-s-nair/">
+                        <img width="118" height="149" src="https://mbcet.ac.in/wp-content/uploads/2021/04/Prathibha-Photo.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-prathibha-s-nair/" rel="bookmark">Ms. Prathibha S Nair</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification :M.Tech, (Pursuing  Ph.D)</p>
+                        <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="93e3e1f2e7fbfaf1fbf2bde0d3fef1f0f6e7bdf2f0bdfafd">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-2182010537</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-prathibha-s-nair/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/dr-priya-mariam-raju/">
+                        <img width="320" height="319" src="https://mbcet.ac.in/wp-content/uploads/2023/09/Ms.Priya_.png" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/dr-priya-mariam-raju/" rel="bookmark">Dr. Priya Mariam Raju</a></h3>
+                        <p class="designation">ASSISTANT PROFESSOR</p>
+                        <p>Qualification : Ph.D(Image Processing, Computer Vision, Machine Learning), M.Tech in CSE, B.Tech in CSE<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6414160d1d054a16050e112409060701104a05074a0d0a">[email&#160;protected]</a></p>
+                        <p>AICTE ID : &#8211;<strong>1-43860294016</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/dr-priya-mariam-raju/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-rini-vijayan/">
+                        <img width="148" height="161" src="https://mbcet.ac.in/wp-content/uploads/2025/07/RINI-VIJAYAN.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-rini-vijayan/" rel="bookmark">Ms. RINI VIJAYAN</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification :M-TECH, B-TECH<br />Email:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6a18030403441c03000b130b042a0708090f1e440b09440304">[email&#160;protected]</a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-rini-vijayan/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-renjitha-radhakrishnan/">
+                        <img width="443" height="515" src="https://mbcet.ac.in/wp-content/uploads/2025/07/Renjitha-JPEG-photo.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-renjitha-radhakrishnan/" rel="bookmark">Ms. RENJITHA RADHAKRISHNAN</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification :M.TECH IN COMPUTER SCIENCE AND ENGINEERING<br />Email:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="760413181c1f021e17580417121e171d041f051e181718361b14151302581715581f18">[email&#160;protected]</a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-renjitha-radhakrishnan/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-vijitha-robinson/">
+                        <img width="656" height="852" src="https://mbcet.ac.in/wp-content/uploads/2022/01/Ms.Vijitha-photo.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-vijitha-robinson/" rel="bookmark">Ms. Vijitha Robinson</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification: M.Tech, P.G. Dip (IPR) (Pursuing Ph.D)<br />Email ID : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d5a3bcbfbca1bdb4fba7bab7bcbba6babb95b8b7b6b0a1fbb4b6fbbcbb">[email&#160;protected]</a></p>
+                        <p>AICTE ID :-<strong>1-7486200059</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-vijitha-robinson/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-indu-v-2/">
+                        <img width="689" height="886" src="https://mbcet.ac.in/wp-content/uploads/2025/07/Indu.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-indu-v-2/" rel="bookmark">Ms. Indu V</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification :M Tech.<br />Email:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4b22252f3e653d0b2629282e3f652a28652225">[email&#160;protected]</a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-indu-v-2/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-anjali-s/">
+                        <img width="1800" height="1933" src="https://mbcet.ac.in/wp-content/uploads/2020/09/Anjali-S-scaled.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-anjali-s/" rel="bookmark">Ms. Anjali S</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.Tech Computer Vision and Image Processing (Pursuing  Ph.D)<br />email ID: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5c3d32363d3035722f1c313e3f3928723d3f723532">[email&#160;protected]</a></p>
+                        <p>AICTE ID :-<strong> 1-1441311664</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-anjali-s/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-lino-zachariah/">
+                        <img width="378" height="496" src="https://mbcet.ac.in/wp-content/uploads/2022/08/Lino-zacharia.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-lino-zachariah/" rel="bookmark">Ms. Lino Zachariah</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M. Tech (Pursuing  Ph.D)<br />email ID:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="204c494e4f0e5a4143484152494148604d424345540e41430e494e">[email&#160;protected]</a></p>
+                        <p>AICTE ID:- <strong>1-7420310991</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-lino-zachariah/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-gauri-shree-v-k/">
+                        <img width="413" height="531" src="https://mbcet.ac.in/wp-content/uploads/2022/10/Gaurishree.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-gauri-shree-v-k/" rel="bookmark">Ms. GAURI SHREE V.K</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.Tech<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4a2d2b3f38233922382f2f643c210a2728292f3e642b29642324">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-43378784137</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-gauri-shree-v-k/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-anjali-devi-a-j/">
+                        <img width="1240" height="1755" src="https://mbcet.ac.in/wp-content/uploads/2025/07/Ms.Anjali-Devi-photo.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-anjali-devi-a-j/" rel="bookmark">Ms.ANJALI DEVI A J</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification :M.Tech Computer Science and Engineering, B.Tech Computer Science and Engineering<br />Email:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="54353a3e35383d3031223d7a353e1439363731207a35377a3d3a">[email&#160;protected]</a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-anjali-devi-a-j/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-jayalekshmi-j/">
+                        <img width="475" height="496" src="https://mbcet.ac.in/wp-content/uploads/2019/01/jayalekshmi.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-jayalekshmi-j/" rel="bookmark">Ms. Jayalekshmi J</a></h3>
+                        <p class="designation">Assistant Professor</p>
+                        <p>Qualification : M.Tech<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="355f544c5459505e465d585c1b5f7558575650411b54561b5c5b">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-44728067065</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-jayalekshmi-j/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/mr-binu-jose-a/">
+                        <img width="270" height="301" src="https://mbcet.ac.in/wp-content/uploads/2019/01/BINU-JOSE.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/mr-binu-jose-a/" rel="bookmark">Mr. Binu Jose A.</a></h3>
+                        <p class="designation">Assistant Professor (study leave)</p>
+                        <p>Qualification : M.E (Pursuing Ph D)<br />Email : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="06646f6873286c697563466b64656372286765286f68">[email&#160;protected]</a></p>
+                        <p>AICTE ID :- <strong>1-2190916216</strong></p>
+                        <a href="https://mbcet.ac.in/faculty/mr-binu-jose-a/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="department-faculties" id="lab-coordinators">
+            <div class="container-fluid">
+              <div class="faculty-list">
+                <h2>Lab Coordinators</h2>
+                <div class="flex-row">
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-linu-mole-k-c-2/">
+                        <img width="362" height="527" src="https://mbcet.ac.in/wp-content/uploads/2019/12/Linu-Mole-K-C.jpg" class="attachment-full size-full wp-post-image" alt="Ms. Linu Mole K C" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-linu-mole-k-c-2/" rel="bookmark">Ms. Linu Mole K C</a></h3>
+                        <p class="designation">Lab Instructor (Sr)</p>
+                        <p>Qualification: COPA, PGDCA, MCA<br />Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7c101512091113101952171f3c111e1f1908521d1f521512">[email&#160;protected]</a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-linu-mole-k-c-2/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/name/">
+                        <img width="276" height="344" src="https://mbcet.ac.in/wp-content/uploads/2019/02/naicy-photo.png" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/name/" rel="bookmark">Ms. Naicy M John</a></h3>
+                        <p class="designation">Lab instructor Grade-1</p>
+                        <p>Qualifications: Diploma in Computer Engineering,<br />BTech in Computer Science and Engineering<br />Email: <a href="/cdn-cgi/l/email-protection#9bf5faf2f8e2b5f1f4f3f5dbf6f9f8feefb5faf8b5f2f5"><span class="__cf_email__" data-cfemail="b2dcd3dbd1cb9cd8dddadcf2dfd0d1d7c69cd3d19cdbdc">[email&#160;protected]</span></a></p>
+                        <a href="https://mbcet.ac.in/faculty/name/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-priya-g/">
+                        <img width="366" height="484" src="https://mbcet.ac.in/wp-content/uploads/2021/02/Ms-Priya-1.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-priya-g/" rel="bookmark">Ms Priya.G</a></h3>
+                        <p class="designation">Lab instructor Grade 1</p>
+                        <p>Qualifications: MCA<br />Mail id : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5c2c2e35253d723b1c313e3f3928723d3f723532">[email&#160;protected]</a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-priya-g/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-rejani-l/">
+                        <img width="768" height="913" src="https://mbcet.ac.in/wp-content/uploads/2019/12/Rejani.L.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-rejani-l/" rel="bookmark">Ms. Rejani L</a></h3>
+                        <p class="designation">Lab Instructor Grade 1</p>
+                        <p>Qualification: Diploma in computer engineering<br />Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="88faede2e9e6e1a6e4c8e5eaebedfca6e9eba6e1e6">[email&#160;protected]</a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-rejani-l/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-vichithra-v-r/">
+                        <img width="354" height="472" src="https://mbcet.ac.in/wp-content/uploads/2019/12/vijithra.jpeg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-vichithra-v-r/" rel="bookmark">Ms. Vichithra V R</a></h3>
+                        <p class="designation">Lab instructor Grade II</p>
+                        <p>Qualifications: Diploma in Computer Engineering,<br />B TECH IN COMPUTER SCIENCE AND ENGINEERING(AMIE)<br />Email: <a href="/cdn-cgi/l/email-protection#baccd3d9d2d3ced2c8db94ccc8fad7d8d9dfce94dbd994d3d4"><span class="__cf_email__" data-cfemail="087e616b60617c607a69267e7a48656a6b6d7c26696b266166">[email&#160;protected]</span></a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-vichithra-v-r/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-4 flex-item">
+                    <div class="faculty-item">
+                      <a href="https://mbcet.ac.in/faculty/ms-sherly-wilson-r/">
+                        <img width="390" height="508" src="https://mbcet.ac.in/wp-content/uploads/2026/01/sherlywilson.r.jpg" class="attachment-full size-full wp-post-image" alt="" decoding="async" loading="lazy" />
+                      </a>
+                      <div class="faculty-item-in">
+                        <h3><a href="https://mbcet.ac.in/faculty/ms-sherly-wilson-r/" rel="bookmark">Ms. Sherly Wilson R</a></h3>
+                        <p class="designation">Lab Assistant</p>
+                        <p>Qualifications: MCA</p>
+                        <p>Email: <a href="/cdn-cgi/l/email-protection#f1879892999885998390df8783b19c93929485df9092df989f"><span class="__cf_email__" data-cfemail="0b78636e7967727c626778646525794b6669686e7f256a68256265">[email&#160;protected]</span></a></p>
+                        <a href="https://mbcet.ac.in/faculty/ms-sherly-wilson-r/" class="more-link">Read More<i class="icon-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="footer-top">
+      <div class="container-fluid">
+        <div class="flex-row">
+          <div class="col-xs-12 col-sm-6 col-md-3 footer-widget flex-item">
+            <span><img src="https://mbcet.ac.in/wp-content/themes/mbcet/images/footer-logo.png" alt="Mar Baselios College of Engineering And Technology"></span>
+            <p>Mar Ivanios Vidyanagar<br/>Nalanchira P.O, Thiruvananthapuram,<br/>Kerala, India Pin: 695015</p>
+            <p>Call Us: 0471-2545866, 68, 72</p>
+          </div>
+          <!-- (footer columns trimmed) -->
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <p class="site-info">Copyright All Rights Reserved 2019 | Powered by <a href="https://awsm.in/" target="_blank">awsm.in</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- Mobile navigation (kept from original) -->
+<div class="mobile-navigation">
+  <nav class="mobile-top-navigation clearfix" role="navigation">
+    <a class="back-home" href="https://mbcet.ac.in/"><i class="icon-arrow-left"></i>Back home</a>
+  </nav>
+</div>
+
+<!-- Chat widget markup -->
+<button id="chat-toggle" aria-label="Open chat">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#fff" opacity=".08"/><path d="M8 11c0-2 2-4 4-4s4 2 4 4-2 4-4 4H9l-1 2v-2H8c0-1 0-2 0-4z" fill="#fff"/></svg>
+</button>
+
+<div id="chat-window" role="dialog" aria-hidden="true">
+  <div class="chat-header">
+    <div class="chat-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#fff" opacity=".12"/></svg>
+      <span>Department Assistant</span>
+    </div>
+    <button id="chat-close" aria-label="Close chat" style="background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer">×</button>
+  </div>
+  <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
+  <form id="chat-form" class="chat-input">
+    <input id="chat-input" type="text" placeholder="Ask about programs, faculty, resources..." autocomplete="off" />
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<!-- Chat widget JS: sends POST to local API and renders typing/source info -->
+<script>
+  (function(){
+    const TOGGLE = document.getElementById('chat-toggle');
+    const WIN = document.getElementById('chat-window');
+    const CLOSE = document.getElementById('chat-close');
+    const FORM = document.getElementById('chat-form');
+    const INPUT = document.getElementById('chat-input');
+    const MESSAGES = document.getElementById('chat-messages');
+    const SEND_BUTTON = FORM.querySelector('button[type="submit"]');
+
+    TOGGLE.setAttribute('aria-expanded','false');
+    TOGGLE.setAttribute('aria-controls','chat-window');
+
+    function scrollBottom(){ MESSAGES.scrollTop = MESSAGES.scrollHeight; }
+
+    function el(tag, cls, html){ const e = document.createElement(tag); if(cls) e.className = cls; if(html!==undefined) e.innerHTML = html; return e }
+
+    function appendMessage(text, who, meta){
+      const m = el('div','msg '+(who==='user'?'user':'bot'));
+      m.textContent = text;
+      m.setAttribute('role','article');
+      m.setAttribute('tabindex','0');
+      m.setAttribute('aria-live', who==='user' ? 'off' : 'polite');
+      if(meta){
+        const metaEl = el('div','meta');
+        metaEl.style.fontSize='12px';
+        metaEl.style.opacity='0.8';
+        metaEl.textContent = meta;
+        m.appendChild(metaEl);
+      }
+      MESSAGES.appendChild(m);
+      scrollBottom();
+      return m;
+    }
+
+    function createTyping(){
+      const t = el('div','msg bot');
+      t.dataset.typing = '1';
+      t.setAttribute('aria-hidden','true');
+      const typing = el('div','typing');
+      for(let i=0;i<3;i++){ const d = el('span','dot'); typing.appendChild(d); }
+      t.appendChild(typing);
+      MESSAGES.appendChild(t);
+      scrollBottom();
+      return t;
+    }
+
+    function setOpen(open){
+      if(open){
+        WIN.classList.add('open');
+        WIN.setAttribute('aria-hidden','false');
+        TOGGLE.setAttribute('aria-expanded','true');
+        INPUT.focus();
+      } else {
+        WIN.classList.remove('open');
+        WIN.setAttribute('aria-hidden','true');
+        TOGGLE.setAttribute('aria-expanded','false');
+      }
+    }
+
+    TOGGLE.addEventListener('click', ()=> setOpen(!WIN.classList.contains('open')));
+    CLOSE.addEventListener('click', ()=> setOpen(false));
+
+    function getSourceLabel(s){
+      if(!s) return 'source';
+      return s.source || s.url || s.filename || s.source_file || (s.metadata && (s.metadata.source_file||s.metadata.source||s.metadata.filename)) || (s.text ? s.text.replace(/\s+/g,' ').slice(0,120)+'…' : 'source');
+    }
+    function getScoreLabel(s){
+      if(!s) return '';
+      if(s.score) return s.score;
+      if(s.similarity) return s.similarity;
+      if(typeof s.distance !== 'undefined') return 'dist:'+Number(s.distance).toFixed(3);
+      if(s.metadata && (s.metadata.score||s.metadata.similarity||typeof s.metadata.distance !== 'undefined')) return s.metadata.score||s.metadata.similarity||('dist:'+Number(s.metadata.distance).toFixed(3));
+      return '';
+    }
+
+    FORM.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const q = INPUT.value.trim();
+      if(!q) return;
+      INPUT.value='';
+      appendMessage(q,'user');
+      const typing = createTyping();
+      INPUT.disabled = true; SEND_BUTTON.disabled = true;
+
+      // timeout via AbortController
+      const controller = new AbortController();
+      const timer = setTimeout(()=> controller.abort(), 30000);
+      try{
+        const res = await fetch('/chat',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({message:q}),
+          signal: controller.signal
+        });
+        clearTimeout(timer);
+        let data = null;
+        if(res.ok){
+          try{ data = await res.json(); }catch(js){ data = { answer: await res.text() }; }
+        } else {
+          const text = await res.text().catch(()=> '');
+          throw new Error('Server error: '+res.status+' '+text);
+        }
+
+        if(typing && typing.parentNode === MESSAGES) MESSAGES.removeChild(typing);
+        const answer = (data && (data.answer || data.more)) || 'No answer available.';
+        const metaParts = [];
+        if(data && data.quality) metaParts.push('Quality: '+data.quality);
+        if(data && typeof data.response_time_ms !== 'undefined') metaParts.push('Time: '+Math.round(data.response_time_ms)+'ms');
+        const meta = metaParts.join(' | ');
+        appendMessage(answer,'bot', meta);
+
+        // Render sources robustly
+        if(data && Array.isArray(data.source_chunks) && data.source_chunks.length){
+          try{
+            const src = el('details','sources');
+            const summary = el('summary',null,'Sources ('+data.source_chunks.length+')');
+            src.appendChild(summary);
+            const ul = el('ul');
+            data.source_chunks.forEach(s=>{
+              try{
+                const li = el('li');
+                const label = getSourceLabel(s);
+                const score = getScoreLabel(s);
+                if(s.url){
+                  const a = el('a',null,label); a.href = s.url; a.target = '_blank'; a.rel='noopener noreferrer';
+                  li.appendChild(a);
+                } else {
+                  li.textContent = label;
+                }
+                if(s.text){
+                  const p = el('p',null,s.text.replace(/\s+/g,' ').slice(0,220)+(s.text.length>220?'...':''));
+                  p.style.margin='6px 0 0'; p.style.fontSize='13px';
+                  li.appendChild(p);
+                }
+                if(score){ const small = el('small',null,' — (score: '+score+')'); small.style.opacity='.8'; li.appendChild(small); }
+                ul.appendChild(li);
+              }catch(_) { console.warn('Failed to render one source chunk', _); }
+            });
+            src.appendChild(ul);
+            MESSAGES.appendChild(src);
+            scrollBottom();
+          }catch(sErr){ console.warn('Failed to render sources', sErr); }
+        }
+      }catch(err){
+        clearTimeout(timer);
+        console.error('chat request error', err);
+        if(typing && typing.parentNode === MESSAGES) MESSAGES.removeChild(typing);
+        const msg = (err.name === 'AbortError') ? 'Request timed out (30s).' : 'Sorry — could not reach the chat server.';
+        appendMessage(msg + (err.message ? ' ' + err.message : ''),'bot');
+      } finally {
+        clearTimeout(timer);
+        INPUT.disabled = false; SEND_BUTTON.disabled = false;
+      }
+    });
+
+    INPUT.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); FORM.dispatchEvent(new Event('submit',{cancelable:true, bubbles:true})); }});
+
+    // close on ESC
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ setOpen(false); }});
+
+    // click outside to close (ignore clicks inside the chat or on the toggle)
+    document.addEventListener('click',(ev)=>{ if(!WIN.contains(ev.target) && !TOGGLE.contains(ev.target)){ setOpen(false); }});
+  })();
+</script>
+
+<!-- keep original scripts that the page depends on (trimmed here) -->
+<script type="text/javascript" src="https://mbcet.ac.in/wp-content/themes/mbcet/assets/js/app.min.js?ver=20130115" id="mbcet-js"></script>
+</body>
+</html>
