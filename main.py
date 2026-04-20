@@ -14,7 +14,8 @@ Usage:
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
-    python main.py --stage chat      # Launch Streamlit chatbot UI
+    python main.py --stage chat      # Launch web assistant (FastAPI + frontend)
+    python main.py --stage serve     # Launch web assistant (FastAPI + frontend)
     python main.py --stage all       # Run complete pipeline
 """
 
@@ -195,25 +196,32 @@ def run_query_stage(query_text: str):
 
 
 def run_chat_stage():
-    """Launch the Streamlit chatbot UI."""
+    """Backward-compatible alias for the primary FastAPI + frontend UI."""
+    print("\n[INFO] Streamlit was test-only. Starting FastAPI + frontend UI instead.")
+    run_serve_stage()
+
+
+def run_serve_stage():
+    """Run the FastAPI-based HTTP server for the chatbot using uvicorn.
+
+    This provides a lightweight replacement for the Streamlit frontend
+    and exposes `POST /chat` for the single-file HTML widget to call.
+    """
     import subprocess
 
-    app_path = Path(__file__).parent / "app.py"
-    if not app_path.exists():
-        print("[ERR] app.py not found. Cannot launch chatbot.")
-        sys.exit(1)
-
     print("\n" + "=" * 50)
-    print(" Launching MBCET CSE Chatbot")
+    print(" Starting FastAPI server (api_server:app) on http://127.0.0.1:8000")
     print("=" * 50)
-    print(f"Starting Streamlit server...")
-    print(f"Press Ctrl+C to stop.\n")
 
-    subprocess.run(
-        [sys.executable, "-m", "streamlit", "run", str(app_path),
-         "--server.headless", "true"],
-        cwd=str(Path(__file__).parent),
-    )
+    try:
+        import uvicorn
+        uvicorn.run("api_server:app", host="127.0.0.1", port=8000, log_level="info")
+    except Exception:
+        # Fallback to subprocess invocation of uvicorn
+        subprocess.run(
+            [sys.executable, "-m", "uvicorn", "api_server:app", "--host", "127.0.0.1", "--port", "8000"],
+            cwd=str(Path(__file__).parent),
+        )
 
 
 def run_all_stages(force: bool = False):
@@ -249,14 +257,15 @@ Examples:
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
-    python main.py --stage chat      # Launch Streamlit chatbot
+    python main.py --stage chat      # Launch web assistant (FastAPI + frontend)
+    python main.py --stage serve     # Launch web assistant (FastAPI + frontend)
     python main.py --stage all       # Run complete pipeline
         """
     )
 
     parser.add_argument(
         '--stage',
-        choices=['scrape', 'entities', 'chunk', 'kg', 'graph', 'embed', 'query', 'chat', 'all'],
+        choices=['scrape', 'entities', 'chunk', 'kg', 'graph', 'embed', 'query', 'chat', 'serve', 'all'],
         required=True,
         help='Pipeline stage to run'
     )
@@ -307,6 +316,8 @@ Examples:
         run_query_stage(args.text)
     elif args.stage == 'chat':
         run_chat_stage()
+    elif args.stage == 'serve':
+        run_serve_stage()
     elif args.stage == 'all':
         run_all_stages(force=args.force)
     else:

@@ -38,6 +38,8 @@ CSE_DEPARTMENT_URL = os.getenv(
     "CSE_DEPARTMENT_URL",
     "https://mbcet.ac.in/departments/computer-science-engineering/"
 )
+PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "http://127.0.0.1:8000")
+NGROK_DOMAIN = os.getenv("NGROK_DOMAIN", "")
 
 # URLs to scrape (CSE focused)
 SCRAPE_URLS = [

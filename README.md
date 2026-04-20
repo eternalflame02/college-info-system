@@ -1,513 +1,509 @@
-# MBCET CSE Semantic Chunking Pipeline
+# College Info System (MBCET CSE)
 
-A Python-based pipeline for scraping, processing, and semantically chunking MBCET CSE department content for RAG (Retrieval-Augmented Generation) and Knowledge Graph applications.
+A hybrid academic information system that combines semantic chunking, deterministic knowledge graphs, and retrieval-augmented generation (RAG) to answer department-related queries.
+
+This repository contains the full pipeline from scraping source content to serving a web chat assistant.
 
 ![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
----
+## Table of Contents
 
-## 📋 Table of Contents
+1. Project Overview
+2. What Is Implemented
+3. System Architecture
+4. Repository Structure
+5. Prerequisites
+6. Installation
+7. Configuration
+8. Running the System
+9. Pipeline Stages (Detailed)
+10. Web Assistant and API
+11. Data Artifacts
+12. Testing and Validation
+13. Troubleshooting
+14. Development Notes
+15. License
 
-- [Features](#-features)
-- [Architecture](#-architecture)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Pipeline Stages](#-pipeline-stages)
-- [Knowledge Graph (Phase 1)](#-knowledge-graph-phase-1)
-- [Project Structure](#-project-structure)
-- [Configuration](#-configuration)
-- [Output Formats](#-output-formats)
-- [Testing](#-testing)
-- [Contributing](#-contributing)
+## Project Overview
 
----
+The goal of this project is to provide reliable answers for CSE department information by grounding responses in structured institutional data.
 
-## ✨ Features
+The system workflow is:
 
-- **Web Scraping**: Crawls MBCET website with intelligent URL discovery
-- **PDF Processing**: Extracts text and tables from syllabus PDFs using `pdfplumber`
-- **OCR Support**: Handles scanned documents with Tesseract OCR
-- **Table Extraction**: Preserves tabular data as structured Markdown tables
-- **Entity Registry**: Extracts and normalizes faculty names with aliases
-- **Semantic Chunking**: Creates semantically meaningful chunks for RAG
-- **Query Routing**: Classifies runtime queries into `teaching`, `faculty`, `course`, `timetable`, `regulation`, and `general`
-- **Multi-Collection Retrieval**: Splits vector storage into table and non-table collections with legacy collection fallback
-- **Fallback Retrieval**: Uses routed retrieval first, then mixed fallback with reranking when route quality is poor
-- **Deterministic KG Edges**: Builds `part_of`, `teaches`, and `taught_in` edges, with optional prerequisite/corequisite edges when explicit evidence exists
-- **Timetable-to-KG Merge**: Derives faculty-course teaching links from timetable chunks and merges with manual assignment registry using deterministic union semantics
-- **Evaluation Pipeline**: Runs wide quality evaluation across chunking, embeddings, retrieval, and graph structure
-- **Duplicate Detection**: SHA-256 based deduplication
+1. Crawl and scrape department web content and PDFs.
+2. Convert content into normalized Markdown.
+3. Build entity registries (faculty, courses, programs).
+4. Build semantic chunks with rich metadata.
+5. Build deterministic knowledge graph artifacts.
+6. Embed chunks and ingest them into ChromaDB.
+7. Retrieve relevant evidence at query time.
+8. Synthesize grounded responses through the chatbot runtime.
 
----
+## What Is Implemented
 
-## 🏗 Architecture
+### Data processing and indexing
 
+- HTML and PDF scraping with table-aware extraction.
+- OCR-compatible pipeline support for scanned PDFs.
+- Semantic chunking with metadata and deduplication.
+- Entity registry generation and normalized aliases.
+- Two graph artifacts:
+  - Canonical graph used by runtime support paths.
+  - Deterministic phase-1 graph with schema validation.
+- Embedding cache and ChromaDB ingestion.
+- Query routing with multi-collection retrieval.
+
+### Runtime assistant
+
+- FastAPI backend (`api_server.py`) with:
+  - `GET /` serving the integrated frontend.
+  - `POST /chat` for chat inference.
+  - `GET /stats` for local KB metrics.
+- Frontend chat widget integrated into `frontend/cse_department.html`.
+- Markdown rendering in bot messages (including tables) with sanitization.
+- Chat window maximize/restore support.
+- Main CLI now treats Streamlit as test-only; `chat` stage aliases `serve`.
+
+## System Architecture
+
+```text
+                +-------------------------+
+                |  MBCET CSE Web Sources  |
+                |  HTML Pages + PDFs      |
+                +------------+------------+
+                             |
+                             v
+                +-------------------------+
+                |  Scraper Layer          |
+                |  url_discovery          |
+                |  html_scraper           |
+                |  pdf_handler            |
+                +------------+------------+
+                             |
+                             v
+                +-------------------------+
+                |  Markdown Artifacts     |
+                |  data/markdown          |
+                +------------+------------+
+                             |
+          +------------------+------------------+
+          |                                     |
+          v                                     v
++-------------------------+         +--------------------------+
+| Entity Registry         |         | Semantic Chunker         |
+| faculty/courses/program |         | chunk metadata + links   |
++------------+------------+         +------------+-------------+
+             |                                   |
+             +------------------+----------------+
+                                |
+                                v
+                 +-------------------------------+
+                 | Knowledge Graph Builders      |
+                 | canonical + phase-1 graph     |
+                 +---------------+---------------+
+                                 |
+                                 v
+                 +-------------------------------+
+                 | Embeddings + ChromaDB         |
+                 | table / non-table / legacy    |
+                 +---------------+---------------+
+                                 |
+                                 v
+                 +-------------------------------+
+                 | Chat Runtime                  |
+                 | retrieval + synthesis         |
+                 +---------------+---------------+
+                                 |
+                                 v
+                 +-------------------------------+
+                 | FastAPI + Frontend UI         |
+                 | GET /, POST /chat             |
+                 +-------------------------------+
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        MBCET Website                            │
-│                    (mbcet.ac.in/cse)                            │
-└─────────────────┬───────────────────────────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                     URL Discovery                               │
-│              (Crawls pages, identifies PDFs)                    │
-└─────────────────┬───────────────────────────────────────────────┘
-                  │
-        ┌─────────┴─────────┐
-        ▼                   ▼
-┌───────────────┐   ┌───────────────┐
-│ HTML Scraper  │   │ PDF Handler   │
-│ (markdownify) │   │ (pdfplumber)  │
-└───────┬───────┘   └───────┬───────┘
-        │                   │
-        └─────────┬─────────┘
-                  ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    Markdown Files                               │
-│                  (data/markdown/)                               │
-└─────────────────┬───────────────────────────────────────────────┘
-                  │
-        ┌─────────┴─────────┐
-        ▼                   ▼
-┌───────────────┐   ┌───────────────┐
-│Entity Registry│   │   Semantic    │
-│   Builder     │   │   Chunker     │
-└───────┬───────┘   └───────┬───────┘
-        │                   │
-        ▼                   ▼
-┌───────────────┐   ┌───────────────┐
-│ faculty.json  │   │ chunks.json   │
-│ courses.json  │   │ 640 chunks    │
-└───────────────┘   └───────────────┘
+
+## Repository Structure
+
+```text
+.
+├── main.py                       # CLI orchestrator for all stages
+├── api_server.py                 # FastAPI server (primary runtime interface)
+├── chatbot.py                    # Retrieval + answer synthesis runtime
+├── rag_ingestion.py              # Embeddings, ingestion, retrieval helpers
+├── app.py                        # Streamlit interface (test-only)
+├── config.py                     # Global settings and paths
+├── evaluate_rag.py               # RAG quality evaluation script
+├── extract_entities.py           # Entity extraction utility
+├── visualize_embeddings.py       # Embedding visualization utility
+├── requirements.txt
+├── .env.example
+│
+├── scraper/                      # Discovery/scraping/conversion modules
+├── chunker/                      # Chunking/entity linking/canonical KG modules
+├── knowledge_graph/              # Deterministic phase-1 KG builder
+├── tests/                        # Unit tests
+├── frontend/                     # Integrated web frontend
+│
+├── data/
+│   ├── markdown/                 # Scraped Markdown content
+│   ├── entities/                 # Entity registries
+│   ├── chunks/                   # Chunk payloads and reports
+│   ├── knowledge_graph/          # Phase-1 graph outputs
+│   ├── embeddings/               # Embedding cache and visualizations
+│   └── validation/               # Ingestion/validation reports
+│
+└── chroma_db/                    # Persistent local vector DB files
 ```
 
----
+## Prerequisites
 
-## 🚀 Installation
-
-### Prerequisites
-
-- Python 3.11 or higher
-- Tesseract OCR (for scanned PDF support)
+- Python 3.11+
 - Git
+- Recommended: CUDA-capable GPU (optional, CPU fallback supported)
+- Optional: Tesseract OCR for scanned PDFs
 
-### Step 1: Clone the Repository
+## Installation
+
+### 1. Clone
 
 ```bash
-git clone https://github.com/yourusername/mbcet-chunking-pipeline.git
-cd mbcet-chunking-pipeline
+git clone https://github.com/eternalflame02/college-info-system.git
+cd college-info-system
 ```
 
-### Step 2: Create Virtual Environment
+### 2. Create and activate virtual environment
+
+Windows (PowerShell):
+
+```powershell
+python -m venv venv
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+.\venv\Scripts\Activate.ps1
+```
+
+Linux/macOS:
 
 ```bash
 python -m venv venv
-
-# Windows
-.\venv\Scripts\activate
-
-# Linux/macOS
 source venv/bin/activate
 ```
 
-### Step 3: Install Dependencies
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 4: Install Tesseract OCR (Optional - for scanned PDFs)
+## Configuration
 
-**Windows:**
-- Download from: https://github.com/UB-Mannheim/tesseract/wiki
-- Add to PATH or set in `.env`
-
-**Linux:**
-```bash
-sudo apt-get install tesseract-ocr
-```
-
-**macOS:**
-```bash
-brew install tesseract
-```
-
-### Step 5: Configure Environment
+Create `.env` from `.env.example` and update as needed.
 
 ```bash
 cp .env.example .env
-# Edit .env with your settings
 ```
 
-Recommended retrieval rollout flags:
+### Core variables
 
-```bash
+- `BASE_URL`: website root for scraping.
+- `CSE_DEPARTMENT_URL`: crawler seed URL.
+- `REQUEST_DELAY`, `MAX_RETRIES`: scraping controls.
+- `MIN_CHUNK_WORDS`, `MAX_CHUNK_WORDS`, `PREFERRED_CHUNK_WORDS`: chunk sizing.
+- `EMBEDDING_MODEL`: embedding model name.
+- `GROQ_API_KEY`, `GROQ_MODEL`: LLM synthesis config.
+
+### Retrieval-related variables
+
+- `CHROMADB_MULTI_COLLECTION_ENABLED`: enable routed collections.
+- `CHROMADB_ENABLE_LEGACY_FALLBACK`: fallback to legacy collection.
+- `CHROMADB_TABLE_COLLECTION`: collection name for table-heavy chunks.
+- `CHROMADB_NON_TABLE_COLLECTION`: collection name for non-table chunks.
+
+Recommended values:
+
+```env
 CHROMADB_MULTI_COLLECTION_ENABLED=1
 CHROMADB_ENABLE_LEGACY_FALLBACK=1
 CHROMADB_TABLE_COLLECTION=mbcet_cse_table
 CHROMADB_NON_TABLE_COLLECTION=mbcet_cse_non_table
 ```
 
----
+### API runtime variables
 
-## 📖 Usage
+- `CHAT_WARMUP_ON_STARTUP`: `1` (default) warms heavy resources on startup; set to `0` for faster dev startup.
+- `CORS_ALLOW_ORIGINS`: comma-separated allowlist for frontend origins.
 
-### Run Complete Pipeline
+Example:
+
+```env
+CHAT_WARMUP_ON_STARTUP=0
+CORS_ALLOW_ORIGINS=http://127.0.0.1:8000,http://localhost:8000
+```
+
+## Running the System
+
+## Full pipeline
 
 ```bash
 python main.py --stage all
 ```
 
-### Run Individual Stages
+## Stage-based runs
 
 ```bash
-# Stage 1: Scrape website and PDFs
 python main.py --stage scrape
-
-# Stage 2: Build entity registry
 python main.py --stage entities
-
-# Stage 3: Build canonical knowledge graph artifact
 python main.py --stage kg
-
-# Stage 4: Run semantic chunker
 python main.py --stage chunk
-
-# Stage 5: Build phase-1 knowledge graph
 python main.py --stage graph
-
-# Stage 6: Embed and ingest into ChromaDB
 python main.py --stage embed --force
+```
 
-# Runtime query check
+## Query smoke test
+
+```bash
 python main.py --stage query --text "Who teaches Artificial Intelligence?"
+```
 
-# Chatbot
+## Start web assistant (primary runtime)
+
+```bash
+python main.py --stage serve
+```
+
+or (backward-compatible alias):
+
+```bash
 python main.py --stage chat
 ```
 
-### Verbose Mode
+Server URL: `http://127.0.0.1:8000`
 
-```bash
-python main.py --stage all -v
-```
+## Pipeline Stages (Detailed)
 
----
+### 1. `scrape`
 
-## 🔄 Pipeline Stages
+Purpose:
 
-### 1. Web Scraping (`--stage scrape`)
+- Crawl department content and collect HTML/PDF assets.
 
-**Purpose:** Crawls MBCET CSE website and converts content to Markdown.
+Operations:
 
-**What it does:**
-- Discovers all pages under `/cse` using BFS crawling
-- Identifies PDF links (syllabi, regulations)
-- Converts HTML pages to clean Markdown
-- Extracts tables from PDFs using `pdfplumber`
-- Falls back to OCR for scanned documents
+- BFS URL discovery with include/exclude pattern controls.
+- HTML conversion to Markdown.
+- PDF text/table extraction with OCR fallback support.
 
-**Output:**
-- `data/markdown/pages/` - 60+ HTML-derived Markdown files
-- `data/markdown/pdfs/` - 10 PDF-derived Markdown files
+Outputs:
 
-### 2. Entity Registry (`--stage entities`)
+- `data/markdown/pages/*.md`
+- `data/markdown/pdfs/*.md`
 
-**Purpose:** Extracts named entities for knowledge graph construction.
+### 2. `entities`
 
-**What it does:**
-- Parses faculty list from department page
-- Normalizes names (removes titles like Dr., Prof.)
-- Generates aliases for entity linking
-- Creates unique entity IDs
+Purpose:
 
-**Output:**
-- `data/entities/faculty.json` - 43 faculty entities
-- `data/entities/courses.json` - Course entities
-- `data/entities/programs.json` - Program entities
+- Build base registries for named entities used in chunking and graph edges.
 
-### 3. Semantic Chunking (`--stage chunk`)
+Operations:
 
-**Purpose:** Splits documents into semantically meaningful chunks.
+- Extract faculty names from department sources.
+- Normalize names and create aliases.
+- Ensure course/program registries exist.
 
-**What it does:**
-- Parses Markdown structure (headers, lists, tables, paragraphs)
-- Classifies content types (profile, regulation, table, section, list)
-- Links chunks to entities (faculty references)
-- Detects and skips duplicates (SHA-256 hashing)
-- Tracks page ranges for PDF sources
+Outputs:
 
-**Output:**
-- `data/chunks/chunks.json` - semantic chunks with metadata and entity links
-- `data/chunks/chunk_report.json` - Statistics and summary
+- `data/entities/faculty.json`
+- `data/entities/courses.json`
+- `data/entities/programs.json`
 
-### 4. Knowledge Graph (`--stage graph`)
+### 3. `kg` (canonical graph)
 
-**Purpose:** Builds phase-1 graph artifacts from entities + semantic chunks.
+Purpose:
 
-**What it does:**
-- Loads entities from `data/entities/*.json`
-- Loads chunk evidence from `data/chunks/chunks.json`
-- Builds canonical nodes for faculty, courses, programs, and deterministic semester nodes
-- Builds timetable-derived teaching links and merges them with `data/entities/teaching_assignments.json` (many-to-many preserved)
-- Extracts deterministic edges only:
-  - `course -> part_of -> program`
-  - `faculty -> teaches -> course`
-  - `course -> taught_in -> semester`
-  - `course -> has_prerequisite -> course` (only when explicit and grounded)
-  - `course -> corequisite -> course` (only when explicit and grounded)
-- Validates output constraints (deterministic edges, endpoint integrity, evidence presence)
+- Build canonical graph artifact for runtime support and consistency.
 
-**Output:**
+Outputs:
+
+- `data/graph/knowledge_graph.json`
+- `data/graph/knowledge_graph_summary.json`
+
+### 4. `chunk`
+
+Purpose:
+
+- Create semantically meaningful chunks for retrieval.
+
+Operations:
+
+- Structure-aware segmentation.
+- Content typing (table/profile/regulation/list/section).
+- Entity linking and metadata enrichment.
+- SHA-256 deduplication.
+
+Outputs:
+
+- `data/chunks/chunks.json`
+- `data/chunks/chunk_report.json`
+
+### 5. `graph` (phase-1 deterministic graph)
+
+Purpose:
+
+- Build deterministic graph with explicit edge rules and validation.
+
+Outputs:
+
 - `data/knowledge_graph/graph.json`
 - `data/knowledge_graph/graph_report.json`
-- `data/entities/teaching_assignments.json` (updated merged assignment map)
+- `data/entities/teaching_assignments.json` (merged deterministic map)
 
----
+### 6. `embed`
 
-## 🕸 Knowledge Graph (Phase 1)
+Purpose:
 
-Current phase-1 implementation constraints:
+- Generate embeddings, ingest into ChromaDB, and run validation checks.
 
-- **Storage format:** JSON only
-- **Edge policy:** deterministic, high-confidence edges only
-- **Priority:** graph construction and documentation first
-- **Current update scope:** technical docs (`README.md`, `CONTRIBUTING.md`, `Docs/knowledge-graph/*`)
+Outputs:
 
-Detailed phase-1 documentation is available in:
+- `chroma_db/*`
+- `data/embeddings/embedding_cache.npz`
+- `data/validation/chromadb_ingestion_report.json`
+- `data/validation/chromadb_validation_report.json`
 
-- `Docs/knowledge-graph/README.md`
-- `Docs/knowledge-graph/phase1-schema.md`
+### 7. `query`
 
----
+Purpose:
 
-## 📁 Project Structure
+- Execute a retrieval-only diagnostic query from CLI.
 
-```
-mbcet-chunking-pipeline/
-├── main.py                 # CLI entry point
-├── config.py               # Configuration and paths
-├── requirements.txt        # Python dependencies
-├── .env.example            # Environment template
-│
-├── scraper/                # Web scraping module
-│   ├── __init__.py
-│   ├── url_discovery.py    # BFS URL crawler
-│   ├── html_scraper.py     # HTML to Markdown converter
-│   ├── pdf_handler.py      # PDF processing with pdfplumber
-│   └── markdown_converter.py # HTML cleaning and conversion
-│
-├── chunker/                # Semantic chunking module
-│   ├── __init__.py
-│   ├── semantic_chunker.py # Main chunking logic
-│   ├── content_classifier.py # Content type classification
-│   ├── entity_registry.py  # Entity extraction and normalization
-│   └── knowledge_graph.py  # Canonical graph generation
-│
-├── knowledge_graph/        # Phase-1 knowledge graph construction
-│   ├── __init__.py
-│   └── builder.py
-│
-├── rag_ingestion.py        # Embeddings, ChromaDB ingestion, retrieval routing
-├── chatbot.py              # Retrieval + synthesis runtime
-├── app.py                  # Streamlit frontend
-│
-├── tests/                  # Unit tests
-│   ├── test_scraper.py
-│   ├── test_chunker.py
-│   ├── test_entity_registry.py
-│   ├── test_query_routing.py
-│   └── test_knowledge_graph.py
-│
-├── data/                   # Generated data (gitignored)
-│   ├── raw/                # Downloaded PDFs
-│   ├── markdown/           # Converted Markdown files
-│   │   ├── pages/          # From HTML pages
-│   │   └── pdfs/           # From PDF documents
-│   ├── entities/           # Entity registries
-│   └── chunks/             # Final chunks
-│   └── knowledge_graph/    # Graph JSON artifacts + report
-│
-└── Docs/                   # Reference documents
-    └── knowledge-graph/    # Phase-1 KG docs and schema
-```
+### 8. `serve` / `chat`
 
----
+Purpose:
 
-## ⚙️ Configuration
+- Run the web assistant stack through FastAPI.
 
-Configuration is managed via `config.py` and `.env`:
+## Web Assistant and API
 
-### Environment Variables (`.env`)
+### Backend endpoints
+
+- `GET /`: serves `frontend/cse_department.html`.
+- `POST /chat`: accepts `{ "message": "..." }`, returns structured chatbot response.
+- `GET /stats`: returns simple local metrics (chunk and faculty counts where available).
+
+### Frontend capabilities
+
+- In-page chat widget with source rendering.
+- Bot markdown rendering with sanitization (supports tables/code/blocks/lists).
+- Maximize/restore chat window support.
+- Mobile-responsive behavior.
+
+### Example request
 
 ```bash
-# Base URL for scraping
-BASE_URL=https://mbcet.ac.in
-CSE_DEPARTMENT_URL=https://mbcet.ac.in/cse
-
-# Request settings
-REQUEST_TIMEOUT=30
-REQUEST_DELAY=1.0
-MAX_RETRIES=3
-
-# Tesseract path (Windows)
-TESSERACT_CMD=C:/Program Files/Tesseract-OCR/tesseract.exe
+curl -X POST "http://127.0.0.1:8000/chat" \
+  -H "Content-Type: application/json" \
+  -d '{"message":"List two CSE courses with credits in a markdown table"}'
 ```
 
-### Chunking Settings (`config.py`)
+## Data Artifacts
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `MAX_CHUNK_WORDS` | 500 | Maximum words per chunk |
-| `MIN_CHUNK_WORDS` | 50 | Minimum words per chunk |
-| `OVERLAP_SENTENCES` | 2 | Sentence overlap between chunks |
+### Important generated files
 
----
+- `data/chunks/chunks.json`: retrieval corpus with metadata.
+- `data/entities/*.json`: registries and assignment mappings.
+- `data/knowledge_graph/graph.json`: deterministic phase-1 graph.
+- `data/validation/*.json`: ingestion and query validation summaries.
+- `data/embeddings/embedding_cache.npz`: cache for re-embedding speed.
 
-## 📤 Output Formats
+### Runtime DB artifact note
 
-### Chunks JSON Schema
+The following are runtime files and should not be committed as data changes:
 
-```json
-{
-  "chunk_id": "pdf_cse_syllabus_root_a1b2c3d4",
-  "text": "## Data Structures\n\nModule 1: Arrays and linked lists...",
-  "source_type": "pdf",
-  "source_file": "data/markdown/pdfs/CSE_Syllabus.md",
-  "section_hierarchy": ["Semester 3", "Data Structures"],
-  "content_type": "regulation",
-  "entity_refs": ["faculty_dr_john_doe"],
-  "page_range": [15, 17],
-  "word_count": 245,
-  "hash": "sha256:abc123..."
-}
-```
+- `chroma_db/chroma.sqlite3`
+- `chroma_db/chroma.sqlite3-shm`
+- `chroma_db/chroma.sqlite3-wal`
 
-### Entity JSON Schema
+The repository ignore rules are configured to prevent repeated runtime DB noise.
 
-```json
-{
-  "id": "faculty_dr_john_doe",
-  "name": "Dr. John Doe",
-  "aliases": ["John Doe", "Dr John Doe"],
-  "type": "faculty",
-  "url": "https://mbcet.ac.in/cse/faculty/john-doe"
-}
-```
+## Testing and Validation
 
-### Knowledge Graph JSON Schema (Phase 1)
-
-```json
-{
-  "version": "1.0",
-  "generated_at": "ISO-8601 timestamp",
-  "nodes": [
-    {
-      "id": "course_cs101",
-      "type": "course",
-      "name": "Data Structures",
-      "aliases": ["CS101", "Data Structures"],
-      "source_refs": ["data/entities/courses.json"]
-    }
-  ],
-  "edges": [
-    {
-      "id": "edge_part_of_course_cs101_prog_btech_cse_<hash>",
-      "type": "part_of",
-      "source": "course_cs101",
-      "target": "prog_btech_cse",
-      "confidence": 1.0,
-      "deterministic": true,
-      "evidence": ["chunk_id:...", "source_file:...", "rule:..."]
-    }
-  ]
-}
-```
-
----
-
-## 🧪 Testing
-
-### Run All Tests
+Run full unit tests:
 
 ```bash
-pytest
+pytest -q
 ```
 
-### Run with Coverage
+Run targeted tests:
 
 ```bash
-pytest --cov=scraper --cov=chunker --cov-report=html
+pytest tests/test_query_routing.py -q
+pytest tests/test_knowledge_graph.py -q
 ```
 
-### Run Specific Tests
+Optional syntax sanity:
 
 ```bash
-pytest tests/test_scraper.py -v
-pytest tests/test_chunker.py -v
-pytest tests/test_entity_registry.py -v
-pytest tests/test_query_routing.py -v
-pytest tests/test_knowledge_graph.py -v
+python -m py_compile main.py api_server.py
 ```
 
----
+## Troubleshooting
 
-## 🔧 Key Dependencies
+### 1. FastAPI server starts slowly
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `requests` | ≥2.31.0 | HTTP client |
-| `beautifulsoup4` | ≥4.12.0 | HTML parsing |
-| `markdownify` | ≥0.12.0 | HTML to Markdown |
-| `pdfplumber` | ≥0.11.0 | PDF table extraction |
-| `pypdf` | ≥4.0.0 | PDF text extraction |
-| `pytesseract` | ≥0.3.10 | OCR integration |
-| `pyyaml` | ≥6.0.0 | YAML frontmatter |
-| `tqdm` | ≥4.66.0 | Progress bars |
-| `pytest` | ≥8.0.0 | Testing framework |
+Cause:
 
----
+- Startup warmup loads model resources.
 
-## 📊 Validation Artifacts
+Fix:
 
-The latest pipeline and quality metrics are written to `data/validation/`:
+```env
+CHAT_WARMUP_ON_STARTUP=0
+```
 
-- `chromadb_ingestion_report.json`
-- `chromadb_validation_report.json`
-- `retrieval_metrics.json`
-- `kg_quality_metrics.json`
-- `wide_eval_summary.md`
+### 2. Chat endpoint returns runtime model errors
 
-These files are run-specific and update whenever the pipeline is re-ingested or re-evaluated.
+Cause:
 
----
+- Incompatible `transformers`/`huggingface-hub` versions.
 
-## 🤝 Contributing
+Fix:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- Ensure dependencies match `requirements.txt`:
+  - `huggingface-hub>=0.26.0,<1.0`
+  - `transformers>=4.44.0,<5.0`
 
----
+### 3. `git restore` fails for `chroma_db/chroma.sqlite3*` on Windows
 
-## 📄 License
+Cause:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- SQLite files locked by active process.
 
----
+Fix:
 
-## 👥 Authors
+1. Stop running API/processes that access Chroma.
+2. Use one-time index cleanup if files were tracked historically:
 
-- **Rohith** - *Initial work* - MBCET CSE Department
+```bash
+git rm --cached chroma_db/chroma.sqlite3 chroma_db/chroma.sqlite3-shm chroma_db/chroma.sqlite3-wal
+```
 
----
+3. Keep ignore rules enabled to prevent recurrence.
 
-## 🙏 Acknowledgments
+### 4. Chat endpoint returns 500
 
-- MBCET CSE Department for the source content
-- pdfplumber team for excellent table extraction
-- Tesseract OCR community
+Steps:
+
+1. Check server logs for `/chat request failed` stack trace.
+2. Verify `data/chunks/chunks.json` and Chroma artifacts exist.
+3. Run pipeline stages up to `embed`.
+
+## Development Notes
+
+- Primary runtime path is FastAPI + integrated frontend.
+- Streamlit interface remains test-only.
+- `main.py --stage chat` is intentionally a backward-compatible alias to `serve`.
+- Keep graph outputs deterministic and evidence-grounded.
+- Prefer rerunning stage-specific pipelines instead of editing generated artifacts manually.
+
+## License
+
+MIT License. See `LICENSE`.
