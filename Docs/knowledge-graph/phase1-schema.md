@@ -1,5 +1,7 @@
 # Phase-1 Knowledge Graph JSON Schema
 
+This document is schema-only. Runtime API, frontend, timeout, and ngrok configuration are documented in top-level `README.md` and `WORKFLOW.md`.
+
 ## Scope
 
 This schema applies only to phase 1:

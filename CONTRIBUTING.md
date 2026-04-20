@@ -142,7 +142,16 @@ Confirm:
 - frontend loads at `http://127.0.0.1:8000`
 - chat endpoint responds
 - markdown table rendering is correct
-- maximize/restore behavior works
+- clear/maximize/close behavior works
+- long responses can complete within 180s client timeout
+
+Optional public validation (ngrok):
+
+```bash
+ngrok http --domain=hyo-gymnocarpous-lingeringly.ngrok-free.dev 8000
+```
+
+Then verify the public URL and one `/chat` request.
 
 ## 7. Pull Request Requirements
 
@@ -189,6 +198,12 @@ If historically tracked and causing churn, one-time untracking can be used:
 ```bash
 git rm --cached chroma_db/chroma.sqlite3 chroma_db/chroma.sqlite3-shm chroma_db/chroma.sqlite3-wal
 ```
+
+## 8.3 Secret handling policy
+
+- Never commit real credentials (for example, `GROQ_API_KEY`, `HF_TOKEN`) to tracked files.
+- Keep secrets in local `.env` only.
+- Use placeholders in `.env.example` and docs.
 
 ## 9. Knowledge Graph Contribution Rules
 
@@ -283,6 +298,11 @@ Ensure `requirements.txt` ranges are respected, especially:
 
 - Stop all processes using ChromaDB.
 - Retry file operations after process shutdown.
+
+### 13.4 `serve` and ngrok lifecycle conflicts
+
+- If one-command auto-ngrok startup is unstable in your terminal, set `AUTO_START_NGROK=0`.
+- Run `serve` and `ngrok` in separate terminals for maximum reliability.
 
 ## 14. Code Review Checklist
 

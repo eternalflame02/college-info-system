@@ -21,6 +21,8 @@ Usage:
 
 import argparse
 import logging
+import os
+import shutil
 import sys
 from pathlib import Path
 from typing import List
@@ -209,9 +211,36 @@ def run_serve_stage():
     """
     import subprocess
 
+    def _maybe_start_ngrok_tunnel():
+        """Optionally start ngrok when AUTO_START_NGROK=1 and NGROK_DOMAIN is set."""
+        auto_start = os.getenv("AUTO_START_NGROK", "0") == "1"
+        if not auto_start:
+            return None
+
+        ngrok_domain = os.getenv("NGROK_DOMAIN", "").strip()
+        if not ngrok_domain:
+            print("[WARN] AUTO_START_NGROK=1 but NGROK_DOMAIN is not set; skipping ngrok startup.")
+            return None
+
+        ngrok_bin = shutil.which("ngrok")
+        if not ngrok_bin:
+            print("[WARN] AUTO_START_NGROK=1 but 'ngrok' is not available in PATH.")
+            return None
+
+        cmd = [ngrok_bin, "http", f"--domain={ngrok_domain}", "8000"]
+        try:
+            proc = subprocess.Popen(cmd, cwd=str(Path(__file__).parent))
+            print(f"[OK] ngrok started for https://{ngrok_domain} -> http://127.0.0.1:8000")
+            return proc
+        except Exception as exc:
+            print(f"[WARN] Failed to start ngrok automatically: {exc}")
+            return None
+
     print("\n" + "=" * 50)
     print(" Starting FastAPI server (api_server:app) on http://127.0.0.1:8000")
     print("=" * 50)
+
+    ngrok_proc = _maybe_start_ngrok_tunnel()
 
     try:
         import uvicorn
@@ -222,6 +251,14 @@ def run_serve_stage():
             [sys.executable, "-m", "uvicorn", "api_server:app", "--host", "127.0.0.1", "--port", "8000"],
             cwd=str(Path(__file__).parent),
         )
+    finally:
+        if ngrok_proc and ngrok_proc.poll() is None:
+            print("[INFO] Stopping auto-started ngrok tunnel...")
+            ngrok_proc.terminate()
+            try:
+                ngrok_proc.wait(timeout=5)
+            except Exception:
+                ngrok_proc.kill()
 
 
 def run_all_stages(force: bool = False):
