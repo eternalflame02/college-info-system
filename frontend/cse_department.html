@@ -36,8 +36,8 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
   #chat-window.open{opacity:1;transform:translateY(0);visibility:visible}
   #chat-window.maximized{top:16px;left:16px;right:16px;bottom:16px;width:auto;max-width:none;min-height:unset;max-height:none;height:auto;border-radius:14px;transform:none}
   .chat-header{background:radial-gradient(circle at top right,#314f88 0%,#243964 56%);color:#fff;padding:14px 16px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-  .chat-actions{display:flex;align-items:center;gap:6px}
-  .chat-icon-btn{background:transparent;border:1px solid rgba(255,255,255,0.35);color:#fff;font-size:15px;line-height:1;padding:6px 8px;border-radius:8px;cursor:pointer;min-width:30px}
+  .chat-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .chat-icon-btn{background:transparent;border:1px solid rgba(255,255,255,0.35);color:#fff;font-size:16px;line-height:1;padding:0;border-radius:8px;cursor:pointer;min-width:34px;width:34px;height:34px;font-weight:500;letter-spacing:0}
   .chat-icon-btn:hover{background:rgba(255,255,255,0.15)}
   .chat-title-wrap{display:flex;align-items:center;gap:10px}
   .chat-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;letter-spacing:0.02em;text-transform:none}
@@ -49,7 +49,8 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
   .chat-quick button:hover{background:#eaf1ff}
   .chat-messages{flex:1;overflow:auto;padding:14px;background:linear-gradient(180deg,var(--chat-surface) 0%,#edf2ff 100%);-webkit-overflow-scrolling:touch}
   .chat-input{display:flex;align-items:flex-end;padding:12px;border-top:1px solid #e6e8f0;background:#fff;gap:8px}
-  .chat-input textarea{flex:1;padding:11px 13px;border-radius:14px;border:1px solid #d7dbe8;min-width:0;font-size:14px;color:#212121;background:#fff;box-shadow:inset 0 1px 2px rgba(16,24,40,0.05);resize:none;min-height:44px;max-height:128px;line-height:1.4}
+  .chat-input textarea{flex:1;padding:11px 13px;border-radius:14px;border:1px solid #d7dbe8;min-width:0;font-size:14px;color:#212121;background:#fff;box-shadow:inset 0 1px 2px rgba(16,24,40,0.05);resize:none;min-height:44px;max-height:128px;line-height:1.4;overflow-y:hidden}
+  .chat-input textarea::-webkit-scrollbar{width:0;height:0}
   .chat-input textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(36,57,100,0.12)}
   .chat-input button{background:var(--primary);color:#fff;border:none;padding:12px 18px;border-radius:999px;cursor:pointer;font-weight:600;transition:background .2s ease,transform .2s ease;}
   .chat-input button:hover{background:#1f3255;}
@@ -1031,12 +1032,12 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#fff" opacity=".12"/></svg>
         <span class="chat-title">Department Assistant</span>
       </div>
-      <div class="chat-status"><span class="dot" aria-hidden="true"></span><span>Online now - answers from indexed CSE knowledge base</span></div>
+      <div class="chat-status"><span class="dot" aria-hidden="true"></span><span>Online - indexed CSE knowledge base</span></div>
     </div>
     <div class="chat-actions">
-      <button id="chat-clear" class="chat-icon-btn" aria-label="Clear chat history">C</button>
-      <button id="chat-maximize" class="chat-icon-btn" aria-label="Maximize chat" aria-pressed="false">[]</button>
-      <button id="chat-close" class="chat-icon-btn" aria-label="Close chat">×</button>
+      <button id="chat-clear" class="chat-icon-btn" aria-label="Clear chat history" title="Clear">↺</button>
+      <button id="chat-maximize" class="chat-icon-btn" aria-label="Maximize chat" aria-pressed="false" title="Maximize">□</button>
+      <button id="chat-close" class="chat-icon-btn" aria-label="Close chat" title="Close">×</button>
     </div>
   </div>
   <div class="chat-quick" id="chat-quick"></div>
@@ -1055,6 +1056,7 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 <script>
   (function(){
     const CHAT_STORAGE_KEY = 'mbcet_cse_chat_history_v2';
+    const REQUEST_TIMEOUT_MS = 180000;
     const QUICK_PROMPTS = [
       'Who is the HOD of CSE?',
       'Who teaches Data Structures?',
@@ -1222,7 +1224,7 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
       WIN.classList.toggle('maximized', next);
       MAXIMIZE.setAttribute('aria-pressed', String(next));
       MAXIMIZE.setAttribute('aria-label', next ? 'Restore chat size' : 'Maximize chat');
-      MAXIMIZE.textContent = next ? 'x' : '[]';
+      MAXIMIZE.textContent = next ? '❐' : '□';
       scrollBottom();
     }
 
@@ -1284,7 +1286,7 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 
       // timeout via AbortController
       const controller = new AbortController();
-      const timer = setTimeout(()=> controller.abort(), 30000);
+      const timer = setTimeout(()=> controller.abort(), REQUEST_TIMEOUT_MS);
       try{
         const res = await fetch('/chat',{
           method:'POST',
@@ -1351,7 +1353,7 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
         clearTimeout(timer);
         console.error('chat request error', err);
         if(typing && typing.parentNode === MESSAGES) MESSAGES.removeChild(typing);
-        const msg = (err.name === 'AbortError') ? 'Request timed out (30s).' : 'Sorry — could not reach the chat server.';
+        const msg = (err.name === 'AbortError') ? 'Request timed out (180s).' : 'Sorry — could not reach the chat server.';
         appendMessage(msg + (err.message ? ' ' + err.message : ''),'bot');
         persistHistory();
         if(!WIN.classList.contains('open')) setUnread(true);
