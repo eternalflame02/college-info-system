@@ -90,6 +90,14 @@ temp/
 *.bak
 *.cache
 
+# Runtime vector DB artifacts
+chroma_db/*.sqlite3
+chroma_db/*.sqlite3-*
+chroma_db/**/*.bin
+data/chroma_db/*.sqlite3
+data/chroma_db/*.sqlite3-*
+data/chroma_db/**/*.bin
+
 
 
 # Keep data directory structure

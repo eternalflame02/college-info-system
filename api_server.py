@@ -18,18 +18,31 @@ from fastapi.encoders import jsonable_encoder
 import os
 import asyncio
 import dataclasses
+import logging
 import config
 from pathlib import Path
 
 app = FastAPI(title="MBCET CSE Assistant API")
+logger = logging.getLogger(__name__)
 
 # Serve the static frontend from the backend for a single-origin integration.
 app.mount("/frontend", StaticFiles(directory=str(Path(__file__).parent / "frontend")), name="frontend")
 
-# Allow local development CORS (adjust for production)
+def _get_allowed_origins() -> list[str]:
+    """Resolve CORS allowlist from env with safe localhost defaults."""
+    raw = os.getenv("CORS_ALLOW_ORIGINS", "http://127.0.0.1:8000,http://localhost:8000")
+    origins = [item.strip() for item in raw.split(",") if item.strip()]
+    if not origins:
+        origins = ["http://127.0.0.1:8000", "http://localhost:8000"]
+    return origins
+
+
+allowed_origins = _get_allowed_origins()
+
+# CORS defaults to localhost only; override with CORS_ALLOW_ORIGINS.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -79,6 +92,7 @@ def chat_endpoint(req: ChatRequest):
         # use jsonable_encoder to handle any numpy or non-standard types
         return jsonable_encoder(resp_dict)
     except Exception as exc:
+        logger.exception("/chat request failed")
         raise HTTPException(status_code=500, detail=str(exc))
 
 

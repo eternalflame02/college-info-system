@@ -32,7 +32,11 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
   #chat-toggle:focus{outline:2px solid rgba(255,255,255,0.75);outline-offset:3px;}
   #chat-window{position:fixed;right:28px;bottom:100px;width:360px;max-width:calc(100% - 56px);min-height:420px;height:auto;max-height:calc(100% - 120px);border-radius:18px;box-shadow:0 16px 40px rgba(0,0,0,0.25);background:#fff;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(28px);transition:transform .25s ease,opacity .25s ease;visibility:hidden;z-index:99999}
   #chat-window.open{opacity:1;transform:translateY(0);visibility:visible}
+  #chat-window.maximized{top:16px;left:16px;right:16px;bottom:16px;width:auto;max-width:none;min-height:unset;max-height:none;height:auto;border-radius:14px;transform:none}
   .chat-header{background:var(--primary);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .chat-actions{display:flex;align-items:center;gap:6px}
+  .chat-icon-btn{background:transparent;border:1px solid rgba(255,255,255,0.35);color:#fff;font-size:15px;line-height:1;padding:6px 8px;border-radius:8px;cursor:pointer}
+  .chat-icon-btn:hover{background:rgba(255,255,255,0.15)}
   .chat-header .chat-label{display:flex;align-items:center;gap:10px}
   .chat-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;letter-spacing:0.02em;text-transform:none}
   .chat-messages{flex:1;overflow:auto;padding:14px;background:#f6f8ff;-webkit-overflow-scrolling:touch}
@@ -44,6 +48,11 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
   .chat-input button:disabled{background:#a0a8bf;cursor:not-allowed;}
   .msg{display:block;max-width:86%;padding:12px 14px;border-radius:18px;margin-bottom:10px;white-space:pre-wrap;line-height:1.55;font-size:14px;box-shadow:0 1px 2px rgba(16,24,40,0.05)}
   .msg.bot{background:#fff;border:1px solid #e7eaf2;border-radius:18px 18px 18px 4px;color:#1f2937;}
+  .msg.bot table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+  .msg.bot th,.msg.bot td{border:1px solid #d9dfea;padding:6px 8px;text-align:left;vertical-align:top}
+  .msg.bot th{background:#eef2fb;font-weight:600}
+  .msg.bot code{background:#f2f4f8;border-radius:4px;padding:1px 4px}
+  .msg.bot pre{background:#f2f4f8;border-radius:8px;padding:8px;overflow:auto}
   .msg.user{margin-left:auto;background:var(--primary);color:#fff;border-radius:18px 18px 4px 18px;}
   .msg.user small, .msg.bot small{display:block;margin-top:8px;opacity:.75;font-size:12px;}
   .typing{display:flex;align-items:center;gap:6px;padding:10px 12px;border-radius:18px;background:#fff;border:1px solid #e7eaf2;}
@@ -57,6 +66,7 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
   @media (max-width: 480px){
     #chat-toggle{right:16px;bottom:16px;width:52px;height:52px}
     #chat-window{right:16px;left:16px;bottom:72px;width:auto;height:70vh;max-height:calc(100% - 84px);border-radius:16px}
+    #chat-window.maximized{top:8px;left:8px;right:8px;bottom:8px;border-radius:10px}
     .chat-header .chat-title{font-size:14px}
     .chat-input{padding:10px}
     .chat-input input{font-size:14px;margin-right:8px}
@@ -974,6 +984,26 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
   <nav class="mobile-top-navigation clearfix" role="navigation">
     <a class="back-home" href="https://mbcet.ac.in/"><i class="icon-arrow-left"></i>Back home</a>
   </nav>
+  <nav class="mobile-main-navigation" role="navigation">
+    <ul>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/bos/">BoS</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/the-people/">The People</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/department-advisory-board/">Department Advisory Board</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/facilities/">Facilities</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/news-events/">News & Events</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/workshops-seminars/">Workshops & Seminars</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/research-consultancy/">Research and Consultancy</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/placement/">Placements</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/activities/">Activities</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/academic-resources/">Video Lectures</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/peos-pos/">B. Tech PEOs POs & PSOs</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/syllabus/">Syllabus</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/time-table/">Time Table</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/computer-society-of-india/">Computer Society of India</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/cse-blog/">CSE Blog</a></li>
+      <li><a href="https://mbcet.ac.in/departments/computer-science-engineering/former-hods/">Former HoDs</a></li>
+    </ul>
+  </nav>
 </div>
 
 <!-- Chat widget markup -->
@@ -987,7 +1017,10 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#fff" opacity=".12"/></svg>
       <span>Department Assistant</span>
     </div>
-    <button id="chat-close" aria-label="Close chat" style="background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer">×</button>
+    <div class="chat-actions">
+      <button id="chat-maximize" class="chat-icon-btn" aria-label="Maximize chat" aria-pressed="false">[]</button>
+      <button id="chat-close" class="chat-icon-btn" aria-label="Close chat">×</button>
+    </div>
   </div>
   <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
   <form id="chat-form" class="chat-input">
@@ -996,12 +1029,17 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
   </form>
 </div>
 
+<!-- Markdown rendering support for bot responses (tables, lists, emphasis) -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+
 <!-- Chat widget JS: sends POST to local API and renders typing/source info -->
 <script>
   (function(){
     const TOGGLE = document.getElementById('chat-toggle');
     const WIN = document.getElementById('chat-window');
     const CLOSE = document.getElementById('chat-close');
+    const MAXIMIZE = document.getElementById('chat-maximize');
     const FORM = document.getElementById('chat-form');
     const INPUT = document.getElementById('chat-input');
     const MESSAGES = document.getElementById('chat-messages');
@@ -1012,11 +1050,37 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 
     function scrollBottom(){ MESSAGES.scrollTop = MESSAGES.scrollHeight; }
 
-    function el(tag, cls, html){ const e = document.createElement(tag); if(cls) e.className = cls; if(html!==undefined) e.innerHTML = html; return e }
+    function el(tag, cls, text){
+      const e = document.createElement(tag);
+      if(cls) e.className = cls;
+      if(text!==undefined && text!==null) e.textContent = text;
+      return e;
+    }
+
+    function renderBotMarkdown(text){
+      const safeText = String(text || '');
+      if(window.marked && window.DOMPurify){
+        marked.setOptions({ gfm: true, breaks: true });
+        const raw = marked.parse(safeText);
+        return DOMPurify.sanitize(raw, {
+          ALLOWED_TAGS: ['p','br','strong','em','code','pre','ul','ol','li','blockquote','table','thead','tbody','tr','th','td','a'],
+          ALLOWED_ATTR: ['href','target','rel']
+        });
+      }
+      const escaped = safeText
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      return '<p>' + escaped.replace(/\n/g, '<br>') + '</p>';
+    }
 
     function appendMessage(text, who, meta){
       const m = el('div','msg '+(who==='user'?'user':'bot'));
-      m.textContent = text;
+      if(who === 'bot'){
+        m.innerHTML = renderBotMarkdown(text);
+      } else {
+        m.textContent = text;
+      }
       m.setAttribute('role','article');
       m.setAttribute('tabindex','0');
       m.setAttribute('aria-live', who==='user' ? 'off' : 'polite');
@@ -1057,8 +1121,18 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
       }
     }
 
+    function toggleMaximize(){
+      const next = !WIN.classList.contains('maximized');
+      WIN.classList.toggle('maximized', next);
+      MAXIMIZE.setAttribute('aria-pressed', String(next));
+      MAXIMIZE.setAttribute('aria-label', next ? 'Restore chat size' : 'Maximize chat');
+      MAXIMIZE.textContent = next ? 'x' : '[]';
+      scrollBottom();
+    }
+
     TOGGLE.addEventListener('click', ()=> setOpen(!WIN.classList.contains('open')));
     CLOSE.addEventListener('click', ()=> setOpen(false));
+    MAXIMIZE.addEventListener('click', toggleMaximize);
 
     function getSourceLabel(s){
       if(!s) return 'source';
@@ -1132,7 +1206,7 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
                   p.style.margin='6px 0 0'; p.style.fontSize='13px';
                   li.appendChild(p);
                 }
-                if(score){ const small = el('small',null,' — (score: '+score+')'); small.style.opacity='.8'; li.appendChild(small); }
+                if(score){ const small = el('small',null,' - (score: '+score+')'); small.style.opacity='.8'; li.appendChild(small); }
                 ul.appendChild(li);
               }catch(_) { console.warn('Failed to render one source chunk', _); }
             });

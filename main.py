@@ -14,7 +14,8 @@ Usage:
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
-    python main.py --stage chat      # Launch Streamlit chatbot UI
+    python main.py --stage chat      # Launch web assistant (FastAPI + frontend)
+    python main.py --stage serve     # Launch web assistant (FastAPI + frontend)
     python main.py --stage all       # Run complete pipeline
 """
 
@@ -195,25 +196,9 @@ def run_query_stage(query_text: str):
 
 
 def run_chat_stage():
-    """Launch the Streamlit chatbot UI."""
-    import subprocess
-
-    app_path = Path(__file__).parent / "app.py"
-    if not app_path.exists():
-        print("[ERR] app.py not found. Cannot launch chatbot.")
-        sys.exit(1)
-
-    print("\n" + "=" * 50)
-    print(" Launching MBCET CSE Chatbot")
-    print("=" * 50)
-    print(f"Starting Streamlit server...")
-    print(f"Press Ctrl+C to stop.\n")
-
-    subprocess.run(
-        [sys.executable, "-m", "streamlit", "run", str(app_path),
-         "--server.headless", "true"],
-        cwd=str(Path(__file__).parent),
-    )
+    """Backward-compatible alias for the primary FastAPI + frontend UI."""
+    print("\n[INFO] Streamlit was test-only. Starting FastAPI + frontend UI instead.")
+    run_serve_stage()
 
 
 def run_serve_stage():
@@ -272,7 +257,8 @@ Examples:
     python main.py --stage embed     # Embed chunks & ingest into ChromaDB
     python main.py --stage embed --force  # Force re-embedding
     python main.py --stage query --text "Who is the HOD?"
-    python main.py --stage chat      # Launch Streamlit chatbot
+    python main.py --stage chat      # Launch web assistant (FastAPI + frontend)
+    python main.py --stage serve     # Launch web assistant (FastAPI + frontend)
     python main.py --stage all       # Run complete pipeline
         """
     )

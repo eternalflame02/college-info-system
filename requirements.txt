@@ -23,7 +23,8 @@ tqdm>=4.66.0
 sentence-transformers>=3.0.0
 chromadb>=0.5.0
 numpy>=1.24.0
-huggingface-hub>=0.20.0
+huggingface-hub>=0.26.0,<1.0
+transformers>=4.44.0,<5.0
 
 # Chatbot UI & LLM
 streamlit>=1.30.0
