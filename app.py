@@ -136,6 +136,40 @@ header { visibility: hidden; }
     margin-bottom: 24px;
 }
 
+.toolbar-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    margin-bottom: 14px;
+}
+.toolbar-note {
+    color: #9fb1c7;
+    font-size: 12px;
+}
+
+.welcome-box {
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    background: rgba(255,255,255,0.03);
+}
+.welcome-title {
+    color: #d8e5f6;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.welcome-sub {
+    color: #9fb1c7;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
 /* ── Metric cards ── */
 .metric-row {
     display: flex;
@@ -233,9 +267,46 @@ with st.sidebar:
 st.markdown('<h1 class="hero-title">MBCET CSE Assistant</h1>', unsafe_allow_html=True)
 st.markdown('<p class="hero-subtitle">Ask anything about the Computer Science & Engineering department</p>', unsafe_allow_html=True)
 
+st.markdown('<div class="toolbar-wrap"><span class="toolbar-note">Tip: ask for concise answers, bullet points, or markdown tables.</span></div>', unsafe_allow_html=True)
+
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
+if "prefill_query" not in st.session_state:
+    st.session_state["prefill_query"] = None
+
+if not st.session_state.messages:
+    st.markdown(
+        """
+        <div class="welcome-box">
+          <div class="welcome-title">Start with one of these quick prompts</div>
+          <div class="welcome-sub">The assistant is strongest on faculty, courses, timetables, and regulations.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    q1, q2, q3 = st.columns(3)
+    with q1:
+        if st.button("Who is the HOD?", use_container_width=True):
+            st.session_state["prefill_query"] = "Who is the HOD of CSE?"
+            st.rerun()
+    with q2:
+        if st.button("S5 courses with credits", use_container_width=True):
+            st.session_state["prefill_query"] = "List S5 CSE subjects with credits in a markdown table"
+            st.rerun()
+    with q3:
+        if st.button("Attendance rules", use_container_width=True):
+            st.session_state["prefill_query"] = "What are the attendance requirements?"
+            st.rerun()
+
+top_l, top_r = st.columns([1, 5])
+with top_l:
+    if st.button("Clear chat", use_container_width=True):
+        st.session_state.messages = []
+        st.rerun()
+with top_r:
+    st.caption("Conversation is local to this browser session.")
 
 # Display chat history
 for message in st.session_state.messages:

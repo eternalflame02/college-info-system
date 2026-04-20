@@ -25,36 +25,48 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 
 <!-- Add chat widget CSS -->
 <style>
-  :root{--primary:#243964;--accent:#f0c237}
+  :root{--primary:#243964;--accent:#f0c237;--chat-surface:#f7f9ff;--chat-border:#d9e1f0;--chat-muted:#5f6b82}
   /* Chat widget */
-  #chat-toggle{position:fixed;right:28px;bottom:28px;width:58px;height:58px;border-radius:50%;background:var(--primary);color:#fff;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;z-index:99999;transition:transform .2s ease,background .2s ease;}
+  #chat-toggle{position:fixed;right:28px;bottom:28px;width:58px;height:58px;border-radius:50%;background:linear-gradient(145deg,#2d467b,#243964);color:#fff;border:none;cursor:pointer;box-shadow:0 10px 24px rgba(17,27,48,0.3);display:flex;align-items:center;justify-content:center;z-index:99999;transition:transform .2s ease,background .2s ease,box-shadow .2s ease;}
   #chat-toggle:hover{transform:scale(1.05);background:#1f3255;}
   #chat-toggle:focus{outline:2px solid rgba(255,255,255,0.75);outline-offset:3px;}
-  #chat-window{position:fixed;right:28px;bottom:100px;width:360px;max-width:calc(100% - 56px);min-height:420px;height:auto;max-height:calc(100% - 120px);border-radius:18px;box-shadow:0 16px 40px rgba(0,0,0,0.25);background:#fff;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(28px);transition:transform .25s ease,opacity .25s ease;visibility:hidden;z-index:99999}
+  #chat-toggle .chat-pulse{position:absolute;top:2px;right:2px;width:11px;height:11px;border-radius:50%;background:#31c48d;border:2px solid #fff;display:none}
+  #chat-toggle.has-unread .chat-pulse{display:block}
+  #chat-window{position:fixed;right:28px;bottom:100px;width:390px;max-width:calc(100% - 56px);min-height:500px;height:auto;max-height:calc(100% - 120px);border-radius:20px;box-shadow:0 22px 46px rgba(14,27,52,0.35);background:#fff;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(28px);transition:transform .25s ease,opacity .25s ease;visibility:hidden;z-index:99999;border:1px solid var(--chat-border)}
   #chat-window.open{opacity:1;transform:translateY(0);visibility:visible}
   #chat-window.maximized{top:16px;left:16px;right:16px;bottom:16px;width:auto;max-width:none;min-height:unset;max-height:none;height:auto;border-radius:14px;transform:none}
-  .chat-header{background:var(--primary);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .chat-header{background:radial-gradient(circle at top right,#314f88 0%,#243964 56%);color:#fff;padding:14px 16px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
   .chat-actions{display:flex;align-items:center;gap:6px}
-  .chat-icon-btn{background:transparent;border:1px solid rgba(255,255,255,0.35);color:#fff;font-size:15px;line-height:1;padding:6px 8px;border-radius:8px;cursor:pointer}
+  .chat-icon-btn{background:transparent;border:1px solid rgba(255,255,255,0.35);color:#fff;font-size:15px;line-height:1;padding:6px 8px;border-radius:8px;cursor:pointer;min-width:30px}
   .chat-icon-btn:hover{background:rgba(255,255,255,0.15)}
-  .chat-header .chat-label{display:flex;align-items:center;gap:10px}
+  .chat-title-wrap{display:flex;align-items:center;gap:10px}
   .chat-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;letter-spacing:0.02em;text-transform:none}
-  .chat-messages{flex:1;overflow:auto;padding:14px;background:#f6f8ff;-webkit-overflow-scrolling:touch}
-  .chat-input{display:flex;padding:12px;border-top:1px solid #e6e8f0;background:#fff}
-  .chat-input input{flex:1;padding:12px 14px;border-radius:999px;border:1px solid #d7dbe8;margin-right:10px;min-width:0;font-size:14px;color:#212121;background:#fff;box-shadow:inset 0 1px 2px rgba(16,24,40,0.05)}
-  .chat-input input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(36,57,100,0.12)}
+  .chat-status{font-size:12px;opacity:0.88;margin-top:2px;display:flex;align-items:center;gap:6px}
+  .chat-status .dot{width:8px;height:8px;border-radius:50%;background:#31c48d;box-shadow:0 0 0 0 rgba(49,196,141,0.45);animation:statusPulse 2s infinite}
+  @keyframes statusPulse{0%{box-shadow:0 0 0 0 rgba(49,196,141,0.45)}70%{box-shadow:0 0 0 10px rgba(49,196,141,0)}100%{box-shadow:0 0 0 0 rgba(49,196,141,0)}}
+  .chat-quick{display:flex;gap:8px;overflow:auto;padding:10px 12px;background:#eef3ff;border-bottom:1px solid #dce4f5}
+  .chat-quick button{border:1px solid #ccdaff;background:#fff;color:#27406f;font-size:12px;padding:7px 10px;border-radius:999px;white-space:nowrap;cursor:pointer;font-weight:600}
+  .chat-quick button:hover{background:#eaf1ff}
+  .chat-messages{flex:1;overflow:auto;padding:14px;background:linear-gradient(180deg,var(--chat-surface) 0%,#edf2ff 100%);-webkit-overflow-scrolling:touch}
+  .chat-input{display:flex;align-items:flex-end;padding:12px;border-top:1px solid #e6e8f0;background:#fff;gap:8px}
+  .chat-input textarea{flex:1;padding:11px 13px;border-radius:14px;border:1px solid #d7dbe8;min-width:0;font-size:14px;color:#212121;background:#fff;box-shadow:inset 0 1px 2px rgba(16,24,40,0.05);resize:none;min-height:44px;max-height:128px;line-height:1.4}
+  .chat-input textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(36,57,100,0.12)}
   .chat-input button{background:var(--primary);color:#fff;border:none;padding:12px 18px;border-radius:999px;cursor:pointer;font-weight:600;transition:background .2s ease,transform .2s ease;}
   .chat-input button:hover{background:#1f3255;}
   .chat-input button:disabled{background:#a0a8bf;cursor:not-allowed;}
-  .msg{display:block;max-width:86%;padding:12px 14px;border-radius:18px;margin-bottom:10px;white-space:pre-wrap;line-height:1.55;font-size:14px;box-shadow:0 1px 2px rgba(16,24,40,0.05)}
-  .msg.bot{background:#fff;border:1px solid #e7eaf2;border-radius:18px 18px 18px 4px;color:#1f2937;}
+  .msg{display:block;max-width:90%;padding:12px 14px;border-radius:18px;margin-bottom:10px;white-space:pre-wrap;line-height:1.55;font-size:14px;box-shadow:0 1px 2px rgba(16,24,40,0.05);animation:msgIn .2s ease}
+  @keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .msg.bot{background:#fff;border:1px solid #e7eaf2;border-radius:18px 18px 18px 6px;color:#1f2937;}
   .msg.bot table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
   .msg.bot th,.msg.bot td{border:1px solid #d9dfea;padding:6px 8px;text-align:left;vertical-align:top}
   .msg.bot th{background:#eef2fb;font-weight:600}
   .msg.bot code{background:#f2f4f8;border-radius:4px;padding:1px 4px}
   .msg.bot pre{background:#f2f4f8;border-radius:8px;padding:8px;overflow:auto}
-  .msg.user{margin-left:auto;background:var(--primary);color:#fff;border-radius:18px 18px 4px 18px;}
-  .msg.user small, .msg.bot small{display:block;margin-top:8px;opacity:.75;font-size:12px;}
+  .msg.user{margin-left:auto;background:linear-gradient(145deg,#243964,#2f4b83);color:#fff;border-radius:18px 18px 6px 18px;}
+  .msg-time{display:block;margin-top:8px;opacity:.72;font-size:11px}
+  .msg-actions{display:flex;justify-content:flex-end;margin-top:6px}
+  .msg-action-btn{border:1px solid #d8dfef;background:#f8faff;color:#33415f;font-size:11px;border-radius:999px;padding:2px 8px;cursor:pointer}
+  .msg-action-btn:hover{background:#eef3ff}
   .typing{display:flex;align-items:center;gap:6px;padding:10px 12px;border-radius:18px;background:#fff;border:1px solid #e7eaf2;}
   .typing .dot{width:8px;height:8px;border-radius:50%;background:#667085;opacity:0;animation:blink 1.2s infinite both}
   .typing .dot:nth-child(1){animation-delay:0s}
@@ -65,11 +77,11 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
   /* Responsive tweaks */
   @media (max-width: 480px){
     #chat-toggle{right:16px;bottom:16px;width:52px;height:52px}
-    #chat-window{right:16px;left:16px;bottom:72px;width:auto;height:70vh;max-height:calc(100% - 84px);border-radius:16px}
+    #chat-window{right:16px;left:16px;bottom:72px;width:auto;height:72vh;max-height:calc(100% - 84px);border-radius:16px}
     #chat-window.maximized{top:8px;left:8px;right:8px;bottom:8px;border-radius:10px}
     .chat-header .chat-title{font-size:14px}
     .chat-input{padding:10px}
-    .chat-input input{font-size:14px;margin-right:8px}
+    .chat-input textarea{font-size:14px}
     .msg{max-width:100%}
   }
 
@@ -145,7 +157,7 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
   }
 
   /* Sources styling inside chat */
-  details.sources{margin-top:8px;border-top:1px dashed #e6e6e6;padding-top:8px}
+  details.sources{margin-top:8px;border-top:1px dashed #d5dded;padding-top:8px;background:#fff;border-radius:12px;padding:8px 10px;border:1px solid #e6ebf7}
   details.sources summary{cursor:pointer;color:var(--primary);font-weight:600;list-style:none}
   details.sources ul{margin:8px 0 0 18px;padding:0;font-size:13px}
   details.sources li{margin-bottom:6px}
@@ -1009,23 +1021,29 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 <!-- Chat widget markup -->
 <button id="chat-toggle" aria-label="Open chat">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#fff" opacity=".08"/><path d="M8 11c0-2 2-4 4-4s4 2 4 4-2 4-4 4H9l-1 2v-2H8c0-1 0-2 0-4z" fill="#fff"/></svg>
+  <span class="chat-pulse" aria-hidden="true"></span>
 </button>
 
-<div id="chat-window" role="dialog" aria-hidden="true">
+<div id="chat-window" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="chat-header">
-    <div class="chat-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#fff" opacity=".12"/></svg>
-      <span>Department Assistant</span>
+    <div>
+      <div class="chat-title-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#fff" opacity=".12"/></svg>
+        <span class="chat-title">Department Assistant</span>
+      </div>
+      <div class="chat-status"><span class="dot" aria-hidden="true"></span><span>Online now - answers from indexed CSE knowledge base</span></div>
     </div>
     <div class="chat-actions">
+      <button id="chat-clear" class="chat-icon-btn" aria-label="Clear chat history">C</button>
       <button id="chat-maximize" class="chat-icon-btn" aria-label="Maximize chat" aria-pressed="false">[]</button>
       <button id="chat-close" class="chat-icon-btn" aria-label="Close chat">×</button>
     </div>
   </div>
+  <div class="chat-quick" id="chat-quick"></div>
   <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
   <form id="chat-form" class="chat-input">
-    <input id="chat-input" type="text" placeholder="Ask about programs, faculty, resources..." autocomplete="off" />
-    <button type="submit">Send</button>
+    <textarea id="chat-input" rows="1" placeholder="Ask about programs, faculty, regulations, timetables..." autocomplete="off"></textarea>
+    <button type="submit" aria-label="Send message">Send</button>
   </form>
 </div>
 
@@ -1036,10 +1054,19 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 <!-- Chat widget JS: sends POST to local API and renders typing/source info -->
 <script>
   (function(){
+    const CHAT_STORAGE_KEY = 'mbcet_cse_chat_history_v2';
+    const QUICK_PROMPTS = [
+      'Who is the HOD of CSE?',
+      'Who teaches Data Structures?',
+      'Show S5 CSE core subjects with credits in a table',
+      'What are the attendance rules?'
+    ];
     const TOGGLE = document.getElementById('chat-toggle');
     const WIN = document.getElementById('chat-window');
     const CLOSE = document.getElementById('chat-close');
+    const CLEAR = document.getElementById('chat-clear');
     const MAXIMIZE = document.getElementById('chat-maximize');
+    const QUICK = document.getElementById('chat-quick');
     const FORM = document.getElementById('chat-form');
     const INPUT = document.getElementById('chat-input');
     const MESSAGES = document.getElementById('chat-messages');
@@ -1049,6 +1076,8 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
     TOGGLE.setAttribute('aria-controls','chat-window');
 
     function scrollBottom(){ MESSAGES.scrollTop = MESSAGES.scrollHeight; }
+    function nowLabel(){ return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
+    function setUnread(on){ TOGGLE.classList.toggle('has-unread', !!on); }
 
     function el(tag, cls, text){
       const e = document.createElement(tag);
@@ -1091,9 +1120,75 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
         metaEl.textContent = meta;
         m.appendChild(metaEl);
       }
+      const t = el('small','msg-time',nowLabel());
+      m.appendChild(t);
+      if(who === 'bot'){
+        const actions = el('div','msg-actions');
+        const copyBtn = el('button','msg-action-btn','Copy');
+        copyBtn.type = 'button';
+        copyBtn.addEventListener('click', async ()=>{
+          const textContent = m.innerText || '';
+          try{ await navigator.clipboard.writeText(textContent.trim()); copyBtn.textContent = 'Copied'; setTimeout(()=>{ copyBtn.textContent='Copy'; }, 1100); }
+          catch(_){ copyBtn.textContent = 'Failed'; setTimeout(()=>{ copyBtn.textContent='Copy'; }, 1100); }
+        });
+        actions.appendChild(copyBtn);
+        m.appendChild(actions);
+      }
       MESSAGES.appendChild(m);
       scrollBottom();
       return m;
+    }
+
+    function persistHistory(){
+      try{
+        const payload = [];
+        Array.prototype.forEach.call(MESSAGES.querySelectorAll('.msg'), (msg)=>{
+          payload.push({
+            role: msg.classList.contains('user') ? 'user' : 'bot',
+            html: msg.innerHTML
+          });
+        });
+        localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(payload.slice(-32)));
+      }catch(_){ }
+    }
+
+    function bindHistoryCopyButtons(){
+      Array.prototype.forEach.call(MESSAGES.querySelectorAll('.msg-action-btn'), (btn)=>{
+        if(btn.dataset.bound === '1') return;
+        btn.dataset.bound = '1';
+        btn.addEventListener('click', async ()=>{
+          const msg = btn.closest('.msg');
+          if(!msg) return;
+          const textContent = msg.innerText || '';
+          try{ await navigator.clipboard.writeText(textContent.trim()); btn.textContent = 'Copied'; setTimeout(()=>{ btn.textContent='Copy'; }, 1100); }
+          catch(_){ btn.textContent = 'Failed'; setTimeout(()=>{ btn.textContent='Copy'; }, 1100); }
+        });
+      });
+    }
+
+    function loadHistory(){
+      try{
+        const raw = localStorage.getItem(CHAT_STORAGE_KEY);
+        if(!raw) return false;
+        const items = JSON.parse(raw);
+        if(!Array.isArray(items) || !items.length) return false;
+        items.forEach((it)=>{
+          const m = el('div','msg '+(it.role==='user'?'user':'bot'));
+          m.innerHTML = String(it.html || '');
+          m.setAttribute('role','article');
+          m.setAttribute('tabindex','0');
+          MESSAGES.appendChild(m);
+        });
+        bindHistoryCopyButtons();
+        scrollBottom();
+        return true;
+      }catch(_){ return false; }
+    }
+
+    function clearHistory(){
+      MESSAGES.innerHTML = '';
+      localStorage.removeItem(CHAT_STORAGE_KEY);
+      addWelcomeMessage();
     }
 
     function createTyping(){
@@ -1114,6 +1209,7 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
         WIN.setAttribute('aria-hidden','false');
         TOGGLE.setAttribute('aria-expanded','true');
         INPUT.focus();
+        setUnread(false);
       } else {
         WIN.classList.remove('open');
         WIN.setAttribute('aria-hidden','true');
@@ -1130,9 +1226,37 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
       scrollBottom();
     }
 
+    function autoResizeInput(){
+      INPUT.style.height = 'auto';
+      INPUT.style.height = Math.min(INPUT.scrollHeight, 128) + 'px';
+    }
+
+    function sendQuickPrompt(promptText){
+      INPUT.value = promptText;
+      autoResizeInput();
+      FORM.dispatchEvent(new Event('submit',{cancelable:true, bubbles:true}));
+    }
+
+    function renderQuickPrompts(){
+      QUICK.innerHTML = '';
+      QUICK_PROMPTS.forEach((p)=>{
+        const b = el('button',null,p);
+        b.type = 'button';
+        b.addEventListener('click', ()=> sendQuickPrompt(p));
+        QUICK.appendChild(b);
+      });
+    }
+
+    function addWelcomeMessage(){
+      appendMessage('Hello. I can help with faculty, courses, timetables, and regulations. Ask a question or tap a quick prompt to start.', 'bot');
+      persistHistory();
+    }
+
     TOGGLE.addEventListener('click', ()=> setOpen(!WIN.classList.contains('open')));
     CLOSE.addEventListener('click', ()=> setOpen(false));
+    CLEAR.addEventListener('click', clearHistory);
     MAXIMIZE.addEventListener('click', toggleMaximize);
+    INPUT.addEventListener('input', autoResizeInput);
 
     function getSourceLabel(s){
       if(!s) return 'source';
@@ -1152,7 +1276,9 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
       const q = INPUT.value.trim();
       if(!q) return;
       INPUT.value='';
+      autoResizeInput();
       appendMessage(q,'user');
+      persistHistory();
       const typing = createTyping();
       INPUT.disabled = true; SEND_BUTTON.disabled = true;
 
@@ -1182,6 +1308,7 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
         if(data && typeof data.response_time_ms !== 'undefined') metaParts.push('Time: '+Math.round(data.response_time_ms)+'ms');
         const meta = metaParts.join(' | ');
         appendMessage(answer,'bot', meta);
+        persistHistory();
 
         // Render sources robustly
         if(data && Array.isArray(data.source_chunks) && data.source_chunks.length){
@@ -1213,17 +1340,22 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
             src.appendChild(ul);
             MESSAGES.appendChild(src);
             scrollBottom();
+            persistHistory();
           }catch(sErr){ console.warn('Failed to render sources', sErr); }
         }
+        if(!WIN.classList.contains('open')) setUnread(true);
       }catch(err){
         clearTimeout(timer);
         console.error('chat request error', err);
         if(typing && typing.parentNode === MESSAGES) MESSAGES.removeChild(typing);
         const msg = (err.name === 'AbortError') ? 'Request timed out (30s).' : 'Sorry — could not reach the chat server.';
         appendMessage(msg + (err.message ? ' ' + err.message : ''),'bot');
+        persistHistory();
+        if(!WIN.classList.contains('open')) setUnread(true);
       } finally {
         clearTimeout(timer);
         INPUT.disabled = false; SEND_BUTTON.disabled = false;
+        INPUT.focus();
       }
     });
 
@@ -1234,6 +1366,10 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 
     // click outside to close (ignore clicks inside the chat or on the toggle)
     document.addEventListener('click',(ev)=>{ if(!WIN.contains(ev.target) && !TOGGLE.contains(ev.target)){ setOpen(false); }});
+
+    renderQuickPrompts();
+    autoResizeInput();
+    if(!loadHistory()) addWelcomeMessage();
   })();
 </script>
 
