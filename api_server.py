@@ -29,12 +29,31 @@ logger = logging.getLogger(__name__)
 app.mount("/frontend", StaticFiles(directory=str(Path(__file__).parent / "frontend")), name="frontend")
 
 def _get_allowed_origins() -> list[str]:
-    """Resolve CORS allowlist from env with safe localhost defaults."""
-    raw = os.getenv("CORS_ALLOW_ORIGINS", "http://127.0.0.1:8000,http://localhost:8000")
-    origins = [item.strip() for item in raw.split(",") if item.strip()]
+    """Resolve CORS allowlist from env with safe localhost/public defaults."""
+    defaults = ["http://127.0.0.1:8000", "http://localhost:8000"]
+
+    public_base = str(getattr(config, "PUBLIC_BASE_URL", "") or "").strip()
+    if public_base:
+        defaults.append(public_base.rstrip("/"))
+
+    ngrok_domain = str(getattr(config, "NGROK_DOMAIN", "") or "").strip()
+    if ngrok_domain:
+        defaults.append(f"https://{ngrok_domain}")
+
+    raw = os.getenv("CORS_ALLOW_ORIGINS", ",".join(defaults))
+    origins = [item.strip().rstrip("/") for item in raw.split(",") if item.strip()]
+
     if not origins:
-        origins = ["http://127.0.0.1:8000", "http://localhost:8000"]
-    return origins
+        origins = defaults
+
+    # Deduplicate while preserving order
+    seen = set()
+    ordered = []
+    for origin in origins:
+        if origin not in seen:
+            ordered.append(origin)
+            seen.add(origin)
+    return ordered
 
 
 allowed_origins = _get_allowed_origins()
