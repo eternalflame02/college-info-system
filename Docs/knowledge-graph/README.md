@@ -2,6 +2,11 @@
 
 This folder defines the implementation scope for the phase-1 knowledge graph work.
 
+Note:
+
+- This folder documents deterministic KG design only.
+- Runtime serving/deployment details are documented in `README.md` and `WORKFLOW.md`.
+
 ## Decisions Fixed for Phase 1
 
 1. **JSON only for now**  

@@ -238,12 +238,29 @@ Responsibilities:
 - Handle chat requests at `POST /chat`.
 - Expose metrics at `GET /stats`.
 
+Online exposure options:
+
+1. Two-terminal mode (recommended):
+   - terminal A: `python main.py --stage serve`
+   - terminal B: `ngrok http --domain=<your-domain> 8000`
+2. One-command mode (optional):
+   - set `AUTO_START_NGROK=1`
+   - set `NGROK_DOMAIN=<your-domain>`
+   - run `python main.py --stage serve`
+
+Notes:
+
+- Two-terminal mode is generally more stable when debugging process lifecycle issues.
+- One-command mode is convenient but may behave differently across terminal hosts.
+
 Operational checks:
 
 - Open `http://127.0.0.1:8000` and verify chat widget loads.
 - Submit a query and confirm answer + source metadata render.
 - Verify markdown tables are rendered properly in bot responses.
-- Verify maximize/restore control works in chat window.
+- Verify clear/maximize/close controls render and function in chat window.
+- Verify long-running prompts can complete within the 180-second client timeout.
+- If ngrok is enabled, verify public URL responds and `/chat` calls succeed.
 
 ## 5. Recommended Developer Flows
 
@@ -291,6 +308,12 @@ Then:
 
 ```bash
 python main.py --stage serve
+```
+
+For public UI testing:
+
+```bash
+ngrok http --domain=hyo-gymnocarpous-lingeringly.ngrok-free.dev 8000
 ```
 
 ## 6. Quality Gates
@@ -355,7 +378,29 @@ If `git restore` fails with unlink errors:
 2. Retry restore or use one-time index cleanup (`git rm --cached ...`).
 3. Confirm ignore rules are present for runtime DB artifacts.
 
-## 9. Branch and PR Workflow
+## 9. Runtime Startup and Port Handling
+
+If `serve` fails with port conflict:
+
+1. Check port ownership:
+
+```powershell
+Get-NetTCPConnection -LocalPort 8000 | Select-Object OwningProcess, LocalAddress, LocalPort, State
+```
+
+2. Stop stale process if required:
+
+```powershell
+Stop-Process -Id <PID> -Force
+```
+
+3. Restart server:
+
+```bash
+python main.py --stage serve
+```
+
+## 10. Branch and PR Workflow
 
 1. Create branch from `main`.
 2. Keep PRs focused by concern:
@@ -367,7 +412,7 @@ If `git restore` fails with unlink errors:
    - query smoke test results
    - UI verification notes
 
-## 10. Release Readiness Checklist
+## 11. Release Readiness Checklist
 
 Before tagging a release/demo build:
 
@@ -379,7 +424,7 @@ Before tagging a release/demo build:
 6. Frontend chat UX checks are complete.
 7. No unintended binary/runtime files remain staged.
 
-## 11. Known Design Notes
+## 12. Known Design Notes
 
 - The repository intentionally maintains two graph outputs:
   - Canonical graph (`data/graph/*`)

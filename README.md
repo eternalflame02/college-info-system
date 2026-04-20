@@ -63,6 +63,9 @@ The system workflow is:
 - Frontend chat widget integrated into `frontend/cse_department.html`.
 - Markdown rendering in bot messages (including tables) with sanitization.
 - Chat window maximize/restore support.
+- Chat controls: clear history, maximize/restore, close.
+- Chat request timeout set to 180 seconds for long-running responses.
+- Quick prompts, local conversation persistence, and copy-to-clipboard for bot responses.
 - Main CLI now treats Streamlit as test-only; `chat` stage aliases `serve`.
 
 ## System Architecture
@@ -231,12 +234,18 @@ CHROMADB_NON_TABLE_COLLECTION=mbcet_cse_non_table
 
 - `CHAT_WARMUP_ON_STARTUP`: `1` (default) warms heavy resources on startup; set to `0` for faster dev startup.
 - `CORS_ALLOW_ORIGINS`: comma-separated allowlist for frontend origins.
+- `PUBLIC_BASE_URL`: public host URL for externally exposed deployments.
+- `NGROK_DOMAIN`: reserved ngrok domain (without protocol).
+- `AUTO_START_NGROK`: when `1`, `main.py --stage serve` attempts to start ngrok automatically.
 
 Example:
 
 ```env
 CHAT_WARMUP_ON_STARTUP=0
-CORS_ALLOW_ORIGINS=http://127.0.0.1:8000,http://localhost:8000
+CORS_ALLOW_ORIGINS=http://127.0.0.1:8000,http://localhost:8000,https://hyo-gymnocarpous-lingeringly.ngrok-free.dev
+PUBLIC_BASE_URL=https://hyo-gymnocarpous-lingeringly.ngrok-free.dev
+NGROK_DOMAIN=hyo-gymnocarpous-lingeringly.ngrok-free.dev
+AUTO_START_NGROK=0
 ```
 
 ## Running the System
@@ -277,6 +286,31 @@ python main.py --stage chat
 ```
 
 Server URL: `http://127.0.0.1:8000`
+
+### Optional online exposure via ngrok
+
+Recommended (more stable) approach uses two terminals:
+
+Terminal 1:
+
+```bash
+python main.py --stage serve
+```
+
+Terminal 2:
+
+```bash
+ngrok http --domain=hyo-gymnocarpous-lingeringly.ngrok-free.dev 8000
+```
+
+Public URL:
+
+`https://hyo-gymnocarpous-lingeringly.ngrok-free.dev`
+
+Single-command option:
+
+- Set `AUTO_START_NGROK=1` and `NGROK_DOMAIN=...` in `.env`
+- Run `python main.py --stage serve`
 
 ## Pipeline Stages (Detailed)
 
@@ -393,7 +427,9 @@ Purpose:
 
 - In-page chat widget with source rendering.
 - Bot markdown rendering with sanitization (supports tables/code/blocks/lists).
+- Clear/maximize/close controls with icon buttons.
 - Maximize/restore chat window support.
+- 180-second client timeout for `/chat` calls.
 - Mobile-responsive behavior.
 
 ### Example request
@@ -495,6 +531,18 @@ Steps:
 1. Check server logs for `/chat request failed` stack trace.
 2. Verify `data/chunks/chunks.json` and Chroma artifacts exist.
 3. Run pipeline stages up to `embed`.
+
+### 5. `serve` exits unexpectedly when using auto-ngrok
+
+Cause:
+
+- ngrok and uvicorn lifecycle interactions in some terminal/process environments.
+
+Fix:
+
+1. Prefer two-terminal mode (`serve` and `ngrok` separately).
+2. Set `AUTO_START_NGROK=0` for stable local serving.
+3. Keep `AUTO_START_NGROK=1` only when one-command startup is required and verified in your shell.
 
 ## Development Notes
 
