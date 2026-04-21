@@ -13,6 +13,7 @@
 \usepackage{subcaption}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
@@ -21,11 +22,15 @@
 \setcounter{tocdepth}{2}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{float}
 
 \renewcommand{\baselinestretch}{1.25}
 \renewcommand{\bibname}{References}
-\renewcommand\listfigurename{\centering{List of Figures}}
-\renewcommand\listtablename{\centering{List of Tables}}
+\renewcommand\listfigurename{List of Figures}
+\renewcommand\listtablename{List of Tables}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\setlength{\emergencystretch}{2em}
 
 %% ---- Code listing style ----
 \lstset{
@@ -73,15 +78,11 @@ Academic Information Systems}}\\[0.2cm]
 \vspace{0.8cm}
 {\Large \textbf{Bachelor of Technology}}\\
 \vspace*{0.1cm}
-\large{in}\\
+\large \textit{by}\\
 \vspace*{0.1cm}
-{\Large \textbf{Computer Science and Engineering}}\\
-\vspace*{0.1cm}
-\large \em{by}\\
-\vspace*{0.1cm}
-{\Large \textbf{\scshape{Julia Mariam John}}}\,({\textbf{B23CS2137}})\\
-{\Large \textbf{\scshape{Nirmel B. Joseph}}}\,({\textbf{B23CS2148}})\\
-{\Large \textbf{\scshape{Rohith N.S.}}}\,({\textbf{B23CS2156}})\\
+{\Large \textbf{Julia Mariam John}}\,({\textbf{B23CS2137}})\\
+{\Large \textbf{Nirmel B. Joseph}}\,({\textbf{B23CS2148}})\\
+{\Large \textbf{Rohith N.S.}}\,({\textbf{B23CS2156}})\\
 \vspace*{1cm}
 \centerline{\includegraphics[width=5cm]{logo.png}}
 \vspace*{-1cm}
@@ -112,12 +113,14 @@ Academic Information Systems}}\\[0.2cm]
   \centerline{\includegraphics[width=5.5cm]{logo.png}}
 \end{center}
 \begin{center}
-  {\Large \textbf{\scshape{Certificate}}}
+  {\Large \textbf{Certificate}}
 \end{center}
 \vspace*{.1in}
 \setstretch{1.5}
 \par
+\begin{sloppypar}
 This is to certify that the report entitled \textbf{Hybrid Knowledge-Graph-Enhanced Retrieval-Augmented Generation for Academic Information Systems} submitted by \textbf{Julia Mariam John}~(B23CS2137), \textbf{Nirmel B. Joseph}~(B23CS2148) \& \textbf{Rohith N.S.}~(B23CS2156), to the APJ Abdul Kalam Technological University in partial fulfillment of the B.Tech.\ degree in Computer Science and Engineering is a bonafide record of the mini project work carried out by them under our guidance and supervision. This report in any form has not been submitted to any other University or Institute for any purpose.
+\end{sloppypar}
 \vspace{0.5in}
 \begin{singlespacing}
 \hspace*{-0.25in}
@@ -198,10 +201,10 @@ Finally, we are grateful to our families and friends for their patience and enco
 Academic information hosted on college websites is largely unstructured and distributed across multiple pages, making precise retrieval difficult using keyword-based search. This mini project proposes a hybrid knowledge-graph-enhanced retrieval-augmented generation (KG-RAG) framework for academic information access, targeting the MBCET CSE department website.
 
 \par
-The system processes institutional content through web scraping, semantic chunking, and vector embedding using EmbeddingGemma (768-dimensional), indexed in a ChromaDB vector database. In parallel, a lightweight knowledge graph explicitly represents academic entities — faculty, courses, programs, and semesters — with deterministic, evidence-backed edges (teaches, part\_of, has\_prerequisite). An intent-aware query router dynamically selects semantic retrieval, graph-based reasoning, or a hybrid of both, and supplies the retrieved context to a large language model for grounded response generation.
+The system processes institutional content through web scraping, semantic chunking, and vector embedding using EmbeddingGemma (768-dimensional), indexed in a ChromaDB vector database. In parallel, a lightweight knowledge graph explicitly represents academic entities --- faculty, courses, programs, and semesters --- with deterministic, evidence-backed edges (\textit{teaches} and \textit{part\_of}) while retaining schema support for \textit{has\_prerequisite}. An intent-aware query router dynamically selects semantic retrieval, graph-based reasoning, or a hybrid of both, and supplies the retrieved context to a large language model for grounded response generation.
 
 \par
-The data pipeline processes 60+ HTML pages and 10 PDF documents, producing 640 semantic chunks and a validated knowledge graph. This design improves factual grounding, relational reasoning, and interpretability over purely embedding-based RAG approaches~\cite{kg_rag_springer,rag_edu_elsevier}.
+The data pipeline currently indexes 2207 semantic chunks (195 HTML-derived and 2012 PDF-derived chunks), ingests 2268 vector documents into ChromaDB (including 61 knowledge-graph synthetic documents), and validates a 480-node academic graph. This design improves factual grounding, relational reasoning, and interpretability over purely embedding-based RAG approaches~\cite{kg_rag_springer,rag_edu_elsevier}.
 
 \par
 \noindent\textbf{Keywords:} Retrieval-Augmented Generation, Knowledge Graph, Vector Embeddings, Semantic Chunking, ChromaDB, Academic Information Systems.
@@ -216,7 +219,7 @@ The data pipeline processes 60+ HTML pages and 10 PDF documents, producing 640 s
 %% ============================================================
 \begin{singlespacing}
 \hypersetup{linkcolor=black}
-\renewcommand\contentsname{\centering{Table of Contents}}
+\renewcommand\contentsname{Table of Contents}
 \tableofcontents
 \setcounter{secnumdepth}{3}
 \clearpage
@@ -249,7 +252,7 @@ Retrieval-Augmented Generation (RAG) addresses part of this problem by combining
 However, purely embedding-based RAG systems exhibit a critical weakness: they treat documents as isolated text passages and fail to capture the \textit{structural relationships} that exist between academic entities. A university's information space is inherently relational — courses belong to programs, faculty teach specific courses, prerequisites link modules across semesters, and departments house laboratories. These relationships are essential for answering multi-hop queries such as ``Which professors in CSE teach semester~5 courses?'' or ``What are the prerequisites for the elective on Machine Learning?'' Knowledge graphs (KGs) offer a natural representation for such relationships. By explicitly encoding entities and typed relationships as nodes and edges, a knowledge graph enables graph-based reasoning that complements semantic similarity search. Recent research confirms that integrating knowledge graphs into RAG pipelines significantly improves multi-hop accuracy, factual grounding, and interpretability~\cite{kg_rag_springer}.
 
 \par
-This mini project proposes a \textbf{hybrid knowledge-graph-enhanced retrieval-augmented generation system} specifically designed for academic information access. The system targets the Computer Science and Engineering (CSE) department of Mar Baselios College of Engineering and Technology (MBCET), processing its website content through a comprehensive pipeline that includes web scraping, PDF extraction, semantic chunking, vector embedding, knowledge graph construction, and intent-aware hybrid retrieval. The data pipeline processes 60+ HTML pages and 10 PDF documents, producing 640 semantic chunks and a validated knowledge graph with deterministic, evidence-backed edges — providing accurate, contextually grounded, and relationally aware responses to academic queries.
+This mini project proposes a \textbf{hybrid knowledge-graph-enhanced retrieval-augmented generation system} specifically designed for academic information access. The system targets the Computer Science and Engineering (CSE) department of Mar Baselios College of Engineering and Technology (MBCET), processing institutional website content through a comprehensive pipeline that includes web scraping, PDF extraction, semantic chunking, vector embedding, knowledge graph construction, and intent-aware hybrid retrieval. The current pipeline produces 2207 semantic chunks and a validated knowledge graph with deterministic, evidence-backed edges, providing accurate, contextually grounded, and relationally aware responses to academic queries.
 
 \clearpage
 
@@ -269,7 +272,7 @@ Linders and Tomczak~\cite{kg_rag_springer} proposed a knowledge-graph-extended R
 
 \section{Summary of Related Works}
 
-\begin{table}[h!]
+\begin{table}[htbp]
   \centering
   \caption{Summary of Related Works}
   \label{tab:litreview}
@@ -321,13 +324,13 @@ Specifically, the system must: (a)~ingest unstructured web content (HTML pages a
   \item To design and implement a semantic chunking pipeline that classifies content by type (profile, regulation, table, section, list) and preserves structural metadata.
   \item To generate vector embeddings using EmbeddingGemma (768-dimensional) and store them in ChromaDB for fast similarity-based retrieval.
   \item To construct a phase-1 knowledge graph with deterministic edges (teaches, part\_of, has\_prerequisite) backed by chunk-level evidence provenance.
-  \item To implement an intent-aware query router that classifies queries into types (teaching, faculty, course, regulation, general) and routes them to the optimal retrieval path.
+  \item To implement an intent-aware query router that classifies queries into types (teaching, faculty, advisory, course, timetable, regulation, general) and routes them to the optimal retrieval path.
   \item To integrate the retrieved context with a large language model for grounded answer generation.
 \end{itemize}
 
 \subsection*{Scope}
 
-The system targets the MBCET CSE department website (\texttt{mbcet.ac.in}) as its primary data source. The data pipeline processes 60+ HTML pages and 10 PDF documents, producing 640 semantic chunks across five content types. The knowledge graph captures faculty (43 entities), courses, programs (B.Tech CSE, B.Tech AI, M.Tech CSE), and semester entities with deterministic, high-confidence edges only. The embedding model (EmbeddingGemma, 768 dimensions) is optimised for a GTX 1650 Ti GPU (4~GB VRAM) with batch size 64 and max sequence length 512 tokens. The system can also run on CPU for inference.
+The system targets the MBCET CSE department website (\texttt{mbcet.ac.in}) as its primary data source. The current data pipeline produces 2207 semantic chunks across five content types (table, profile, section, regulation, list). The knowledge graph captures 64 faculty entities, 405 course entities, 3 program entities, and 8 semester entities with deterministic, high-confidence edges only. The embedding model (EmbeddingGemma, 768 dimensions) is optimised for a GTX 1650 Ti GPU (4~GB VRAM) with batch size 64 and max sequence length 512 tokens. The system can also run on CPU for inference.
 
 \section{Proposed Methodology}
 
@@ -354,7 +357,7 @@ The semantic chunker transforms raw Markdown content into structured, retrievabl
   \item Performs SHA-256 based deduplication to eliminate redundant content.
 \end{itemize}
 
-\begin{table}[h!]
+\begin{table}[htbp]
   \centering
   \caption{Semantic Chunk Schema}
   \label{tab:chunk_schema}
@@ -402,7 +405,7 @@ A lightweight knowledge graph is constructed from the entity registries and sema
 \par
 The graph contains four node types and three edge types:
 
-\begin{table}[h!]
+\begin{table}[htbp]
   \centering
   \caption{Knowledge Graph Node and Edge Types}
   \label{tab:kg_types}
@@ -410,13 +413,13 @@ The graph contains four node types and three edge types:
   \begin{tabular}{|l|l|p{6cm}|}
     \hline
     \textbf{Element} & \textbf{Type} & \textbf{Description} \\ \hline
-    Node & Faculty   & 43 faculty members with name, aliases, URL     \\ \hline
+    Node & Faculty   & 64 faculty members with name, aliases, URL     \\ \hline
     Node & Course    & Course code, name, credits, aliases             \\ \hline
     Node & Program   & B.Tech CSE, B.Tech AI, M.Tech CSE               \\ \hline
     Node & Semester  & Semesters 1--8 (deterministic from chunk refs)   \\ \hline
     Edge & teaches          & Faculty $\rightarrow$ Course (from timetable tables) \\ \hline
     Edge & part\_of          & Course $\rightarrow$ Program (from syllabus source)   \\ \hline
-    Edge & has\_prerequisite & Course $\rightarrow$ Course (from prerequisite text)   \\ \hline
+    Edge & has\_prerequisite & Course $\rightarrow$ Course (schema-supported; none extracted in current build)   \\ \hline
   \end{tabular}
 \end{table}
 
@@ -434,12 +437,14 @@ The graph is validated post-construction: every edge must have both endpoints in
 When a user submits a query, the system performs intent-aware routing:
 
 \begin{enumerate}
-  \item \textbf{Query classification:} The query is classified into one of six types: \textit{teaching}, \textit{faculty}, \textit{course}, \textit{timetable}, \textit{regulation}, or \textit{general}.
+  \item \textbf{Query classification:} The query is classified into one of seven types: \textit{teaching}, \textit{faculty}, \textit{advisory}, \textit{course}, \textit{timetable}, \textit{regulation}, or \textit{general}.
   \item \textbf{Retrieval routing:} Based on the classified type, the system applies content-type filters in ChromaDB and adjusts the number of results:
     \begin{itemize}
       \item \textit{teaching} $\rightarrow$ filter \texttt{knowledge\_graph} chunks, $k=5$
       \item \textit{faculty} $\rightarrow$ filter \texttt{profile} chunks, $k=3$
+      \item \textit{advisory} $\rightarrow$ table-primary hybrid retrieval with broader fallback, $k=10$
       \item \textit{course} $\rightarrow$ filter \texttt{table} chunks, $k=10$
+      \item \textit{timetable} $\rightarrow$ filter \texttt{table} chunks, $k=5$
       \item \textit{regulation} $\rightarrow$ filter \texttt{regulation} chunks, $k=5$
       \item \textit{general} $\rightarrow$ no filter, $k=5$
     \end{itemize}
@@ -460,24 +465,25 @@ The retrieved chunks (from vector search) and/or related entities (from the know
 The system is divided into the following functional modules:
 
 \begin{enumerate}
-  \item \textbf{URL Discovery Module (\texttt{scraper/url\_discovery.py}):} BFS crawling engine that discovers HTML pages and PDF links under the CSE department URL with configurable depth and URL-pattern filters.
-  \item \textbf{HTML Scraper Module (\texttt{scraper/html\_scraper.py}):} Converts discovered HTML pages to clean Markdown, extracts faculty lists, and handles BeautifulSoup parsing with error recovery.
-  \item \textbf{PDF Handler Module (\texttt{scraper/pdf\_handler.py}):} Processes PDF documents using pdfplumber for text and table extraction, with Tesseract OCR fallback for scanned pages.
-  \item \textbf{Entity Registry Module (\texttt{chunker/entity\_registry.py}):} Extracts and normalises named entities (faculty names, course codes) from processed Markdown, generating unique IDs and aliases for entity linking.
-  \item \textbf{Semantic Chunker Module (\texttt{chunker/semantic\_chunker.py}):} Content-aware chunking engine that splits documents at semantic boundaries, classifies content types, links entity references, and enforces size constraints with deduplication.
-  \item \textbf{Knowledge Graph Builder Module (\texttt{knowledge\_graph/builder.py}):} Constructs the phase-1 JSON knowledge graph from entity registries and semantic chunks, extracting deterministic edges with evidence provenance and validating graph integrity.
-  \item \textbf{RAG Ingestion Module (\texttt{rag\_ingestion.py}):} Loads the embedding model, generates 768-dimensional vectors for all chunks, caches embeddings, initialises ChromaDB, and ingests chunks with structured metadata.
-  \item \textbf{Query Router Module (\texttt{rag\_ingestion.py}):} Classifies incoming queries by intent, routes to the appropriate retrieval path (vector/graph/hybrid), applies adaptive distance thresholding, and assembles context for generation.
+  \item \textbf{URL Discovery Module (\path{scraper/url_discovery.py}):} BFS crawling engine that discovers HTML pages and PDF links under the CSE department URL with configurable depth and URL-pattern filters.
+  \item \textbf{HTML Scraper Module (\path{scraper/html_scraper.py}):} Converts discovered HTML pages to clean Markdown, extracts faculty lists, and handles BeautifulSoup parsing with error recovery.
+  \item \textbf{PDF Handler Module (\path{scraper/pdf_handler.py}):} Processes PDF documents using pdfplumber for text and table extraction, with Tesseract OCR fallback for scanned pages.
+  \item \textbf{Entity Registry Module (\path{chunker/entity_registry.py}):} Extracts and normalises named entities (faculty names, course codes) from processed Markdown, generating unique IDs and aliases for entity linking.
+  \item \textbf{Semantic Chunker Module (\path{chunker/semantic_chunker.py}):} Content-aware chunking engine that splits documents at semantic boundaries, classifies content types, links entity references, and enforces size constraints with deduplication.
+  \item \textbf{Knowledge Graph Builder Module (\path{knowledge_graph/builder.py}):} Constructs the phase-1 JSON knowledge graph from entity registries and semantic chunks, extracting deterministic edges with evidence provenance and validating graph integrity.
+  \item \textbf{RAG Ingestion Module (\path{rag_ingestion.py}):} Loads the embedding model, generates 768-dimensional vectors for all chunks, caches embeddings, initialises ChromaDB, and ingests chunks with structured metadata.
+  \item \textbf{Query Router Module (\path{rag_ingestion.py}):} Classifies incoming queries by intent, routes to the appropriate retrieval path (vector/graph/hybrid), applies adaptive distance thresholding, and assembles context for generation.
 \end{enumerate}
 
 \subsection{Operating Environment}
 
-\begin{table}[h!]
+\begin{table}[htbp]
   \centering
   \caption{Software and Hardware Requirements}
   \label{tab:requirements}
   \vspace*{5pt}
-  \begin{tabular}{|l|l|}
+  \small
+  \begin{tabular}{|L{3.2cm}|L{8.8cm}|}
     \hline
     \textbf{Component} & \textbf{Specification} \\ \hline
     OS & Ubuntu 22.04 LTS / Windows 11 \\ \hline
@@ -503,7 +509,7 @@ The system is divided into the following functional modules:
 
 Figure~\ref{fig:sysarch} depicts the overall system architecture of the hybrid KG-RAG system, showing the data flow from web scraping through embedding, knowledge graph construction, and hybrid retrieval to answer generation.
 
-\begin{figure}[h!]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.88\textwidth]{Images/System_Architecture.png}
 \caption{System Architecture}
@@ -514,7 +520,7 @@ Figure~\ref{fig:sysarch} depicts the overall system architecture of the hybrid K
 
 The DFD Level~0 (Figure~\ref{fig:dfd0}) represents the entire system as a single process interacting with the user and the MBCET website. The website provides HTML pages and PDF documents; the system processes both and returns grounded answers to natural-language queries.
 
-\begin{figure}[h!]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{Images/DFD0.png}
 \caption{DFD Level 0 — Context Diagram}
@@ -525,7 +531,7 @@ The DFD Level~0 (Figure~\ref{fig:dfd0}) represents the entire system as a single
 
 The Level~1 DFD (Figure~\ref{fig:dfd1}) decomposes the system into sub-processes: web scraping, semantic chunking, knowledge graph construction, embedding and vector ingestion, hybrid retrieval, and answer generation.
 \clearpage
-\begin{figure}[h!]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{Images/DFD1.png}
 \caption{DFD Level 1 — Expanded System Data Flows}
@@ -536,9 +542,9 @@ The Level~1 DFD (Figure~\ref{fig:dfd1}) decomposes the system into sub-processes
 
 Figure~\ref{fig:usecase} shows the use case diagram. The primary actors are the \textbf{Student / End User} (submits queries) and the \textbf{Administrator} (manages the data pipeline).
 
-\begin{figure}[h!]
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.5\textwidth]{Images/use_case_noarrow.png}
+  \includegraphics[width=0.5\textwidth]{Images/use_case_noarrow.jpg}
   \caption{Use Case Diagram}
   \label{fig:usecase}
 \end{figure}
@@ -558,7 +564,7 @@ Key use cases include:
 
 Figure~\ref{fig:classdiag} shows the class diagram depicting the core modules and their relationships.
 
-\begin{figure}[h!]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.55\textwidth]{Images/class_diagram.png}
   \caption{Class Diagram}
@@ -567,30 +573,31 @@ Figure~\ref{fig:classdiag} shows the class diagram depicting the core modules an
 
 The core classes and their responsibilities are summarised in Table~\ref{tab:classes}.
 
-\begin{table}[h!]
+\begin{table}[htbp]
   \centering
   \caption{Key Classes and Their Responsibilities}
   \label{tab:classes}
   \vspace*{5pt}
-  \begin{tabular}{|l|l|p{5.5cm}|}
+  \small
+  \begin{tabularx}{\textwidth}{|L{2.6cm}|L{3.0cm}|Y|}
     \hline
     \textbf{Module} & \textbf{Class/Function} & \textbf{Responsibility} \\ \hline
-    \texttt{url\_discovery}     & \texttt{discover\_urls()}        & BFS URL crawling with depth/pattern control \\ \hline
-    \texttt{html\_scraper}      & \texttt{HTMLScraper}             & HTML$\rightarrow$Markdown, faculty list extraction \\ \hline
-    \texttt{pdf\_handler}       & \texttt{PDFHandler}              & PDF text/table extraction, OCR fallback \\ \hline
-    \texttt{semantic\_chunker}  & \texttt{run\_chunking\_pipeline()} & Content-aware splitting, typing, dedup \\ \hline
-    \texttt{entity\_registry}   & \texttt{EntityRegistry}          & Entity extraction, ID gen., alias normalisation \\ \hline
-    \texttt{builder}            & \texttt{build\_knowledge\_graph()} & Node/edge construction, validation \\ \hline
-    \texttt{rag\_ingestion}     & \texttt{run\_ingestion\_pipeline()} & Embedding gen., ChromaDB ingestion \\ \hline
-    \texttt{rag\_ingestion}     & \texttt{query\_chromadb()}       & Intent routing, adaptive thresholding \\ \hline
-  \end{tabular}
+    \path{url_discovery}     & \path{discover_urls()}        & BFS URL crawling with depth/pattern control \\ \hline
+    \path{html_scraper}      & \path{HTMLScraper}             & HTML$\rightarrow$Markdown, faculty list extraction \\ \hline
+    \path{pdf_handler}       & \path{PDFHandler}              & PDF text/table extraction, OCR fallback \\ \hline
+    \path{semantic_chunker}  & \path{run_chunking_pipeline()} & Content-aware splitting, typing, dedup \\ \hline
+    \path{entity_registry}   & \path{EntityRegistry}          & Entity extraction, ID generation, alias normalisation \\ \hline
+    \path{builder}           & \path{build_knowledge_graph()} & Node/edge construction, validation \\ \hline
+    \path{rag_ingestion}     & \path{run_ingestion_pipeline()} & Embedding generation, ChromaDB ingestion \\ \hline
+    \path{rag_ingestion}     & \path{query_chromadb()}       & Intent routing, adaptive thresholding \\ \hline
+  \end{tabularx}
 \end{table}
 
 \section{Sequence Diagram}
 
 Figure~\ref{fig:seqdiag} illustrates the query processing flow from user input through intent classification, retrieval, and LLM-based answer generation.
 
-\begin{figure}[h!]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{Images/sequence_diagram.png}
   \caption{Sequence Diagram — Query Processing Flow}
@@ -599,25 +606,278 @@ Figure~\ref{fig:seqdiag} illustrates the query processing flow from user input t
 
 \section{Pipeline Output Summary}
 
-\begin{table}[h!]
+\begin{table}[htbp]
   \centering
   \caption{Pipeline Stage Outputs}
   \label{tab:pipeline_outputs}
   \vspace*{5pt}
-  \begin{tabular}{|l|c|l|}
+  \small
+  \begin{tabularx}{\textwidth}{|L{3.0cm}|c|Y|}
     \hline
     \textbf{Stage} & \textbf{Count} & \textbf{Output Location} \\ \hline
-    HTML pages scraped    & 60+  & \texttt{data/markdown/pages/}     \\ \hline
-    PDFs processed        & 10   & \texttt{data/markdown/pdfs/}      \\ \hline
-    Faculty entities      & 43   & \texttt{data/entities/faculty.json} \\ \hline
-    Semantic chunks       & 640  & \texttt{data/chunks/chunks.json}  \\ \hline
-    Duplicates detected   & 1    & (skipped during chunking)         \\ \hline
-    KG nodes              & ---  & \texttt{data/knowledge\_graph/graph.json} \\ \hline
-    KG edges              & ---  & \texttt{data/knowledge\_graph/graph.json} \\ \hline
-    ChromaDB vectors      & 640+ & \texttt{chroma\_db/}              \\ \hline
-    Unit tests passing    & 50   & \texttt{tests/}                   \\ \hline
+    HTML-derived chunks   & 195  & \path{data/chunks/chunk_report.json}     \\ \hline
+    PDF-derived chunks    & 2012 & \path{data/chunks/chunk_report.json}      \\ \hline
+    Faculty entities      & 64   & \path{data/knowledge_graph/graph_report.json} \\ \hline
+    Semantic chunks       & 2207 & \path{data/chunks/chunks.json}  \\ \hline
+    Duplicates skipped    & 298  & \path{data/chunks/chunk_report.json}      \\ \hline
+    KG nodes              & 480  & \path{data/validation/kg_quality_metrics.json} \\ \hline
+    KG edges (phase-1)    & 1700 & \path{data/validation/kg_quality_metrics.json} \\ \hline
+    ChromaDB vectors      & 2268 & \path{data/validation/chromadb_ingestion_report.json} \\ \hline
+    Top-level test functions & 35 & \path{tests/}                   \\ \hline
+  \end{tabularx}
+\end{table}
+
+\clearpage
+
+%% ============================================================
+%%  CHAPTER 5 — RESULTS OF IMPLEMENTATION
+%% ============================================================
+\chapter{Results of Implementation}
+
+This chapter reports quantitative outcomes from the implemented pipeline using the generated validation artifacts in \texttt{data/validation/}. The results are grouped by pipeline stage quality (chunking, embedding, retrieval, and graph quality), followed by runtime performance and observed limitations.
+
+\section{Pipeline Output and Data Coverage}
+
+The implemented system produced a large and diverse retrieval corpus. Table~\ref{tab:results_coverage} summarises key output counts from chunking, ingestion, and graph construction.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Implemented Pipeline Coverage Metrics}
+  \label{tab:results_coverage}
+  \vspace*{5pt}
+  \small
+  \begin{tabular}{|L{3.4cm}|c|L{5.8cm}|}
+    \hline
+    \textbf{Metric} & \textbf{Value} & \textbf{Source Artifact} \\ \hline
+    Total semantic chunks & 2207 & \texttt{chunk\_report.json} \\ \hline
+    HTML-derived chunks & 195 & \texttt{chunk\_report.json} \\ \hline
+    PDF-derived chunks & 2012 & \texttt{chunk\_report.json} \\ \hline
+    Duplicates skipped & 298 & \texttt{chunk\_report.json} \\ \hline
+    Ingested vector documents & 2268 & \texttt{chromadb\_ingestion\_report.json} \\ \hline
+    Knowledge graph nodes & 480 & \texttt{kg\_quality\_metrics.json} \\ \hline
+    Knowledge graph edges (phase-1) & 1700 & \texttt{kg\_quality\_metrics.json} \\ \hline
+    Largest connected component ratio & 0.983 & \texttt{kg\_quality\_metrics.json} \\ \hline
   \end{tabular}
 \end{table}
+
+\section{Chunking Quality Metrics}
+
+Chunk quality was assessed for size distribution, metadata completeness, and redundancy. The chunking pipeline preserved metadata robustly (completeness ratio 1.000) while keeping exact duplicates at zero in the final corpus. Table-heavy academic content dominates the corpus, which is expected given timetable and syllabus prevalence.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Chunk Quality Metrics}
+  \label{tab:chunk_quality}
+  \vspace*{5pt}
+  \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Metric} & \textbf{Value} \\ \hline
+    Total chunks & 2207 \\ \hline
+    Mean / median words per chunk & 179.07 / 120 \\ \hline
+    Metadata completeness ratio & 1.000 \\ \hline
+    Exact duplicate ratio & 0.000 \\ \hline
+    Near-duplicate proxy ratio & 0.191 \\ \hline
+    Chunks with entity references & 1604 (72.68\%) \\ \hline
+  \end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=18pt,
+    width=0.9\textwidth,
+    height=0.35\textheight,
+    ylabel={Chunk count},
+    symbolic x coords={Table,Profile,Section,Regulation,List},
+    xtick=data,
+    ymin=0,
+    nodes near coords,
+    nodes near coords align={vertical},
+    grid=major,
+    ymajorgrids=true,
+    enlarge x limits=0.12
+]
+\addplot coordinates {(Table,1971) (Profile,102) (Section,73) (Regulation,50) (List,11)};
+\end{axis}
+\end{tikzpicture}
+\caption{Chunk Distribution by Content Type}
+\label{fig:chunk_distribution}
+\end{figure}
+
+\section{Embedding Quality Metrics}
+
+Embedding quality analysis indicates stable vector normalization and strong semantic neighborhood coherence. A same-type neighbor ratio of 0.952 at $k=5$ confirms that most chunks are clustered with semantically compatible neighbors, which supports robust retrieval ranking.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Embedding Quality Metrics}
+  \label{tab:embedding_quality}
+  \vspace*{5pt}
+  \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Metric} & \textbf{Value} \\ \hline
+    Embedding matrix size & 2261 $\times$ 768 \\ \hline
+    Norm mean / std & 1.0000 / $3.02 \times 10^{-8}$ \\ \hline
+    Same-type neighbor ratio ($k=5$) & 0.952 \\ \hline
+    Mean neighbor similarity & 0.829 \\ \hline
+    Outlier count & 0 \\ \hline
+  \end{tabular}
+\end{table}
+
+\section{Retrieval Performance}
+
+Retrieval quality was measured over 30 representative queries with top-$k=5$ evaluation. Table~\ref{tab:retrieval_aggregate} presents aggregate ranking quality metrics.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Aggregate Retrieval Metrics (30-query benchmark)}
+  \label{tab:retrieval_aggregate}
+  \vspace*{5pt}
+  \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Metric} & \textbf{Value} \\ \hline
+    Hit@5 & 0.767 \\ \hline
+    MRR & 0.740 \\ \hline
+    NDCG@5 & 0.841 \\ \hline
+    Precision@5 (proxy) & 0.600 \\ \hline
+    Recall@5 (proxy) & 0.733 \\ \hline
+    Fallback trigger ratio & 0.967 \\ \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Per Query-Type Retrieval Hit Rates}
+  \label{tab:query_type_hit_rates}
+  \vspace*{5pt}
+  \begin{tabular}{|l|c|c|}
+    \hline
+    \textbf{Query Type} & \textbf{Hit Rate} & \textbf{Failure Rate} \\ \hline
+    Teaching & 1.00 & 0.00 \\ \hline
+    Faculty & 1.00 & 0.00 \\ \hline
+    Course & 1.00 & 0.00 \\ \hline
+    Timetable & 1.00 & 0.00 \\ \hline
+    General & 0.60 & 0.40 \\ \hline
+    Regulation & 0.00 & 1.00 \\ \hline
+  \end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=15pt,
+    width=0.9\textwidth,
+    height=0.34\textheight,
+    ylabel={Hit rate},
+    ymin=0,
+    ymax=1.1,
+    symbolic x coords={Teaching,Faculty,Course,Timetable,General,Regulation},
+    xtick=data,
+    nodes near coords,
+    nodes near coords align={vertical},
+    ymajorgrids=true,
+    grid=major,
+    enlarge x limits=0.08
+]
+\addplot coordinates {(Teaching,1.0) (Faculty,1.0) (Course,1.0) (Timetable,1.0) (General,0.6) (Regulation,0.0)};
+\end{axis}
+\end{tikzpicture}
+\caption{Retrieval Hit Rate by Query Type}
+\label{fig:query_type_hits}
+\end{figure}
+
+The results show excellent performance for teaching, faculty, course, and timetable queries, while regulation queries remain a critical weakness. Routing-mismatch logs further show that many regulation prompts drift toward table content, indicating the need for tighter regulation-aware filtering.
+
+\section{Knowledge Graph Quality}
+
+Graph quality evaluation confirms strong structural coverage with low orphan ratio and high connectivity. Table~\ref{tab:kg_quality} reports graph-level quality indicators.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Knowledge Graph Quality Metrics}
+  \label{tab:kg_quality}
+  \vspace*{5pt}
+  \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Metric} & \textbf{Value} \\ \hline
+    Total nodes / edges & 480 / 1700 \\ \hline
+    Courses with program link ratio & 0.990 \\ \hline
+    Faculty with teaching link ratio & 0.891 \\ \hline
+    Orphan node ratio & 0.017 \\ \hline
+    Connected components & 9 \\ \hline
+    Largest component ratio & 0.983 \\ \hline
+    Prerequisite edge count & 0 \\ \hline
+  \end{tabular}
+\end{table}
+
+\section{System and Query Latency Benchmarks}
+
+Latency measurements from retrieval evaluation show stable but high response times for batch evaluation mode, primarily due to model-loading overhead and fallback-heavy routing.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Latency Metrics (ms)}
+  \label{tab:latency_metrics}
+  \vspace*{5pt}
+  \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Metric} & \textbf{Value (ms)} \\ \hline
+    Mean latency & 25898.19 \\ \hline
+    Min latency & 13365.32 \\ \hline
+    Median (p50) latency & 25610.87 \\ \hline
+    p75 latency & 26975.34 \\ \hline
+    p90 latency & 29331.99 \\ \hline
+    Max latency & 37817.61 \\ \hline
+  \end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.88\textwidth,
+    height=0.33\textheight,
+    xlabel={Percentile bucket},
+    ylabel={Latency (ms)},
+    symbolic x coords={p10,p25,p50,p75,p90},
+    xtick=data,
+    ymin=20000,
+    ymax=31000,
+    grid=major,
+    ymajorgrids=true,
+    mark=* 
+]
+\addplot coordinates {(p10,22265.29) (p25,23575.99) (p50,25610.87) (p75,26975.34) (p90,29331.99)};
+\end{axis}
+\end{tikzpicture}
+\caption{Latency Percentiles for Retrieval Evaluation}
+\label{fig:latency_percentiles}
+\end{figure}
+
+\section{Failure Analysis and Improvement Backlog}
+
+The implementation backlog identifies three priority areas: retrieval quality, runtime latency, and prerequisite extraction. Table~\ref{tab:improvement_backlog} summarises the actionable items.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Priority Improvement Backlog}
+  \label{tab:improvement_backlog}
+  \vspace*{5pt}
+  \small
+  \begin{tabular}{|L{1.8cm}|L{2.8cm}|L{4.6cm}|L{3.8cm}|}
+    \hline
+    \textbf{Priority} & \textbf{Issue} & \textbf{Recommended Change} & \textbf{Success Metric} \\ \hline
+    P1 (Retrieval) & Hit@k below target & Retune route-specific thresholds and add broader fallback when filtered retrieval is empty. & Hit@k $\geq$ 0.85, MRR $\geq$ 0.65 (75-query benchmark) \\ \hline
+    P1 (Perf) & High average latency & Persist embedding model and avoid per-query initialization in multi-query path. & Mean latency $<$ 900 ms on same hardware \\ \hline
+    P1 (KG) & No prerequisite edges extracted & Constrain prerequisite extraction to nearest course heading with local window disambiguation. & Non-zero prerequisite edges with manual precision $\geq$ 0.85 \\ \hline
+  \end{tabular}
+\end{table}
+
+In summary, the implemented system demonstrates strong retrieval quality for core academic intents (teaching/faculty/course/timetable) and robust graph integrity, while highlighting clear engineering priorities for regulation retrieval and end-to-end runtime optimization.
 
 \clearpage
 
