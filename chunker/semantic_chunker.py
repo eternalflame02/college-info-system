@@ -773,7 +773,8 @@ class MarkdownChunker:
         word_count = self._count_words(text)
         
         # Check minimum size (except for tables which can be smaller)
-        if word_count < self.min_words and not is_table:
+        is_faq = "frequently" in str(filepath).lower()
+        if word_count < self.min_words and not is_table and not is_faq:
             logger.debug(f"Chunk too small ({word_count} words): {text[:50]}...")
             return None
         

@@ -1,0 +1,16 @@
+{
+  "total_nodes": 472,
+  "total_edges": 120,
+  "node_counts_by_type": {
+    "course": 405,
+    "faculty": 64,
+    "program": 3
+  },
+  "edge_counts_by_relation": {
+    "TEACHES": 120
+  },
+  "orphan_references": {
+    "faculty_ids": [],
+    "course_ids": []
+  }
+}

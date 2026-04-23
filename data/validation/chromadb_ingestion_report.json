@@ -1,5 +1,5 @@
 {
-  "ingestion_timestamp": "2026-04-15T04:21:27Z",
+  "ingestion_timestamp": "2026-04-23T06:05:13Z",
   "total_chunks_processed": 2268,
   "successfully_ingested": 2268,
   "failed_chunks": [],
@@ -7,8 +7,8 @@
     "model": "google/embeddinggemma-300m",
     "dimensions": 768,
     "batch_size": 32,
-    "total_time_seconds": 1084.42,
-    "chunks_per_second": 2.09,
+    "total_time_seconds": 0,
+    "chunks_per_second": 0,
     "gpu_used": true
   },
   "chromadb_stats": {
@@ -18,9 +18,9 @@
       "table": 1971,
       "profile": 102,
       "list": 11,
-      "section": 73,
+      "section": 76,
       "regulation": 50,
-      "knowledge_graph": 61
+      "knowledge_graph": 55
     },
     "collection_counts": {
       "table": 1971,
@@ -28,5 +28,5 @@
       "legacy": 2268
     }
   },
-  "total_pipeline_time_seconds": 1164.01
+  "total_pipeline_time_seconds": 104.26
 }

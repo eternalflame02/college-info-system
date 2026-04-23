@@ -1,9 +1,9 @@
 {
-  "validation_timestamp": "2026-04-15T04:20:19Z",
+  "validation_timestamp": "2026-04-23T06:04:07Z",
   "collection_health": {
-    "expected_count": 2268,
+    "expected_count": 2265,
     "actual_count": 2268,
-    "status": "PASS"
+    "status": "FAIL"
   },
   "content_type_validation": {
     "table": {
@@ -22,9 +22,9 @@
       "status": "PASS"
     },
     "section": {
-      "expected": 73,
-      "actual": 73,
-      "status": "PASS"
+      "expected": 76,
+      "actual": 79,
+      "status": "FAIL"
     },
     "regulation": {
       "expected": 50,
@@ -32,8 +32,8 @@
       "status": "PASS"
     },
     "knowledge_graph": {
-      "expected": 61,
-      "actual": 61,
+      "expected": 55,
+      "actual": 55,
       "status": "PASS"
     }
   },
@@ -42,52 +42,60 @@
       "query": "Who is the head of CSE department?",
       "expected_content_type": "profile",
       "top_result_content_type": "profile",
-      "top_result_distance": 1.016,
+      "top_result_distance": 0.512,
       "results_count": 3,
-      "query_time_ms": 11530.0,
+      "query_time_ms": 9580.66,
       "status": "PASS"
     },
     {
       "query": "What courses are in Semester 3?",
       "expected_content_type": "table",
       "top_result_content_type": "table",
-      "top_result_distance": 0.773,
-      "results_count": 1,
-      "query_time_ms": 10770.32,
+      "top_result_distance": 0.38,
+      "results_count": 10,
+      "query_time_ms": 9201.07,
       "status": "PASS"
     },
     {
       "query": "R2023 regulations",
-      "status": "FAIL",
-      "error": "No results returned"
+      "expected_content_type": "regulation",
+      "top_result_content_type": "regulation",
+      "top_result_distance": 0.733,
+      "results_count": 5,
+      "query_time_ms": 11003.07,
+      "status": "PASS"
     },
     {
       "query": "Database management systems syllabus",
-      "status": "FAIL",
-      "error": "No results returned"
+      "expected_content_type": "table",
+      "top_result_content_type": "table",
+      "top_result_distance": 0.375,
+      "results_count": 10,
+      "query_time_ms": 13531.0,
+      "status": "PASS"
     },
     {
       "query": "faculty specializing in machine learning",
       "expected_content_type": "profile",
       "top_result_content_type": "profile",
-      "top_result_distance": 1.159,
+      "top_result_distance": 0.501,
       "results_count": 3,
-      "query_time_ms": 10832.01,
+      "query_time_ms": 12613.16,
       "status": "PASS"
     },
     {
       "query": "Who teaches Artificial Intelligence?",
       "expected_content_type": "knowledge_graph",
       "top_result_content_type": "knowledge_graph",
-      "top_result_distance": 0.945,
+      "top_result_distance": 0.436,
       "results_count": 5,
-      "query_time_ms": 10851.41,
+      "query_time_ms": 10323.28,
       "status": "PASS"
     }
   ],
   "performance_metrics": {
-    "average_query_time_ms": 11146.83,
-    "min_query_time_ms": 10770.32,
-    "max_query_time_ms": 11715.53
+    "average_query_time_ms": 11042.04,
+    "min_query_time_ms": 9201.07,
+    "max_query_time_ms": 13531.0
   }
 }
