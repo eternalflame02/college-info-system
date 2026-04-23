@@ -1,5 +1,5 @@
 {
-  "total_chunks": 2207,
+  "total_chunks": 2210,
   "duplicates_skipped": 298,
   "too_small_skipped": 0,
   "tables_split": 0,
@@ -7,11 +7,11 @@
     "table": 1971,
     "profile": 102,
     "list": 11,
-    "section": 73,
+    "section": 76,
     "regulation": 50
   },
   "chunks_by_source": {
-    "html": 195,
+    "html": 198,
     "pdf": 2012
   }
 }
