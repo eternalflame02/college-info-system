@@ -1,0 +1,153 @@
+Initializing ChromaDB at E:\Rohith\COLLEGE\Mini Project\chroma_db...
+[OK] ChromaDB initialized
+   Storage path: E:\Rohith\COLLEGE\Mini Project\chroma_db
+
+--- Query: How are internal marks calculated? ---
+Loading google/embeddinggemma-300m on cuda...
+[OK] Model loaded: google/embeddinggemma-300m
+   Device: cuda
+   Embedding dimensions: 768
+   Max sequence length: 512
+   GPU: NVIDIA GeForce GTX 1650 Ti
+   VRAM: 4096 MB
+Query type: general
+[1] ID: html_cse_frequently_asked_questions_frequently_asked_questions_faq_academic_rules_and__e595792b | Distance: 0.4127
+    Source: data\markdown\pages\cse_frequently_asked_questions.md
+    Text: ## Academic Rules and Grading
+
+**Q: How are internal marks calculated?**
+A: For standard theory subjects, there is an End Semester Exam (ESE) out of 6...
+
+[2] ID: pdf_2020_autonomy_curriculum_and_s_2020_autonomy_curriculum_and_syllabus_updated_18_0_98236bc4 | Distance: 0.5146
+    Source: data\markdown\pdfs\2020_autonomy_curriculum-and-syllabus_updated_18-08-25.md
+    Text: [Context: 2020_autonomy_curriculum-and-syllabus_updated_18-08-25]
+| Total Marks | Continuous Internal Evaluation Marks | End Semester Evaluation Marks...
+
+[3] ID: pdf_2020_autonomy_curriculum_and_s_2020_autonomy_curriculum_and_syllabus_updated_18_0_31e3d7f9 | Distance: 0.5621
+    Source: data\markdown\pdfs\2020_autonomy_curriculum-and-syllabus_updated_18-08-25.md
+    Text: <!-- page: 37 -->
+
+Assessment Procedure: Total marks allotted for the course is 100 marks. CIE shall be conducted for 70 marks and ESE for 30 marks. C...
+
+[4] ID: pdf_2020_autonomy_curriculum_and_s_2020_autonomy_curriculum_and_syllabus_updated_18_0_207ac1e0 | Distance: 0.5753
+    Source: data\markdown\pdfs\2020_autonomy_curriculum-and-syllabus_updated_18-08-25.md
+    Text: [Context: 2020_autonomy_curriculum-and-syllabus_updated_18-08-25]
+| Component | Marks |
+| --- | --- |
+| Attendance | 10 |
+| Marks awarded based on gui...
+
+
+--- Query: Who teaches Data Structures? ---
+Loading google/embeddinggemma-300m on cuda...
+[OK] Model loaded: google/embeddinggemma-300m
+   Device: cuda
+   Embedding dimensions: 768
+   Max sequence length: 512
+   GPU: NVIDIA GeForce GTX 1650 Ti
+   VRAM: 4096 MB
+Query type: teaching
+[1] ID: kg_faculty_ms_dhanya_l_k | Distance: 0.4145
+    Source: data/entities/teaching_assignments.json
+    Text: [Context: Knowledge Graph] Ms. Dhanya L K is a faculty member in the CSE department. Ms. Dhanya L K teaches 23CSL20A (Data Structures), 23CSP20B (Data...
+
+[2] ID: kg_faculty_ms_krishna_l | Distance: 0.4460
+    Source: data/entities/teaching_assignments.json
+    Text: [Context: Knowledge Graph] Ms. KRISHNA L is a faculty member in the CSE department. Ms. KRISHNA L teaches 23CSB20C (Object Oriented Programming Concep...
+
+[3] ID: kg_faculty_mr_ramjith_r_p | Distance: 0.4525
+    Source: data/entities/teaching_assignments.json
+    Text: [Context: Knowledge Graph] Mr. Ramjith R P is a faculty member in the CSE department. Mr. Ramjith R P teaches 23CSL20A (Data Structures), 23CSP20B (Da...
+
+[4] ID: kg_faculty_dr_neena_raj_n_r | Distance: 0.4628
+    Source: data/entities/teaching_assignments.json
+    Text: [Context: Knowledge Graph] Dr. Neena Raj N R is a faculty member in the CSE department. Dr. Neena Raj N R teaches 23CSP20B (Data Structures Lab). The ...
+
+[5] ID: kg_faculty_ms_sreeja_s_r | Distance: 0.4663
+    Source: data/entities/teaching_assignments.json
+    Text: [Context: Knowledge Graph] Ms. SREEJA S R is a faculty member in the CSE department. Ms. SREEJA S R teaches 23CSL20A (Data Structures), 23CSL31B (Intr...
+
+
+--- Query: What electives are available for S5CS? ---
+Loading google/embeddinggemma-300m on cuda...
+[OK] Model loaded: google/embeddinggemma-300m
+   Device: cuda
+   Embedding dimensions: 768
+   Max sequence length: 512
+   GPU: NVIDIA GeForce GTX 1650 Ti
+   VRAM: 4096 MB
+Query type: advisory
+[1] ID: pdf_cse_s5s6_syllabus_2023_scheme__cse_s5s6_syllabus_2023_scheme_updated_121b90fd | Distance: 0.4421
+    Source: data\markdown\pdfs\CSE_S5S6_Syllabus_2023-Scheme_updated.md
+    Text: [Context: CSE_S5S6_Syllabus_2023-Scheme_updated]
+|  | Sl. |  | Category |  | Category |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | ---...
+
+[2] ID: pdf_cse_s5s6_syllabus_2023_scheme__cse_s5s6_syllabus_2023_scheme_updated_6644291e | Distance: 0.4556
+    Source: data\markdown\pdfs\CSE_S5S6_Syllabus_2023-Scheme_updated.md
+    Text: [Context: CSE_S5S6_Syllabus_2023-Scheme_updated]
+| Course Code |  | Course Name |  |  | Category | L | T | P | J | Credit |  | Year of |  |
+| --- | --...
+
+[3] ID: pdf_cse_s5s6_syllabus_2023_scheme__cse_s5s6_syllabus_2023_scheme_updated_b8916b5d | Distance: 0.4557
+    Source: data\markdown\pdfs\CSE_S5S6_Syllabus_2023-Scheme_updated.md
+    Text: [Context: CSE_S5S6_Syllabus_2023-Scheme_updated]
+| retsemeS |  | Basket IV |  |  |  |  |  | Basket V |  |  |  |  |
+| --- | --- | --- | --- | --- | ---...
+
+[4] ID: pdf_cse_s5s6_syllabus_2023_scheme__cse_s5s6_syllabus_2023_scheme_updated_416ed880 | Distance: 0.4590
+    Source: data\markdown\pdfs\CSE_S5S6_Syllabus_2023-Scheme_updated.md
+    Text: [Context: CSE_S5S6_Syllabus_2023-Scheme_updated]
+| SEMESTER V |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Slot | Catego...
+
+[5] ID: pdf_cse_s5s6_syllabus_2023_scheme__cse_s5s6_syllabus_2023_scheme_updated_4cfb57cc | Distance: 0.4647
+    Source: data\markdown\pdfs\CSE_S5S6_Syllabus_2023-Scheme_updated.md
+    Text: [Context: CSE_S5S6_Syllabus_2023-Scheme_updated]
+| Course Code | Course Name |  |  | Category | L | T | P | J | Credit |  | Year of |  |
+| --- | --- |...
+
+[6] ID: pdf_cse_s5s6_syllabus_2023_scheme__cse_s5s6_syllabus_2023_scheme_updated_ab77482f | Distance: 0.4721
+    Source: data\markdown\pdfs\CSE_S5S6_Syllabus_2023-Scheme_updated.md
+    Text: [Context: CSE_S5S6_Syllabus_2023-Scheme_updated]
+| Slot |  | Category |  |  | Course |  | Courses | L-T-P-J | Hours | Credit |
+| --- | --- | --- | ---...
+
+[7] ID: pdf_cse_s5s6_syllabus_2023_scheme__cse_s5s6_syllabus_2023_scheme_updated_49d4dfae | Distance: 0.4737
+    Source: data\markdown\pdfs\CSE_S5S6_Syllabus_2023-Scheme_updated.md
+    Text: [Context: CSE_S5S6_Syllabus_2023-Scheme_updated]
+| Slot |  | Category |  |  | Course |  | Courses | L-T-P-J | Hours | Credit |
+| --- | --- | --- | ---...
+
+[8] ID: pdf_cse_s5s6_syllabus_2023_scheme__cse_s5s6_syllabus_2023_scheme_updated_6112b664 | Distance: 0.4739
+    Source: data\markdown\pdfs\CSE_S5S6_Syllabus_2023-Scheme_updated.md
+    Text: [Context: CSE_S5S6_Syllabus_2023-Scheme_updated]
+| Course Code | Course Name |  |  | Category | L | T | P | J | Credit |  | Year of |  |
+| --- | --- |...
+
+[9] ID: pdf_cse_2023_syllabus_s1s2_ss_hour_cse_2023_syllabus_s1s2_ss_hours_added_17_6_25_cc2b6b74 | Distance: 0.4750
+    Source: data\markdown\pdfs\CSE_2023_Syllabus_S1S2_SS-hours-added_17-6-25.md
+    Text: [Context: CSE_2023_Syllabus_S1S2_SS-hours-added_17-6-25]
+| retsemeS |  | Basket IV |  |  |  |  |  | Basket V |  |  |  |  |
+| --- | --- | --- | --- | -...
+
+[10] ID: pdf_cse_2020_revised_s7s8_syllabus_cse_2020_revised_s7s8_syllabus_88b1e605 | Distance: 0.4754
+    Source: data\markdown\pdfs\CSE_2020-Revised_S7S8-Syllabus.md
+    Text: [Context: CSE_2020-Revised_S7S8-Syllabus]
+| Sl. No. | Category | Category Code | Total credits |
+| --- | --- | --- | --- |
+|  |  |  |  |
+| 1 | Humanit...
+
+[11] ID: pdf_cse_s5s6_syllabus_2023_scheme__cse_s5s6_syllabus_2023_scheme_updated_afe4b4f5 | Distance: 0.4771
+    Source: data\markdown\pdfs\CSE_S5S6_Syllabus_2023-Scheme_updated.md
+    Text: [Context: CSE_S5S6_Syllabus_2023-Scheme_updated]
+| Course Code |  | Course Name |  |  | Category | L | T | P | J | Credit |  | Year of |  |
+| --- | --...
+
+[12] ID: pdf_cse_s5s6_syllabus_2023_scheme__cse_s5s6_syllabus_2023_scheme_updated_c94fbffa | Distance: 0.4773
+    Source: data\markdown\pdfs\CSE_S5S6_Syllabus_2023-Scheme_updated.md
+    Text: [Context: CSE_S5S6_Syllabus_2023-Scheme_updated]
+| Course Code | Course Code | Course Name |  |  | Category | L | T | P | J | Credit | Credit |  | Yea...
+

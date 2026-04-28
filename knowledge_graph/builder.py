@@ -160,6 +160,58 @@ def _normalize_assignments(
     return normalized, dict(rejected)
 
 
+def _parse_timetable_rows(
+    text: str,
+    code_to_course: Dict[str, str],
+    faculty_alias_map: Dict[str, str],
+) -> List[Tuple[Set[str], Set[str]]]:
+    """Parse individual timetable rows to extract per-row (course_ids, faculty_ids) pairs.
+
+    Each row of a timetable markdown table typically has:
+    | Slot | Category | Course Code | Course Name | TT code | Faculty Name | ... |
+
+    Returns a list of (course_ids_set, faculty_ids_set) tuples, one per row.
+    """
+    code_pat = re.compile(r"\b[A-Z0-9]{5,10}\b")
+    rows: List[Tuple[Set[str], Set[str]]] = []
+
+    for line in text.splitlines():
+        stripped = line.strip()
+        # Only process markdown table data rows (contains | and is not separator)
+        if not stripped.startswith("|") or stripped.startswith("| ---"):
+            continue
+        # Skip header/separator rows
+        if re.match(r"^\|[\s\-|]+\|$", stripped):
+            continue
+
+        cells = [cell.strip() for cell in stripped.split("|")]
+        # Remove empty leading/trailing from split
+        cells = [c for c in cells if c]
+
+        if len(cells) < 3:
+            continue
+
+        # Extract course codes from all cells in this row
+        row_text_upper = stripped.upper()
+        row_course_ids: Set[str] = set()
+        for token in code_pat.findall(row_text_upper):
+            mapped = code_to_course.get(token)
+            if mapped:
+                row_course_ids.add(mapped)
+
+        # Extract faculty names from all cells in this row
+        row_faculty_ids: Set[str] = set()
+        for candidate in _extract_candidate_faculty_names(stripped):
+            mapped = faculty_alias_map.get(_normalize(candidate))
+            if mapped:
+                row_faculty_ids.add(mapped)
+
+        if row_course_ids and row_faculty_ids:
+            rows.append((row_course_ids, row_faculty_ids))
+
+    return rows
+
+
 def extract_timetable_teaching_links(
     chunks: List[dict],
     faculty: List[dict],
@@ -167,6 +219,10 @@ def extract_timetable_teaching_links(
 ) -> Tuple[Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, int]]:
     """
     Extract deterministic faculty-course links from timetable chunks.
+
+    Uses **row-level parsing** to avoid cross-product explosion: each
+    timetable row maps its specific faculty to its specific course(s),
+    rather than pairing every faculty in the chunk with every course.
 
     Returns:
         assignments_from_timetable: faculty_id -> {course_ids}
@@ -179,7 +235,6 @@ def extract_timetable_teaching_links(
     assignments: Dict[str, Set[str]] = defaultdict(set)
     pair_sources: Dict[str, Set[str]] = defaultdict(set)
     audit = defaultdict(int)
-    code_pat = re.compile(r"\b[A-Z0-9]{5,10}\b")
 
     for chunk in chunks:
         content_type = chunk.get("content_type")
@@ -197,49 +252,27 @@ def extract_timetable_teaching_links(
             continue
 
         audit["timetable_chunks_seen"] += 1
-        refs = set(chunk.get("entity_refs", []))
 
-        course_ids = {ref for ref in refs if isinstance(ref, str) and ref.startswith("course_")}
-        course_ids_meta = [token.strip() for token in str(metadata.get("timetable_course_ids", "")).split(",") if token.strip()]
-        for cid in course_ids_meta:
-            if cid in code_to_course.values():
-                course_ids.add(cid)
-            else:
-                audit["timetable_unmapped_course_ids"] += 1
+        # Row-level parsing: extract per-row faculty-course pairs
+        row_pairs = _parse_timetable_rows(
+            chunk.get("text", ""),
+            code_to_course,
+            faculty_alias_map,
+        )
 
-        for token in code_pat.findall(chunk.get("text", "").upper()):
-            mapped = code_to_course.get(token)
-            if mapped:
-                course_ids.add(mapped)
-
-        faculty_ids = {ref for ref in refs if isinstance(ref, str) and ref.startswith("faculty_")}
-        faculty_ids_meta = [token.strip() for token in str(metadata.get("timetable_faculty_ids", "")).split(",") if token.strip()]
-        for fid in faculty_ids_meta:
-            if fid in faculty_alias_map.values():
-                faculty_ids.add(fid)
-            else:
-                audit["timetable_unmapped_faculty_ids"] += 1
-
-        for token in _extract_candidate_faculty_names(chunk.get("text", "")):
-            mapped = faculty_alias_map.get(_normalize(token))
-            if mapped:
-                faculty_ids.add(mapped)
-            else:
-                audit["timetable_unmatched_faculty_names"] += 1
-
-        if not faculty_ids:
-            audit["timetable_chunks_without_faculty"] += 1
-            continue
-        if not course_ids:
-            audit["timetable_chunks_without_course"] += 1
+        if not row_pairs:
+            audit["timetable_chunks_no_row_pairs"] += 1
             continue
 
-        for fid in sorted(faculty_ids):
-            for cid in sorted(course_ids):
-                assignments[fid].add(cid)
-                pair_key = f"{fid}|{cid}"
-                pair_sources[pair_key].add("timetable")
-                audit["timetable_pairs_added"] += 1
+        for row_course_ids, row_faculty_ids in row_pairs:
+            for fid in sorted(row_faculty_ids):
+                for cid in sorted(row_course_ids):
+                    assignments[fid].add(cid)
+                    pair_key = f"{fid}|{cid}"
+                    pair_sources[pair_key].add("timetable")
+                    audit["timetable_pairs_added"] += 1
+
+        audit["timetable_rows_parsed"] += len(row_pairs)
 
     return assignments, pair_sources, dict(audit)
 
@@ -655,25 +688,67 @@ def extract_course_relation_edges(
     return sorted(edges.values(), key=lambda e: e["id"]), dict(rejected)
 
 
+# Source files that list faculty and courses together but do NOT represent
+# teaching assignments (publications, workshops, lab inventories, etc.).
+_NON_TEACHING_SOURCE_PATTERNS = [
+    "research",
+    "workshop",
+    "seminar",
+    "publication",
+    "facilit",
+    "placement",
+    "consultancy",
+    "achievement",
+    "event",
+    "conference",
+    "patent",
+]
+
+
+def _is_non_teaching_source(source_file: str) -> bool:
+    """Check if the chunk source is a non-teaching page."""
+    source_lower = source_file.lower()
+    return any(pat in source_lower for pat in _NON_TEACHING_SOURCE_PATTERNS)
+
+
 def extract_teaches_edges(
     chunks: List[dict],
     faculty: List[dict],
     courses: List[dict],
 ) -> Tuple[List[dict], Dict[str, int]]:
+    """Extract teaches edges from chunks using line-level co-occurrence.
+
+    Instead of cross-producting all faculty×course refs in a chunk,
+    this only creates edges when a faculty name and course code appear
+    on the **same line or adjacent lines** (proximity window).
+    """
     edges: Dict[str, dict] = {}
     rejected = defaultdict(int)
+    faculty_alias_map = _faculty_alias_to_id(faculty)
+    code_to_course = _course_code_tokens(courses)
+    code_pat = re.compile(r"\b[A-Z0-9]{5,10}\b")
 
     cue_words = [re.escape(word) for word in config.TEACHES_ASSIGNMENT_CUES]
     cue_pat = re.compile(rf"\b({'|'.join(cue_words)})\b", re.IGNORECASE)
 
     for chunk in chunks:
+        source_file = chunk.get("source_file", "")
+
+        # Skip non-teaching sources entirely
+        if _is_non_teaching_source(source_file):
+            rejected["teaches_non_teaching_source"] += 1
+            continue
+
         refs = set(chunk.get("entity_refs", []))
         matched_faculty = sorted([ref for ref in refs if ref.startswith("faculty_")])
         matched_courses = sorted([ref for ref in refs if ref.startswith("course_")])
         if not matched_faculty or not matched_courses:
             continue
 
-        lines = [ln.strip() for ln in chunk.get("text", "").splitlines() if ln.strip()]
+        text = chunk.get("text", "")
+        lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+
+        # Check for assignment signal
         has_chunk_signal = False
         for line in lines:
             has_table_row_signal = line.count("|") >= 2
@@ -686,22 +761,40 @@ def extract_teaches_edges(
             rejected["teaches_no_assignment_signal"] += 1
             continue
 
-        for fid in matched_faculty:
-            for cid in matched_courses:
-                edge = {
-                    "id": _edge_id("teaches", fid, cid),
-                    "type": "teaches",
-                    "source": fid,
-                    "target": cid,
-                    "confidence": 1.0,
-                    "deterministic": True,
-                    "evidence": [
-                        f"chunk_id:{chunk.get('chunk_id', '')}",
-                        f"source_file:{chunk.get('source_file', '')}",
-                        "rule:entity_ref_assignment_signal",
-                    ],
-                }
-                edges[edge["id"]] = edge
+        # Line-level co-occurrence: only pair faculty+course on the same line
+        for line in lines:
+            line_upper = line.upper()
+            line_course_ids: Set[str] = set()
+            for token in code_pat.findall(line_upper):
+                mapped = code_to_course.get(token)
+                if mapped:
+                    line_course_ids.add(mapped)
+
+            line_faculty_ids: Set[str] = set()
+            for candidate in _extract_candidate_faculty_names(line):
+                mapped = faculty_alias_map.get(_normalize(candidate))
+                if mapped:
+                    line_faculty_ids.add(mapped)
+
+            if not line_course_ids or not line_faculty_ids:
+                continue
+
+            for fid in sorted(line_faculty_ids):
+                for cid in sorted(line_course_ids):
+                    edge = {
+                        "id": _edge_id("teaches", fid, cid),
+                        "type": "teaches",
+                        "source": fid,
+                        "target": cid,
+                        "confidence": 1.0,
+                        "deterministic": True,
+                        "evidence": [
+                            f"chunk_id:{chunk.get('chunk_id', '')}",
+                            f"source_file:{source_file}",
+                            "rule:line_level_cooccurrence",
+                        ],
+                    }
+                    edges[edge["id"]] = edge
 
     return sorted(edges.values(), key=lambda e: e["id"]), dict(rejected)
 
@@ -863,10 +956,9 @@ def run_knowledge_graph_pipeline() -> Tuple[dict, dict]:
 
     graph, report = build_knowledge_graph(faculty, courses, programs, chunks)
 
-    merged_assignments = report.get("merged_teaching_assignments", {})
-    if isinstance(merged_assignments, dict) and merged_assignments:
-        with open(config.TEACHING_ASSIGNMENTS_FILE, "w", encoding="utf-8") as f:
-            json.dump(merged_assignments, f, indent=2, ensure_ascii=False)
+    # NOTE: We intentionally do NOT overwrite teaching_assignments.json here.
+    # That file is a manually curated ground-truth mapping. The auto-extracted
+    # merged assignments are stored in the graph report for audit purposes only.
 
     config.KNOWLEDGE_GRAPH_DIR.mkdir(parents=True, exist_ok=True)
     with open(config.KNOWLEDGE_GRAPH_FILE, "w", encoding="utf-8") as f:
@@ -876,7 +968,7 @@ def run_knowledge_graph_pipeline() -> Tuple[dict, dict]:
         json.dump(report, f, indent=2, ensure_ascii=False)
 
     print("\n" + "=" * 50)
-    print("🕸 Knowledge graph construction complete")
+    print("[OK] Knowledge graph construction complete")
     print("=" * 50)
     print(f"Nodes: {report['total_nodes']}")
     print(f"Edges: {report['total_edges']}")

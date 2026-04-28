@@ -635,7 +635,7 @@ def ingest_chunks_to_chromadb(
         embeddings_list = batch_embeddings.tolist()
 
         try:
-            collection.add(
+            collection.upsert(
                 ids=ids,
                 documents=documents,
                 embeddings=embeddings_list,
@@ -1104,17 +1104,24 @@ def _filter_faculty_linked_candidates(
                 continue
             keep_indices.append(idx)
 
-    # If no strict metadata match exists, allow a conservative fallback:
-    # dedicated faculty-page chunks whose text appears to contain a titled name.
     if not keep_indices:
         for idx, meta in enumerate(metas):
             meta_obj = meta or {}
             source_file = str(meta_obj.get("source_file", "")).lower()
+            if "frequently" in source_file:
+                keep_indices.append(idx)
+                continue
             if not any(token in source_file for token in ["faculty_", "/faculty/", "faculty-"]):
                 continue
             doc_text = str(docs[idx]).lower() if idx < len(docs) else ""
             if re.search(r"\b(dr|prof|mr|ms|mrs)\.?\s+[a-z]+", doc_text):
                 keep_indices.append(idx)
+
+    # Always preserve FAQ chunks that were matched semantically
+    for idx, meta in enumerate(metas):
+        meta_obj = meta or {}
+        if "frequently" in str(meta_obj.get("source_file", "")).lower() and idx not in keep_indices:
+            keep_indices.append(idx)
 
     if not keep_indices:
         empty = {
@@ -1195,11 +1202,13 @@ def _filter_regulation_candidates(results: Dict) -> Dict:
         return results
 
     metas = results.get("metadatas", [[]])[0]
-    keep_indices = [
-        idx
-        for idx, meta in enumerate(metas)
-        if str((meta or {}).get("content_type", "")).lower() == "regulation"
-    ]
+    keep_indices = []
+    for idx, meta in enumerate(metas):
+        meta_obj = meta or {}
+        ctype = str(meta_obj.get("content_type", "")).lower()
+        source_file = str(meta_obj.get("source_file", "")).lower()
+        if ctype == "regulation" or "frequently" in source_file:
+            keep_indices.append(idx)
     if not keep_indices:
         return results
 
@@ -1499,8 +1508,11 @@ def query_chromadb_with_fallback(
             fallback_needed = True
         elif query_type == "advisory" and primary_count < 3:
             fallback_needed = True
-        elif query_type == "faculty" and faculty_signal and not _has_faculty_signal_match(primary, faculty_signal):
-            fallback_needed = True
+        elif query_type == "faculty":
+            if faculty_signal and not _has_faculty_signal_match(primary, faculty_signal):
+                fallback_needed = True
+            elif not faculty_signal:
+                fallback_needed = True
         elif query_type == "teaching" and primary_quality in {"poor", "fair"} and primary_count < 2:
             fallback_needed = True
         elif query_type == "regulation" and primary_count == 0:
@@ -1882,12 +1894,43 @@ def run_ingestion_pipeline(
 
         if set(cached_ids) == set(current_ids):
             print("[OK] Using cached embeddings (matched)")
-            # Reorder embeddings to match current chunk order
             id_to_idx = {cid: idx for idx, cid in enumerate(cached_ids)}
             reorder = [id_to_idx[cid] for cid in current_ids]
             embeddings = cached_embeddings[reorder]
         else:
-            print("[WARN]  Cache mismatch, regenerating embeddings")
+            missing_ids_set = set(current_ids) - set(cached_ids)
+            print(f"[WARN] Cache mismatch. Missing {len(missing_ids_set)} embeddings. Partially regenerating.")
+            
+            # Identify missing chunks and their exact IDs in a consistent order
+            missing_chunks = [c for c in chunks if c["chunk_id"] in missing_ids_set]
+            missing_texts = [c["text"] for c in missing_chunks]
+            missing_ids = [c["chunk_id"] for c in missing_chunks]
+            
+            if missing_texts:
+                model = load_embedding_model(config.EMBEDDING_MODEL, device="auto")
+                new_embeddings = generate_embeddings(
+                    model,
+                    missing_texts,
+                    batch_size=config.EMBEDDING_BATCH_SIZE,
+                )
+                del model
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                
+                # Update cache
+                cached_ids = list(cached_ids) + missing_ids
+                if cached_embeddings.shape[0] > 0:
+                    cached_embeddings = np.vstack([cached_embeddings, new_embeddings])
+                else:
+                    cached_embeddings = new_embeddings
+                
+                # Save cache since we got new ones
+                cache_embeddings(cached_ids, cached_embeddings, cache_path)
+            
+            # Reorder all
+            id_to_idx = {cid: idx for idx, cid in enumerate(cached_ids)}
+            reorder = [id_to_idx[cid] for cid in current_ids]
+            embeddings = cached_embeddings[reorder]
 
     # ========== STEP 3: Generate Embeddings ==========
     if embeddings is None:
@@ -1953,7 +1996,7 @@ def run_ingestion_pipeline(
     )
 
     # ========== STEP 5: Ingest Chunks ==========
-    if any((coll.count() == 0 or force_reembed) for coll in collection_map.values()):
+    if force_reembed or any(coll.count() < len(chunks) for coll in collection_map.values()):
         print("\n[STEP 5] Ingesting chunks into ChromaDB...")
 
         split_payload = _split_chunks_for_collections(chunks, embeddings)
@@ -1973,14 +2016,6 @@ def run_ingestion_pipeline(
                 }
                 continue
 
-            if coll.count() > 0 and not force_reembed:
-                ingest_stats_by_collection[key] = {
-                    "total_processed": len(payload_chunks),
-                    "successfully_ingested": len(payload_chunks),
-                    "failed_chunks": [],
-                    "final_collection_count": coll.count(),
-                }
-                continue
 
             ingest_stats_by_collection[key] = ingest_chunks_to_chromadb(
                 coll,
