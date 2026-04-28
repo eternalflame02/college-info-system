@@ -266,17 +266,10 @@ To test these ideas, we propose a \textbf{hybrid knowledge-graph-enhanced retrie
 This chapter examines the major studies bridging retrieval-augmented generation, knowledge graphs, and educational data systems. These works heavily influenced the design choices in our hybrid KG-RAG framework.
 
 \par
-<<<<<<< HEAD
 The foundational formulation of RAG was introduced by Lewis~\textit{et al.}~\cite{lewis2020}, who established that coupling a pre-trained language generator with a Dense Passage Retriever significantly reduces hallucination in knowledge-intensive NLP tasks. Building on this to handle broader contexts, Izacard and Grave~\cite{izacard2021} presented the Fusion-in-Decoder architecture, demonstrating that independently encoding retrieved passages yields superior accuracy for multi-document question answering. Furthermore, the modern trajectory of synthesizing structured logic with raw generation is explored comprehensively by Pan~\textit{et al.}~\cite{pan2024}; their roadmap survey explicitly identifies the KG-enhanced LLM paradigm as the superior mechanism for factual anchoring—a philosophy strictly adopted in this project.
 
 \par
 In the context of architectural deployments, Linders and Tomczak~\cite{kg_rag_springer} engineered a knowledge-graph-extended RAG framework proving that standard similarity retrieval can be substantially augmented using deterministic graph-guided entity relationship traversal, a technique crucial for unlocking accurate multi-hop QA. Finally, applying these paradigms to academic institutions, Li~\textit{et al.}~\cite{rag_edu_elsevier} provided an extensive survey isolating RAG's impact inside educational boundaries. Their findings confirm that isolated, domain-specific semantic engines massively outperform general-purpose models on institutional datasets, but critically identify the fundamental lack of structured, entity-level relational data as the primary failure point in academic deployment, explicitly validating our implementation of a hybrid KG-RAG pipeline.
-=======
-Lewis \textit{et al.}~\cite{lewis2020} originally brought RAG to the forefront as a viable strategy for NLP tasks requiring intensive knowledge lookups. By linking a pre-trained text generator directly with a Dense Passage Retriever, they proved that adding an active retrieval step drastically cuts down on hallucinated answers. Building on that idea, Izacard and Grave~\cite{izacard2021} developed Fusion-in-Decoder. Their approach encoded each pulled text passage separately rather than squashing them together, leading to much better outcomes on QA tasks that scan multiple documents. Around the same time, Pan \textit{et al.}~\cite{pan2024} mapped out how the industry is starting to merge large language models with knowledge graphs, noting that the KG-enhanced LLM model—the exact path we chose for this project—is gaining significant traction.
-
-\par
-More recently, Linders and Tomczak~\cite{kg_rag_springer} detailed a framework where standard RAG gets a boost from graph-guided relationship traversal. They showed that this method greatly improves accuracy when answering questions that require multiple logical leaps. Looking specifically at schools, Li \textit{et al.}~\cite{rag_edu_elsevier} reviewed how RAG performs in educational environments. Their survey concluded that systems built strictly for college data perform much better than generic LLMs. However, they also noted a major flaw: standard systems normally lack structured relational knowledge, making them struggle with complex institutional questions.
->>>>>>> 3782c87ba5f7ffd9e3df8f0e7670b903e1366271
 \clearpage
 
 \section{Summary of Related Works}
@@ -473,7 +466,6 @@ Once a query arrives, the pipeline first tries to identify user intent and then 
 The selected vectors and knowledge graph evidence are passed to a large language model. We instruct the model to use the provided context as the only source of facts and to say that the answer is not available if it cannot be supported. In practice, this helps reduce hallucinations, though it does not eliminate them entirely.
 \subsection{Modules of the Project}
 
-<<<<<<< HEAD
 The system is divided into the following functional modules which correspond to the pipeline stages of the application:
 
 \begin{enumerate}
@@ -486,19 +478,6 @@ The system is divided into the following functional modules which correspond to 
   \item \textbf{RAG Ingestion Module (\path{rag_ingestion.py}):} Handles the vectorization pipeline using the \textbf{EmbeddingGemma} 768-dimensional model via the \textit{Sentence-Transformers} library. The module caches embedding vectors to bypass re-encoding during rebuilds, and seamlessly initializes multiple isolated persistent collections inside ChromaDB (e.g., separating table-heavy content from general text).
   \item \textbf{Query Router Module (\path{rag_ingestion.py}):} The runtime layer that intercepts user prompts. It features an intent classification stage that categorizes requests across seven domain types, dynamically routing searches to the appropriate vector collection or to graph traversal, applying adaptive distance thresholds based on retrieval quality, and finally formatting context windows for LLM synthesis.
   \item \textbf{FastAPI Integration and End User Interface (\path{api_server.py} \& \path{chatbot.py}):} The serving layer exposing RESTful endpoints, including a \texttt{/chat} inference interface serving generative responses, and metrics diagnostics on \texttt{/stats}. This is fully integrated with a browser-based UI frontend supporting Markdown formatting, dynamically generated tables, and conversational cache support.
-=======
-The pipeline is broken into eight main Python scripts:
-
-\begin{enumerate}
-  \item \textbf{URL Discovery Module (\path{scraper/url_discovery.py}):} Uses breadth-first search to find HTML pages and PDF links under the CSE website.
-  \item \textbf{HTML Scraper Module (\path{scraper/html_scraper.py}):} Parses pages with BeautifulSoup and converts them to Markdown, while cleaning up inconsistent markup.
-  \item \textbf{PDF Handler Module (\path{scraper/pdf_handler.py}):} Extracts text and tables with pdfplumber and uses Tesseract OCR for scanned pages.
-  \item \textbf{Entity Registry Module (\path{chunker/entity_registry.py}):} Normalises names and identifiers so entity references remain consistent.
-  \item \textbf{Semantic Chunker Module (\path{chunker/semantic_chunker.py}):} Splits documents on structural markers rather than fixed word counts.
-  \item \textbf{Knowledge Graph Builder Module (\path{knowledge_graph/builder.py}):} Builds and validates the phase-1 JSON knowledge graph.
-  \item \textbf{RAG Ingestion Module (\path{rag_ingestion.py}):} Generates 768-dimensional embeddings and stores them in ChromaDB.
-  \item \textbf{Query Router Module (\path{rag_ingestion.py}):} Selects filters and thresholds based on detected intent for retrieval.
->>>>>>> 3782c87ba5f7ffd9e3df8f0e7670b903e1366271
 \end{enumerate}
 
 \subsection{Operating Environment}
@@ -534,11 +513,7 @@ The pipeline is broken into eight main Python scripts:
 
 \section{System Architecture}
 
-<<<<<<< HEAD
 The system architecture, illustrated in Figure~\ref{fig:sysarch}, showcases a sophisticated end-to-end pipeline tailored for academic knowledge extraction. The architecture separates the offline ingestion pipeline from the runtime access backend. The ingestion pipeline encompasses web scraping nodes, structural parsing algorithms, and semantic embedding functions mapping into isolated vector stores. Data follows a streamlined progression: from raw site domains into structured Markdown files, which are subsequently routed to parallel logic for knowledge graph instantiation and ChromaDB embedding. The diverse structures then converge via intent-routing during inference, successfully formatting generated payloads inside the responsive application environment.
-=======
-Figure~\ref{fig:sysarch} shows the data flow in the hybrid KG-RAG framework. It begins with scraping and ends with answer generation, and it illustrates how the major components are connected.
->>>>>>> 3782c87ba5f7ffd9e3df8f0e7670b903e1366271
 
 \begin{figure}[htbp]
 \centering
@@ -549,11 +524,7 @@ Figure~\ref{fig:sysarch} shows the data flow in the hybrid KG-RAG framework. It 
 
 \section{Data Flow Diagram — Level 0 (Context Diagram)}
 
-<<<<<<< HEAD
 The Context Diagram (DFD Level~0), depicted in Figure~\ref{fig:dfd0}, conceptualises the hybrid KG-RAG implementation as a central functional process interfacing directly with external endpoints. The external environment revolves around the MBCET Web Sources and the End User. The web layer behaves as the raw data reservoir, parsing comprehensive HTML trees and institutional PDF resources iteratively into the architecture. Simultaneously, conversational queries instantiated by students filter into the intent classification boundary, subsequently returning context-driven, synthetically grounded insights and generated results back to the frontend users.
-=======
-The DFD Level~0 view in Figure~\ref{fig:dfd0} represents the system as a single process. On one side it interacts with end users, and on the other it pulls HTML pages and PDFs from the MBCET site. The internal steps are hidden in this view, but the output is a grounded answer to a natural-language query.
->>>>>>> 3782c87ba5f7ffd9e3df8f0e7670b903e1366271
 
 \begin{figure}[htbp]
 \centering
@@ -564,11 +535,7 @@ The DFD Level~0 view in Figure~\ref{fig:dfd0} represents the system as a single 
 
 \section{Data Flow Diagram — Level 1}
 
-<<<<<<< HEAD
 The Level~1 DFD (Figure~\ref{fig:dfd1}) progressively decomposes the monolithic context schema into high-fidelity component processes encapsulating the application's true modularity. The visualization highlights how incoming textual documents filter dynamically across scraping configurations before entering the \textit{Semantic Chunker} component. Simultaneously, entities are validated inside an independent \textit{Entity Registry} node. Pipeline flow explicitly bifurcates toward analytical vector creation (Vector Ingestion) and the formulation of deterministic pathways (Knowledge Graph Construction). The query execution stream explicitly routes intent classifications across vector distributions, prioritizing deterministic endpoints.
-=======
-The Level~1 DFD in Figure~\ref{fig:dfd1} breaks the system into six sub-processes. These include web scraping, semantic chunking, knowledge graph construction, embedding and ingestion, hybrid retrieval, and answer generation.
->>>>>>> 3782c87ba5f7ffd9e3df8f0e7670b903e1366271
 \clearpage
 \begin{figure}[htbp]
 \centering
@@ -579,11 +546,7 @@ The Level~1 DFD in Figure~\ref{fig:dfd1} breaks the system into six sub-processe
 
 \section{Use Case Diagram}
 
-<<<<<<< HEAD
 Figure~\ref{fig:usecase} specifies the scope of human-to-system behavioral associations in the application. The primary actors encompass the \textbf{Student / End User}, tasked seamlessly with operating the prompt-query cycle across various informational areas, and the \textbf{Administrator}, imbued with pipeline orchestration protocols (overriding caching parameters, launching explicit database rebuilding tasks incrementally, and reviewing log metrics).
-=======
-Figure~\ref{fig:usecase} shows the actors and their main interactions with the system. On one side, the \textbf{Student / End User} submits queries. On the other side, the \textbf{Administrator} manages data ingestion and pipeline execution.
->>>>>>> 3782c87ba5f7ffd9e3df8f0e7670b903e1366271
 
 \begin{figure}[htbp]
   \centering
@@ -598,11 +561,7 @@ Conversely, the \textbf{Administrator} role interacts dynamically with the backe
 
 \section{Class Diagram}
 
-<<<<<<< HEAD
 Figure~\ref{fig:classdiag} shows the class diagram depicting the core modules and their conceptual inheritance and structural relationships.
-=======
-Going entirely into the software design, Figure~\ref{fig:classdiag} explicitly draws up the class breakdown dividing the project modules across the codebase.
->>>>>>> 3782c87ba5f7ffd9e3df8f0e7670b903e1366271
 
 \begin{figure}[H]
   \centering
@@ -611,21 +570,13 @@ Going entirely into the software design, Figure~\ref{fig:classdiag} explicitly d
   \label{fig:classdiag}
 \end{figure}
 
-<<<<<<< HEAD
 The architectural execution of the project is primarily distributed across an array of highly specialized Python classes designed for compartmentalised fault tolerance. The ingestion phase is heavily abstracted by the system's URL crawlers and parsing blocks, including \texttt{discover\_urls()} acting as the procedural anchor for site-depth exploration, alongside the \texttt{HTMLScraper} and \texttt{PDFHandler} object instances. These classes natively isolate unique attributes such as BeautifulSoup4 extraction tags and OCR fallback states respectively, mitigating fatal extraction crashes.
-=======
-The principal pieces of code and what they specifically handle are compiled tightly within Table~\ref{tab:classes}.
->>>>>>> 3782c87ba5f7ffd9e3df8f0e7670b903e1366271
 
 Once raw documentation is formatted into Markdown, processing is inherited by the \texttt{Semantic\_Chunker} wrapper which initializes structural deduplication boundaries (checking semantic tags and character allocations). Simultaneously, the \texttt{EntityRegistry} class manages local state dictionaries for academic properties (assigning UUIDs and alias arrays tracking normalized professor or course labels). The relational synthesis depends upon the \texttt{Knowledge\_Graph\_Builder()} procedures which strictly analyze chunk properties to construct Phase-1 declarative edge vectors. Ultimately, the \texttt{RAG\_Ingestion} handler natively encapsulates ChromaDB configurations, enabling rapid topological storage vectors and housing the execution environments for adaptive threshold intent querying at runtime.
 
 \section{Sequence Diagram}
 
-<<<<<<< HEAD
 Figure~\ref{fig:seqdiag} illustrates the strict sequential event progression modeling how user queries traverse the underlying architectural layers.
-=======
-Figure~\ref{fig:seqdiag} records the sequence of events that occur when a user submits a query. It begins with intent classification, continues through retrieval and evidence collection, and ends with the LLM synthesizing an answer.
->>>>>>> 3782c87ba5f7ffd9e3df8f0e7670b903e1366271
 
 \begin{figure}[H]
   \centering
