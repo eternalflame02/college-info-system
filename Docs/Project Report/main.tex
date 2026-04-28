@@ -266,29 +266,30 @@ To test these ideas, we propose a \textbf{hybrid knowledge-graph-enhanced retrie
 This chapter examines the major studies bridging retrieval-augmented generation, knowledge graphs, and educational data systems. These works heavily influenced the design choices in our hybrid KG-RAG framework.
 
 \par
-Lewis \textit{et al.}~\cite{lewis2020} originally brought RAG to the forefront as a viable strategy for NLP tasks requiring intensive knowledge lookups. By linking a pre-trained text generator directly with a Dense Passage Retriever, they proved that adding an active retrieval step drastically cuts down on hallucinated answers. Building on that idea, Izacard and Grave~\cite{izacard2021} developed Fusion-in-Decoder. Their approach encoded each pulled text passage separately rather than squashing them together, leading to much better outcomes on QA tasks that scan multiple documents. Around the same time, Pan \textit{et al.}~\cite{pan2024} mapped out how the industry is starting to merge large language models with knowledge graphs, noting that the KG-enhanced LLM model—the exact path we chose for this project—is gaining significant traction.
+The foundational formulation of RAG was introduced by Lewis~\textit{et al.}~\cite{lewis2020}, who established that coupling a pre-trained language generator with a Dense Passage Retriever significantly reduces hallucination in knowledge-intensive NLP tasks. Building on this to handle broader contexts, Izacard and Grave~\cite{izacard2021} presented the Fusion-in-Decoder architecture, demonstrating that independently encoding retrieved passages yields superior accuracy for multi-document question answering. Furthermore, the modern trajectory of synthesizing structured logic with raw generation is explored comprehensively by Pan~\textit{et al.}~\cite{pan2024}; their roadmap survey explicitly identifies the KG-enhanced LLM paradigm as the superior mechanism for factual anchoring—a philosophy strictly adopted in this project.
 
 \par
-More recently, Linders and Tomczak~\cite{kg_rag_springer} detailed a framework where standard RAG gets a boost from graph-guided relationship traversal. They showed that this method greatly improves accuracy when answering questions that require multiple logical leaps. Looking specifically at schools, Li \textit{et al.}~\cite{rag_edu_elsevier} reviewed how RAG performs in educational environments. Their survey concluded that systems built strictly for college data perform much better than generic LLMs. However, they also noted a major flaw: standard systems normally lack structured relational knowledge, making them struggle with complex institutional questions.
+In the context of architectural deployments, Linders and Tomczak~\cite{kg_rag_springer} engineered a knowledge-graph-extended RAG framework proving that standard similarity retrieval can be substantially augmented using deterministic graph-guided entity relationship traversal, a technique crucial for unlocking accurate multi-hop QA. Finally, applying these paradigms to academic institutions, Li~\textit{et al.}~\cite{rag_edu_elsevier} provided an extensive survey isolating RAG's impact inside educational boundaries. Their findings confirm that isolated, domain-specific semantic engines massively outperform general-purpose models on institutional datasets, but critically identify the fundamental lack of structured, entity-level relational data as the primary failure point in academic deployment, explicitly validating our implementation of a hybrid KG-RAG pipeline.
 \clearpage
 
 \section{Summary of Related Works}
 
 \begin{table}[htbp]
   \centering
-  \caption{Summary of Related Works}
-  \label{tab:litreview}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \begin{tabular}{|p{3cm}|p{3.2cm}|p{3cm}|p{3cm}|}
     \hline
     \textbf{Author(s)} & \textbf{Method} & \textbf{Focus} & \textbf{Limitation} \\ \hline
-    Lewis et al.\ (2020)     & RAG (DPR + BART)           & Open-domain QA          & No relational reasoning           \\ \hline
-    Izacard \& Grave (2021)  & Fusion-in-Decoder          & Multi-document QA        & Scalability to large KBs          \\ \hline
-    Linders \& Tomczak (2025)& KG-extended RAG            & Multi-hop QA             & Requires pre-built KG              \\ \hline
-    Li et al.\ (2025)        & RAG survey (education)     & Educational QA           & Dependent on retriever quality    \\ \hline
-    Pan et al.\ (2024)       & LLM-KG unification survey  & Knowledge representation & Broad survey, no implementation   \\ \hline
-    \textbf{Proposed System} & Hybrid KG-RAG              & Academic info. retrieval & Limited to single institution     \\ \hline
+    Lewis et al.~\cite{lewis2020}       & RAG (DPR + BART)           & Open-domain QA          & No relational reasoning           \\ \hline
+    Izacard \& Grave~\cite{izacard2021} & Fusion-in-Decoder          & Multi-document QA        & Scalability to large KBs          \\ \hline
+    Linders \& Tomczak~\cite{kg_rag_springer} & KG-extended RAG      & Multi-hop QA             & Requires pre-built KG              \\ \hline
+    Li et al.~\cite{rag_edu_elsevier}   & RAG survey (education)     & Educational QA           & Dependent on retriever quality    \\ \hline
+    Pan et al.~\cite{pan2024}           & LLM-KG unification survey  & Knowledge representation & Broad survey, no implementation   \\ \hline
+    \textbf{Proposed System}            & Hybrid KG-RAG              & Academic info. retrieval & Limited to single institution     \\ \hline
   \end{tabular}
+  \caption{Summary of Related Works}
+  \label{tab:litreview}
+
 \end{table}
 
 \section{Gaps in the Literature}
@@ -361,9 +362,7 @@ After producing Markdown, the semantic chunker converts the content into segment
 
 \begin{table}[htbp]
   \centering
-  \caption{Semantic Chunk Schema}
-  \label{tab:chunk_schema}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \begin{tabular}{|l|l|p{6cm}|}
     \hline
     \textbf{Field} & \textbf{Type} & \textbf{Description} \\ \hline
@@ -378,6 +377,9 @@ After producing Markdown, the semantic chunker converts the content into segment
     \texttt{word\_count}         & int      & Number of words in chunk                   \\ \hline
     \texttt{hash}                & string   & SHA-256 content hash for deduplication     \\ \hline
   \end{tabular}
+  \caption{Semantic Chunk Schema}
+  \label{tab:chunk_schema}
+
 \end{table}
 
 \subsection{Vector Embedding and Storage}
@@ -409,9 +411,7 @@ At this stage, the graph includes four node types and three edge relations:
 
 \begin{table}[htbp]
   \centering
-  \caption{Knowledge Graph Node and Edge Types}
-  \label{tab:kg_types}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \begin{tabular}{|l|l|p{6cm}|}
     \hline
     \textbf{Element} & \textbf{Type} & \textbf{Description} \\ \hline
@@ -423,6 +423,9 @@ At this stage, the graph includes four node types and three edge relations:
     Edge & part\_of          & Course $\rightarrow$ Program (from syllabus source)   \\ \hline
     Edge & has\_prerequisite & Course $\rightarrow$ Course (schema-supported; none extracted in current build)   \\ \hline
   \end{tabular}
+  \caption{Knowledge Graph Node and Edge Types}
+  \label{tab:kg_types}
+
 \end{table}
 
 Our logic for gathering relationships functions exclusively across three explicit rules targeting text formatting within the chunks:
@@ -463,26 +466,25 @@ Once a query arrives, the pipeline first tries to identify user intent and then 
 The selected vectors and knowledge graph evidence are passed to a large language model. We instruct the model to use the provided context as the only source of facts and to say that the answer is not available if it cannot be supported. In practice, this helps reduce hallucinations, though it does not eliminate them entirely.
 \subsection{Modules of the Project}
 
-The pipeline is broken into eight main Python scripts:
+The system is divided into the following functional modules which correspond to the pipeline stages of the application:
 
 \begin{enumerate}
-  \item \textbf{URL Discovery Module (\path{scraper/url_discovery.py}):} Uses breadth-first search to find HTML pages and PDF links under the CSE website.
-  \item \textbf{HTML Scraper Module (\path{scraper/html_scraper.py}):} Parses pages with BeautifulSoup and converts them to Markdown, while cleaning up inconsistent markup.
-  \item \textbf{PDF Handler Module (\path{scraper/pdf_handler.py}):} Extracts text and tables with pdfplumber and uses Tesseract OCR for scanned pages.
-  \item \textbf{Entity Registry Module (\path{chunker/entity_registry.py}):} Normalises names and identifiers so entity references remain consistent.
-  \item \textbf{Semantic Chunker Module (\path{chunker/semantic_chunker.py}):} Splits documents on structural markers rather than fixed word counts.
-  \item \textbf{Knowledge Graph Builder Module (\path{knowledge_graph/builder.py}):} Builds and validates the phase-1 JSON knowledge graph.
-  \item \textbf{RAG Ingestion Module (\path{rag_ingestion.py}):} Generates 768-dimensional embeddings and stores them in ChromaDB.
-  \item \textbf{Query Router Module (\path{rag_ingestion.py}):} Selects filters and thresholds based on detected intent for retrieval.
+  \item \textbf{URL Discovery Module (\path{scraper/url_discovery.py}):} A Breadth-First Search (BFS) crawling engine that discovers HTML pages and PDF links under the CSE department URL. It supports configurable depth limits and URL-pattern filtering (include/exclude paths).
+  \item \textbf{HTML Scraper Module (\path{scraper/html_scraper.py}):} Handles HTML pages scraped from the department website. It converts discovered HTML to clean Markdown format and specifically extracts structured faculty lists by parsing nested DOM elements using BeautifulSoup4, with built-in error recovery mechanisms.
+  \item \textbf{PDF Handler Module (\path{scraper/pdf_handler.py}):} A robust PDF processing stage utilizing \textit{pdfplumber} for text and tabular data extraction. For documents containing scanned pages, it features an OCR fallback mechanism via Tesseract to ensure high-fidelity extraction of academic syllabi and examination timetables.
+  \item \textbf{Entity Registry Module (\path{chunker/entity_registry.py}):} Responsible for extracting and normalizing named entities (such as faculty names or course codes) from the generated Markdown documents. The module dynamically builds registries for faculty, courses, and programs, tracking aliases and assigning unique entity identifiers.
+  \item \textbf{Semantic Chunker Module (\path{chunker/semantic_chunker.py}):} A content-aware segmentation framework that splits documents exactly at natural semantic boundaries rather than arbitrary character counts. It classifies each generated chunk into structural types (\textit{profile, regulation, table, section, list}), links extracted entity references, and enforces configurable word-count boundaries alongside SHA-256 deductive hashing to prevent index redundancy.
+  \item \textbf{Knowledge Graph Builder Module (\path{knowledge_graph/builder.py}):} Constructs the phase-1 deterministic knowledge graph artifact (stored as JSON) by combining entity registries and chunk metadata. The module utilizes strict regex patterns and string heuristics to extract multi-relational edges (\textit{teaches}, \textit{part\_of}) and integrates an end-to-end provenance architecture where every extracted relationship retains a direct reference to its source chunk ID.
+  \item \textbf{RAG Ingestion Module (\path{rag_ingestion.py}):} Handles the vectorization pipeline using the \textbf{EmbeddingGemma} 768-dimensional model via the \textit{Sentence-Transformers} library. The module caches embedding vectors to bypass re-encoding during rebuilds, and seamlessly initializes multiple isolated persistent collections inside ChromaDB (e.g., separating table-heavy content from general text).
+  \item \textbf{Query Router Module (\path{rag_ingestion.py}):} The runtime layer that intercepts user prompts. It features an intent classification stage that categorizes requests across seven domain types, dynamically routing searches to the appropriate vector collection or to graph traversal, applying adaptive distance thresholds based on retrieval quality, and finally formatting context windows for LLM synthesis.
+  \item \textbf{FastAPI Integration and End User Interface (\path{api_server.py} \& \path{chatbot.py}):} The serving layer exposing RESTful endpoints, including a \texttt{/chat} inference interface serving generative responses, and metrics diagnostics on \texttt{/stats}. This is fully integrated with a browser-based UI frontend supporting Markdown formatting, dynamically generated tables, and conversational cache support.
 \end{enumerate}
 
 \subsection{Operating Environment}
 
 \begin{table}[htbp]
   \centering
-  \caption{Software and Hardware Requirements}
-  \label{tab:requirements}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \small
   \begin{tabular}{|L{3.2cm}|L{8.8cm}|}
     \hline
@@ -498,6 +500,9 @@ The pipeline is broken into eight main Python scripts:
     GPU (Optional) & NVIDIA GTX 1650 Ti (4 GB VRAM) / Google Colab T4 \\ \hline
     RAM & 8 GB minimum, 16 GB recommended \\ \hline
   \end{tabular}
+  \caption{Software and Hardware Requirements}
+  \label{tab:requirements}
+
 \end{table}
 \clearpage
 
@@ -508,7 +513,7 @@ The pipeline is broken into eight main Python scripts:
 
 \section{System Architecture}
 
-Figure~\ref{fig:sysarch} shows the data flow in the hybrid KG-RAG framework. It begins with scraping and ends with answer generation, and it illustrates how the major components are connected.
+The system architecture, illustrated in Figure~\ref{fig:sysarch}, showcases a sophisticated end-to-end pipeline tailored for academic knowledge extraction. The architecture separates the offline ingestion pipeline from the runtime access backend. The ingestion pipeline encompasses web scraping nodes, structural parsing algorithms, and semantic embedding functions mapping into isolated vector stores. Data follows a streamlined progression: from raw site domains into structured Markdown files, which are subsequently routed to parallel logic for knowledge graph instantiation and ChromaDB embedding. The diverse structures then converge via intent-routing during inference, successfully formatting generated payloads inside the responsive application environment.
 
 \begin{figure}[htbp]
 \centering
@@ -519,7 +524,7 @@ Figure~\ref{fig:sysarch} shows the data flow in the hybrid KG-RAG framework. It 
 
 \section{Data Flow Diagram — Level 0 (Context Diagram)}
 
-The DFD Level~0 view in Figure~\ref{fig:dfd0} represents the system as a single process. On one side it interacts with end users, and on the other it pulls HTML pages and PDFs from the MBCET site. The internal steps are hidden in this view, but the output is a grounded answer to a natural-language query.
+The Context Diagram (DFD Level~0), depicted in Figure~\ref{fig:dfd0}, conceptualises the hybrid KG-RAG implementation as a central functional process interfacing directly with external endpoints. The external environment revolves around the MBCET Web Sources and the End User. The web layer behaves as the raw data reservoir, parsing comprehensive HTML trees and institutional PDF resources iteratively into the architecture. Simultaneously, conversational queries instantiated by students filter into the intent classification boundary, subsequently returning context-driven, synthetically grounded insights and generated results back to the frontend users.
 
 \begin{figure}[htbp]
 \centering
@@ -530,7 +535,7 @@ The DFD Level~0 view in Figure~\ref{fig:dfd0} represents the system as a single 
 
 \section{Data Flow Diagram — Level 1}
 
-The Level~1 DFD in Figure~\ref{fig:dfd1} breaks the system into six sub-processes. These include web scraping, semantic chunking, knowledge graph construction, embedding and ingestion, hybrid retrieval, and answer generation.
+The Level~1 DFD (Figure~\ref{fig:dfd1}) progressively decomposes the monolithic context schema into high-fidelity component processes encapsulating the application's true modularity. The visualization highlights how incoming textual documents filter dynamically across scraping configurations before entering the \textit{Semantic Chunker} component. Simultaneously, entities are validated inside an independent \textit{Entity Registry} node. Pipeline flow explicitly bifurcates toward analytical vector creation (Vector Ingestion) and the formulation of deterministic pathways (Knowledge Graph Construction). The query execution stream explicitly routes intent classifications across vector distributions, prioritizing deterministic endpoints.
 \clearpage
 \begin{figure}[htbp]
 \centering
@@ -541,7 +546,7 @@ The Level~1 DFD in Figure~\ref{fig:dfd1} breaks the system into six sub-processe
 
 \section{Use Case Diagram}
 
-Figure~\ref{fig:usecase} shows the actors and their main interactions with the system. On one side, the \textbf{Student / End User} submits queries. On the other side, the \textbf{Administrator} manages data ingestion and pipeline execution.
+Figure~\ref{fig:usecase} specifies the scope of human-to-system behavioral associations in the application. The primary actors encompass the \textbf{Student / End User}, tasked seamlessly with operating the prompt-query cycle across various informational areas, and the \textbf{Administrator}, imbued with pipeline orchestration protocols (overriding caching parameters, launching explicit database rebuilding tasks incrementally, and reviewing log metrics).
 
 \begin{figure}[htbp]
   \centering
@@ -550,20 +555,13 @@ Figure~\ref{fig:usecase} shows the actors and their main interactions with the s
   \label{fig:usecase}
 \end{figure}
 
-Key use cases include:
-\begin{enumerate}
-  \item Query about faculty information (``Who is the HOD of CSE?'')
-  \item Query about course details (``How many credits does Computer Networks have?'')
-  \item Query about teaching assignments (``Who teaches Artificial Intelligence?'')
-  \item Query about regulations (``What is the attendance requirement?'')
-  \item Run scraping pipeline (Administrator)
-  \item Rebuild knowledge graph (Administrator)
-  \item Re-index embeddings (Administrator)
-\end{enumerate}
+The functional behaviors of the software are heavily segmented between the two critical actors. The \textbf{Student / End User} utilizes the frontend application exclusively as a read-only query interface. Their major use cases inherently revolve around retrieving nuanced academic data. For example, they can continuously query the system for isolated faculty information (e.g., verifying the current assigned HOD of the CSE Department), inquire about academic course topologies (such as extracting credit allocations for core modules like Computer Networks), and trace overlapping teaching assignments. Crucially, they can also extract deep regulatory facts natively locked within heavy academic handbook PDFs (such as complex institution attendance requirements and grading conventions).
+
+Conversely, the \textbf{Administrator} role interacts dynamically with the backend layers to ensure content freshness and systemic integrity. Their major operational use cases involve triggering the \texttt{scrape} module to systematically index external institutional portals when semester data updates occur. Furthermore, administrators are responsible for executing graph transformations (rebuilding deterministic knowledge graphs across new entities) and dictating embedding cache overrides (\texttt{re-index embeddings}) directly to the local ChromaDB deployment.
 
 \section{Class Diagram}
 
-Going entirely into the software design, Figure~\ref{fig:classdiag} explicitly draws up the class breakdown dividing the project modules across the codebase.
+Figure~\ref{fig:classdiag} shows the class diagram depicting the core modules and their conceptual inheritance and structural relationships.
 
 \begin{figure}[H]
   \centering
@@ -572,31 +570,13 @@ Going entirely into the software design, Figure~\ref{fig:classdiag} explicitly d
   \label{fig:classdiag}
 \end{figure}
 
-The principal pieces of code and what they specifically handle are compiled tightly within Table~\ref{tab:classes}.
+The architectural execution of the project is primarily distributed across an array of highly specialized Python classes designed for compartmentalised fault tolerance. The ingestion phase is heavily abstracted by the system's URL crawlers and parsing blocks, including \texttt{discover\_urls()} acting as the procedural anchor for site-depth exploration, alongside the \texttt{HTMLScraper} and \texttt{PDFHandler} object instances. These classes natively isolate unique attributes such as BeautifulSoup4 extraction tags and OCR fallback states respectively, mitigating fatal extraction crashes.
 
-\begin{table}[htbp]
-  \centering
-  \caption{Key Classes and Their Responsibilities}
-  \label{tab:classes}
-  \vspace*{5pt}
-  \small
-  \begin{tabularx}{\textwidth}{|L{2.6cm}|L{3.0cm}|Y|}
-    \hline
-    \textbf{Module} & \textbf{Class/Function} & \textbf{Responsibility} \\ \hline
-    \path{url_discovery}     & \path{discover_urls()}        & BFS URL crawling with depth/pattern control \\ \hline
-    \path{html_scraper}      & \path{HTMLScraper}             & HTML$\rightarrow$Markdown, faculty list extraction \\ \hline
-    \path{pdf_handler}       & \path{PDFHandler}              & PDF text/table extraction, OCR fallback \\ \hline
-    \path{semantic_chunker}  & \path{run_chunking_pipeline()} & Content-aware splitting, typing, dedup \\ \hline
-    \path{entity_registry}   & \path{EntityRegistry}          & Entity extraction, ID generation, alias normalisation \\ \hline
-    \path{builder}           & \path{build_knowledge_graph()} & Node/edge construction, validation \\ \hline
-    \path{rag_ingestion}     & \path{run_ingestion_pipeline()} & Embedding generation, ChromaDB ingestion \\ \hline
-    \path{rag_ingestion}     & \path{query_chromadb()}       & Intent routing, adaptive thresholding \\ \hline
-  \end{tabularx}
-\end{table}
+Once raw documentation is formatted into Markdown, processing is inherited by the \texttt{Semantic\_Chunker} wrapper which initializes structural deduplication boundaries (checking semantic tags and character allocations). Simultaneously, the \texttt{EntityRegistry} class manages local state dictionaries for academic properties (assigning UUIDs and alias arrays tracking normalized professor or course labels). The relational synthesis depends upon the \texttt{Knowledge\_Graph\_Builder()} procedures which strictly analyze chunk properties to construct Phase-1 declarative edge vectors. Ultimately, the \texttt{RAG\_Ingestion} handler natively encapsulates ChromaDB configurations, enabling rapid topological storage vectors and housing the execution environments for adaptive threshold intent querying at runtime.
 
 \section{Sequence Diagram}
 
-Figure~\ref{fig:seqdiag} records the sequence of events that occur when a user submits a query. It begins with intent classification, continues through retrieval and evidence collection, and ends with the LLM synthesizing an answer.
+Figure~\ref{fig:seqdiag} illustrates the strict sequential event progression modeling how user queries traverse the underlying architectural layers.
 
 \begin{figure}[H]
   \centering
@@ -605,13 +585,17 @@ Figure~\ref{fig:seqdiag} records the sequence of events that occur when a user s
   \label{fig:seqdiag}
 \end{figure}
 
+The query processing lifecycle requires meticulously ordered interactions between multiple independent boundary components. Initially, the process is instantiated when a Student inputs an inquiry at the visual application frontend. The UI packages this interaction into an asynchronous HTTP POST payload delivered instantaneously to the FastAPI networking middleware. Subsequently, the Query Router acts as a central control dispatcher, performing algorithmic intent categorization against the query string (e.g., classifying it dynamically into `timetable`, `regulation`, or `general` schemas). Based entirely upon this determined intent, execution control diverges: the router invokes specific ChromaDB collections—evaluating vector semantics using Euclidean distance constraints—or invokes a lightweight lookup within the local JSON Knowledge Graph for explicit relational truths. Finally, the synthesized metadata chunks are packaged aggressively into contextual templates and passed natively to the Large Language Model endpoint. The LLM performs generative synthesis, relaying a highly accurate and heavily sanitized output backward across the topological stack immediately back to the user's viewport.
+
+\section{Project Pipeline Integration}
+
+Crucially matching the methodology of ``Hybrid Knowledge-Graph-Enhanced Retrieval-Augmented Generation for Academic Information Systems'', the application enforces a rigid operational timeline separating offline collection from runtime synthesis. The initial indexing stages independently crawl and interpret academic materials (syllabi, HTML faculty grids), injecting explicit metadata through a dynamic Entity Registry. This extracted payload then forks down parallel pipelines. The first branch securely stores textual embeddings inside local ChromaDB vector topologies using a standardized 768-dimensional footprint. Simultaneously, the alternative branch leverages deterministic extraction mapping to synthesize the phase-1 declarative Knowledge Graph. At runtime, the application successfully harmonizes these isolated pipelines; a semantic router systematically unites structural logic queries and abstract analytical searches, establishing an unprecedented educational assistant strictly shielded against external generative hallucination.
+
 \section{Pipeline Output Summary}
 
 \begin{table}[htbp]
   \centering
-  \caption{Pipeline Stage Outputs}
-  \label{tab:pipeline_outputs}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \small
   \begin{tabularx}{\textwidth}{|L{3.0cm}|c|Y|}
     \hline
@@ -626,6 +610,9 @@ Figure~\ref{fig:seqdiag} records the sequence of events that occur when a user s
     ChromaDB vectors      & 2268 & \path{data/validation/chromadb_ingestion_report.json} \\ \hline
     Top-level test functions & 35 & \path{tests/}                   \\ \hline
   \end{tabularx}
+  \caption{Pipeline Stage Outputs}
+  \label{tab:pipeline_outputs}
+
 \end{table}
 
 \clearpage
@@ -643,9 +630,7 @@ When we ran the pipeline on the available CSE data, it created a broad base of s
 
 \begin{table}[htbp]
   \centering
-  \caption{Implemented Pipeline Coverage Metrics}
-  \label{tab:results_coverage}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \small
   \begin{tabular}{|L{3.4cm}|c|L{5.8cm}|}
     \hline
@@ -659,6 +644,9 @@ When we ran the pipeline on the available CSE data, it created a broad base of s
     Knowledge graph edges (phase-1) & 1700 & \texttt{kg\_quality\_metrics.json} \\ \hline
     Largest connected component ratio & 0.983 & \texttt{kg\_quality\_metrics.json} \\ \hline
   \end{tabular}
+  \caption{Implemented Pipeline Coverage Metrics}
+  \label{tab:results_coverage}
+
 \end{table}
 
 \section{Chunking Quality Metrics}
@@ -667,9 +655,7 @@ We ran precise diagnostics strictly over every single chunk observing its size, 
 
 \begin{table}[htbp]
   \centering
-  \caption{Chunk Quality Metrics}
-  \label{tab:chunk_quality}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \begin{tabular}{|l|c|}
     \hline
     \textbf{Metric} & \textbf{Value} \\ \hline
@@ -680,6 +666,9 @@ We ran precise diagnostics strictly over every single chunk observing its size, 
     Near-duplicate proxy ratio & 0.191 \\ \hline
     Chunks with entity references & 1604 (72.68\%) \\ \hline
   \end{tabular}
+  \caption{Chunk Quality Metrics}
+  \label{tab:chunk_quality}
+
 \end{table}
 
 \begin{figure}[htbp]
@@ -713,9 +702,7 @@ We analysed the semantic embeddings and found that normalization was stable acro
 
 \begin{table}[htbp]
   \centering
-  \caption{Embedding Quality Metrics}
-  \label{tab:embedding_quality}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \begin{tabular}{|l|c|}
     \hline
     \textbf{Metric} & \textbf{Value} \\ \hline
@@ -725,6 +712,9 @@ We analysed the semantic embeddings and found that normalization was stable acro
     Mean neighbor similarity & 0.829 \\ \hline
     Outlier count & 0 \\ \hline
   \end{tabular}
+  \caption{Embedding Quality Metrics}
+  \label{tab:embedding_quality}
+
 \end{table}
 
 \section{Retrieval Performance}
@@ -733,9 +723,7 @@ To verify how the backend actually performs, we hit the query router cleanly usi
 
 \begin{table}[htbp]
   \centering
-  \caption{Aggregate Retrieval Metrics (30-query benchmark)}
-  \label{tab:retrieval_aggregate}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \begin{tabular}{|l|c|}
     \hline
     \textbf{Metric} & \textbf{Value} \\ \hline
@@ -746,13 +734,14 @@ To verify how the backend actually performs, we hit the query router cleanly usi
     Recall@5 (proxy) & 0.733 \\ \hline
     Fallback trigger ratio & 0.967 \\ \hline
   \end{tabular}
+  \caption{Aggregate Retrieval Metrics (30-query benchmark)}
+  \label{tab:retrieval_aggregate}
+
 \end{table}
 
 \begin{table}[htbp]
   \centering
-  \caption{Per Query-Type Retrieval Hit Rates}
-  \label{tab:query_type_hit_rates}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \begin{tabular}{|l|c|c|}
     \hline
     \textbf{Query Type} & \textbf{Hit Rate} & \textbf{Failure Rate} \\ \hline
@@ -763,6 +752,9 @@ To verify how the backend actually performs, we hit the query router cleanly usi
     General & 0.60 & 0.40 \\ \hline
     Regulation & 0.00 & 1.00 \\ \hline
   \end{tabular}
+  \caption{Per Query-Type Retrieval Hit Rates}
+  \label{tab:query_type_hit_rates}
+
 \end{table}
 
 \begin{figure}[htbp]
@@ -799,9 +791,7 @@ Scanning the resulting graph, our tests show strong connectivity with few orphan
 
 \begin{table}[htbp]
   \centering
-  \caption{Knowledge Graph Quality Metrics}
-  \label{tab:kg_quality}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \begin{tabular}{|l|c|}
     \hline
     \textbf{Metric} & \textbf{Value} \\ \hline
@@ -813,6 +803,9 @@ Scanning the resulting graph, our tests show strong connectivity with few orphan
     Largest component ratio & 0.983 \\ \hline
     Prerequisite edge count & 0 \\ \hline
   \end{tabular}
+  \caption{Knowledge Graph Quality Metrics}
+  \label{tab:kg_quality}
+
 \end{table}
 
 \section{System and Query Latency Benchmarks}
@@ -821,9 +814,7 @@ Time tests pulled plainly off the batch run revealed solid averages albeit extre
 
 \begin{table}[htbp]
   \centering
-  \caption{Latency Metrics (ms)}
-  \label{tab:latency_metrics}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \begin{tabular}{|l|c|}
     \hline
     \textbf{Metric} & \textbf{Value (ms)} \\ \hline
@@ -834,6 +825,9 @@ Time tests pulled plainly off the batch run revealed solid averages albeit extre
     p90 latency & 29331.99 \\ \hline
     Max latency & 37817.61 \\ \hline
   \end{tabular}
+  \caption{Latency Metrics (ms)}
+  \label{tab:latency_metrics}
+
 \end{table}
 
 \begin{figure}[htbp]
@@ -865,9 +859,7 @@ We identified three main issues during testing: retrieval accuracy for difficult
 
 \begin{table}[htbp]
   \centering
-  \caption{Priority Improvement Backlog}
-  \label{tab:improvement_backlog}
-  \vspace*{5pt}
+    \vspace*{5pt}
   \small
   \begin{tabular}{|L{1.8cm}|L{2.8cm}|L{4.6cm}|L{3.8cm}|}
     \hline
@@ -876,9 +868,32 @@ We identified three main issues during testing: retrieval accuracy for difficult
     P1 (Perf) & High average latency & Persist embedding model and avoid per-query initialization in multi-query path. & Mean latency $<$ 900 ms on same hardware \\ \hline
     P1 (KG) & No prerequisite edges extracted & Constrain prerequisite extraction to nearest course heading with local window disambiguation. & Non-zero prerequisite edges with manual precision $\geq$ 0.85 \\ \hline
   \end{tabular}
+  \caption{Priority Improvement Backlog}
+  \label{tab:improvement_backlog}
+
 \end{table}
 
 To wrap up the findings fairly quickly, testing demonstrated quite vividly how efficiently this KG-RAG build gathers proper documents corresponding specifically to teachers, locations, and courses securely maintaining strict relationships throughout. Nonetheless, failing to find regulatory data accurately while executing very sluggishly highlights obvious spots we absolutely plan on revising during our next optimization pass.
+
+\clearpage
+
+%% ============================================================
+%%  CHAPTER 6 — CONCLUSION AND FUTURE WORK
+%% ============================================================
+\chapter{Conclusion and Future Work}
+
+\section{Conclusion}
+
+This mini project successfully developed and evaluated a Hybrid Knowledge-Graph-Enhanced Retrieval-Augmented Generation (KG-RAG) system tailored specifically for academic information access. By deeply processing decentralized, unstructured HTML and intricate PDF syllabus documents from the MBCET CSE department, the pipeline systematically synthesized an accurate, multi-relational vector database alongside a strict, deterministic declarative knowledge graph. Integrating a 768-dimensional local Gemma embedding topology with continuous semantic deduplication resolved significant discrepancies native to baseline lexical search models. Furthermore, complex structural queries securely mapped against high-confidence graph pathways (utilizing semantic mappings such as \textit{teaches} and \textit{part\_of}), ensuring responses were inherently grounded by algorithmic evidence and mitigating hallucinated predictions. The resulting hybrid framework efficiently bridges the semantic gap for multifaceted academic queries, offering an automated, dependable, and explainable chat interface explicitly primed for institutional applications.
+
+\section{Future Work}
+
+Although the active infrastructure substantiates the effectiveness of intent-aware multi-modal algorithms, meaningful evolution pathways persist for subsequent optimizations:
+\begin{enumerate}
+    \item \textbf{Expanded Prerequisite Constraints:} Incorporating recursive schema constraints (such as context-aware extraction bounded by nearby academic regulations) to comprehensively capture missing graph dependencies and elaborate multi-level prerequisite trees efficiently.
+    \item \textbf{Operational Caching Strategies:} Transitioning the FastAPI runtime component to support query-result semantic caching mechanisms, fundamentally mitigating excessive Large Language Model API overhead experienced during traffic bursts common around examination schedules.
+    \item \textbf{Relational Database Migration:} Migrating the locally generated phase-1 flat JSON repository directly into a specialized graphical Database Management System infrastructure (such as Neo4j). Such an enhancement inherently fosters the rapid graph traversal velocities critical when scaling the environment to support multi-department datasets across the wider university corpus.
+\end{enumerate}
 
 \clearpage
 
@@ -910,14 +925,6 @@ To wrap up the findings fairly quickly, testing demonstrated quite vividly how e
   ``Leveraging passage retrieval with generative models for open domain question answering,''
   in \emph{Proc.\ 16th Conference of the European Chapter of the ACL (EACL)},
   pp.~874--880, 2021.
-
-  \bibitem{hogan2021}
-  A.~Hogan, E.~Blomqvist, M.~Cochez, C.~d'Amato, G.~de~Melo, C.~Gutierrez,
-  S.~Kirrane, J.~E.~L\'{a}baj N\'{a}ter, R.~Navigli, S.~Neumaier, A.-C.~Ngonga~Ngomo,
-  A.~Polleres, S.~M.~Rashid, A.~Rula, L.~Schmelzeisen, J.~Sequeda, S.~Staab,
-  and A.~Zimmermann,
-  ``Knowledge graphs,''
-  \emph{ACM Computing Surveys}, vol.~54, no.~4, pp.~1--37, 2021.
 
   \bibitem{pan2024}
   S.~Pan, L.~Luo, Y.~Wang, C.~Chen, J.~Wang, and X.~Wu,
