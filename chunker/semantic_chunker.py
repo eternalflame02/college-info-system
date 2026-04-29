@@ -541,6 +541,9 @@ class MarkdownChunker:
             List of Chunk objects
         """
         self.heading_stack = []  # Reset for new file
+
+        if filepath.name == "chatbot_qa.txt":
+            return self._chunk_admissions_qa_file(filepath, entity_registry)
         
         # Read file
         try:
@@ -567,6 +570,90 @@ class MarkdownChunker:
             entity_registry
         )
         
+        return chunks
+
+    def _chunk_admissions_qa_file(
+        self,
+        filepath: Path,
+        entity_registry: Optional[Dict] = None,
+    ) -> List[Chunk]:
+        """Chunk the admissions QA text file into one chunk per question-answer pair."""
+        try:
+            content = filepath.read_text(encoding="utf-8")
+        except Exception as e:
+            logger.error(f"Failed to read {filepath}: {e}")
+            return []
+
+        def _clean_heading(line: str) -> str:
+            cleaned = line.strip()
+            cleaned = cleaned.lstrip("🎓📅💰📊📄🏢").strip()
+            cleaned = re.sub(r"^\*\*(.+?)\*\*$", r"\1", cleaned).strip()
+            return cleaned or "Admissions QA"
+
+        section_title = "Admissions QA"
+        subsection_title = ""
+        chunks: List[Chunk] = []
+        question = ""
+        answer = ""
+        question_line = 0
+
+        def emit_chunk() -> None:
+            nonlocal question, answer, question_line
+            if not question and not answer:
+                return
+
+            qa_text = f"Question: {question.strip()}\nAnswer: {answer.strip()}".strip()
+            hierarchy = [section_title]
+            if subsection_title:
+                hierarchy.append(subsection_title)
+
+            chunk = self._create_chunk(
+                qa_text,
+                filepath,
+                "text",
+                hierarchy,
+                question_line,
+                question_line,
+                {},
+                entity_registry,
+            )
+            if chunk:
+                chunk.metadata.setdefault("tags", []).append("admissions")
+                chunk.metadata["qa_type"] = "admissions_faq"
+                chunks.append(chunk)
+
+        for idx, raw_line in enumerate(content.splitlines()):
+            line = raw_line.strip()
+            if not line:
+                continue
+
+            if line.startswith("🎓 ") and "**" in line:
+                section_title = _clean_heading(line)
+                subsection_title = ""
+                continue
+
+            subsection_match = re.match(r'^\*([^*].*?)\*:?\s*$', line)
+            if subsection_match:
+                subsection_title = subsection_match.group(1).strip()
+                continue
+
+            question_match = re.match(r'^-\s+"(.+?)"\s*$', line)
+            if question_match:
+                emit_chunk()
+                question = question_match.group(1).strip()
+                answer = ""
+                question_line = idx
+                continue
+
+            answer_match = re.match(r'^-\s+Answer:\s*(.+)$', line)
+            if answer_match and question:
+                answer = answer_match.group(1).strip()
+                emit_chunk()
+                question = ""
+                answer = ""
+                continue
+
+        emit_chunk()
         return chunks
 
     def _chunk_by_structure(
@@ -773,7 +860,8 @@ class MarkdownChunker:
         word_count = self._count_words(text)
         
         # Check minimum size (except for tables which can be smaller)
-        is_faq = "frequently" in str(filepath).lower()
+        filepath_lower = str(filepath).lower()
+        is_faq = "frequently" in filepath_lower or "chatbot_qa" in filepath_lower
         if word_count < self.min_words and not is_table and not is_faq:
             logger.debug(f"Chunk too small ({word_count} words): {text[:50]}...")
             return None
@@ -905,6 +993,7 @@ class SemanticChunkingPipeline:
         for extra_dir in config.ADDITIONAL_MARKDOWN_SOURCE_DIRS:
             if extra_dir.exists():
                 files.extend(extra_dir.glob("**/*.md"))
+                files.extend(extra_dir.glob("**/*.txt"))
         
         return sorted(set(files))
 

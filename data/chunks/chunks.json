@@ -64242,5 +64242,960 @@
     "metadata": {
       "table_kind": "generic"
     }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_btech_19dbb50c",
+    "text": "Question: What are the academic eligibility criteria for B.Tech admission?\nAnswer: Candidates must have passed the Higher Secondary Examination of Kerala or an equivalent examination with at least 45% marks in Mathematics, Physics, and Chemistry/equivalent subjects put together.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For B.Tech:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 38,
+    "hash": "19dbb50cfddb35098b36fb6877cdf02908bbec28c8b2c413db789ae7f0ab6b6b",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_btech_be334c09",
+    "text": "Question: What is the minimum percentage required in Plus Two (12th grade) for B.Tech?\nAnswer: 45% aggregate in Physics, Chemistry, and Mathematics (PCM).",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For B.Tech:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 23,
+    "hash": "be334c0964596131c9f8f8ea227db898641dcf4066da1f163652fa9908526ddd",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_btech_822b315a",
+    "text": "Question: Is there any age limit for B.Tech admissions?\nAnswer: Yes, applicants should have completed 17 years of age on 31st December 2025. No relaxation of age will be allowed.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For B.Tech:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 30,
+    "hash": "822b315aec4e0b4813f569e6eaee14958c952992eaa6411f5473b8f0efd0590c",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_btech_4f3f414f",
+    "text": "Question: Are both KEAM and JEE scores accepted for B.Tech admission?\nAnswer: Yes, candidates should qualify in either the Engineering Entrance Exam KEAM 2025 conducted by CEE Govt. of Kerala or JEE 2025.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For B.Tech:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 33,
+    "hash": "4f3f414f6688f00ed98380b31bc28a588217c0050e056c93c823c2c26807526e",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_btech_d32e2531",
+    "text": "Question: I belong to the SC/ST category. Do I have any relaxation in the qualifying marks?\nAnswer: Yes, candidates eligible for SC/ST category relaxation need only a \"Pass\" in the qualifying examination (for Plus Two subjects).",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For B.Tech:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 36,
+    "hash": "d32e2531991cbd2c11b79544cb48ac6e471834f5429b6eebed767cbe478b8ae0",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_btech_0a49bb37",
+    "text": "Question: Is the Eligibility Certificate mandatory if I studied in the CBSE board?\nAnswer: No, an Eligibility Certificate is not required for students from Kerala HSE, VHSE, CBSE, and ISC boards.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For B.Tech:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 31,
+    "hash": "0a49bb3706ddcd05bf9faa81e884dfb896656be184b6f349b113beeb994102f5",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_616c6308",
+    "text": "Question: What is the minimum B.Tech aggregate percentage required to apply for M.Tech?\nAnswer: A minimum of 60% aggregate marks in the qualifying B.Tech Degree Examination. For SEBC & OEC candidates, it is 55%. For SC/ST candidates, a pass is sufficient.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 41,
+    "hash": "616c6308d5dc3cfb30db946155f4bfe9c0957ed4ac597eb7808730216ea755b7",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_f9ca2777",
+    "text": "Question: Can I apply for M.Tech if I am in my final semester of B.Tech?\nAnswer: Yes, you can apply provided you have passed all subjects up to and including the 6th semester. Final admission confirmation requires the production of the qualifying degree.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 43,
+    "hash": "f9ca2777c3420576c80b1db544ac75386df9f7f27e4d9c69bcc028376feb7eb8",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_0fa0444a",
+    "text": "Question: Is a valid GATE score compulsory for M.Tech admission?\nAnswer: While not strictly compulsory for all, a valid GATE score is highly preferred and is required to be eligible for AICTE Scholarships. Candidates with AMIE/AMIETE must have a valid GATE score.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 42,
+    "hash": "0fa0444a9413e25888b7db85c01c6fe0d51fc88d508c16423c22185adead4337",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_c7efdbea",
+    "text": "Question: Which M.Tech streams can I apply to if my B.Tech is in Electronics and Communication?\nAnswer: You are eligible to apply for the M.Tech stream in IoT and Sensor Systems (ISS).",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 32,
+    "hash": "c7efdbea7ef734bc2986a1b1d3bd20cc3e86fb08615448227aa08ced0b0a980e",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_da4b20da",
+    "text": "Question: What is the procedure for Ph.D. admission?\nAnswer: Candidates must qualify the Kerala Technological University (KTU) Ph.D. entrance test. The admission process is conducted exclusively through the KTU web portal.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 31,
+    "hash": "da4b20da0ed48780e81fcba8febf116fde066cd97f041ab0f1839d79f22352d3",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_3b57e3ef",
+    "text": "Question: Who are the approved research supervisors for Civil Engineering?\nAnswer: The approved research supervisors for Civil Engineering are Dr. M. Satyakumar and Dr. Neethu Roy.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 26,
+    "hash": "3b57e3efb468ac69500dd0a16580931f1672f466895306a1eb556dccd8c26692",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_cc190b09",
+    "text": "Question: When does the online application process start for B.Tech 2025?\nAnswer: The issue of online application forms tentatively begins on 16 May 2025.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 24,
+    "hash": "cc190b09f9fdb78885f2a8bbebc0a208b84eaa20f3774d319a41ddba1caaa44e",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_0c59568d",
+    "text": "Question: What is the last date to submit the B.Tech Management Merit online application?\nAnswer: You should submit it through the candidate portal (mbcetv4.linways.com/v4/adm-applicant/login) as soon as possible; admissions tentatively close by 15 Aug 2025.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 35,
+    "hash": "0c59568dde852ae53df8355f65c5244c9991a549c8107009180757a6adbc47e1",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_55468a46",
+    "text": "Question: Where can I find the online application link for M.Tech admissions?\nAnswer: The M.Tech application form can be accessed through the Candidate Portal: https://mbcetv4.linways.com/v4/adm-applicant/login.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 25,
+    "hash": "55468a468c50735ca4fdd7dd9a7f0449952edf79c1219344461254c2e18780a3",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_1cffb46b",
+    "text": "Question: Can I edit my application if I made a mistake?\nAnswer: Yes, there is a specific date to rectify entry defects (tentatively 27 May 2025 up to 11.00 AM).",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 30,
+    "hash": "1cffb46bb5ffde2bb8701e19204f75935f81e49f1212d8dd9c16450c49652391",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_a533d595",
+    "text": "Question: When will the merit list be published for B.Tech Management admissions?\nAnswer: The merit list will be published in the Candidate portal, tentatively on 28 May 2025 at 8.00 PM.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 31,
+    "hash": "a533d595d985588ced906055bf6155bdee73d4f30022856eb4b1a9eb6da4ee43",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_c84fdfbe",
+    "text": "Question: Is the document verification process online or offline?\nAnswer: Document verification is conducted physically offline at the College campus (Mar Ivanios Vidyanagar).",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 23,
+    "hash": "c84fdfbebb1d884fe1207748ed57e26539fbdf77ed4fe7ca1d456d04972b931d",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_f4c57d01",
+    "text": "Question: When do the M.Tech classes commence for the 2025 academic year?\nAnswer: The exact date for the commencement of M.Tech classes will be updated on the website soon. Admissions commence on 19.05.2025.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 33,
+    "hash": "f4c57d011ff1cdbb8c94cd96e660d797c8bb104f7b3ce5d62e173da4721a2f1b",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_f46bf035",
+    "text": "Question: What is the total first-year fee for a B.Tech Management Merit seat?\nAnswer: The total first-year fee to be paid is Rs. 2,23,370/-, which includes an annual tuition fee of Rs. 1,00,500/-, a refundable deposit of Rs. 1,00,000/-, caution deposit of Rs. 10,000/-, and other university/facility fees.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 48,
+    "hash": "f46bf0357df47caa6050bb5f71c6b50163f22f7c927aa1e7165da9e18fccae76",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_61cf9d9e",
+    "text": "Question: How much is the interest-free refundable deposit, and when do I get it back?\nAnswer: The interest-free refundable deposit is Rs. 1,00,000/-. It is a one-time payment made at the time of admission and is refundable after course completion.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 40,
+    "hash": "61cf9d9eccf2526804d58e302298cbf11228c31a2bf574fffa63b894d08f1cdb",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_e9eb2dc6",
+    "text": "Question: What is the fee structure for NRI candidates?\nAnswer: For NRI candidates, the total first-year fee is Rs. 1,23,370/-. They are exempted from the Rs. 1,00,000/- refundable deposit.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 29,
+    "hash": "e9eb2dc627bd2d8319f9baf2a2c1ffeef61b8d7c71da92abe706b31aec0e6792",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_b941e366",
+    "text": "Question: Are there any fee concessions for SC/ST or OEC category students?\nAnswer: Yes, SC, ST & OEC category students need to pay Rs. 1,23,370/- at the time of admission, and the government will refund the eligible amount to their Bank Account.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 42,
+    "hash": "b941e366c5220d4db1e9f192955cf4d2cccb5bc28b5c3d648b01dd35e34634cb",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_e3c7bea9",
+    "text": "Question: What is the tuition fee per semester for the M.Tech program?\nAnswer: The tuition fee per semester for the M.Tech program is Rs. 7,000/-.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 25,
+    "hash": "e3c7bea94394695130cd6b5cbe25e44ec46023d2dbcc046051addbea9410b301",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_3b5ca690",
+    "text": "Question: Does the college provide any scholarships for B.Tech students?\nAnswer: Yes, MBCET Scholarships 2025 are available. Details regarding the specific scholarship schemes are available on the College website.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 29,
+    "hash": "3b5ca690530fe9f18a5bd33a18656b38952aeea6956f2e239ff4533a58375fd1",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_334acf3b",
+    "text": "Question: Are AICTE scholarships available for M.Tech students with a GATE score?\nAnswer: Yes, AICTE Scholarships are available to M.Tech students with a valid GATE score as per the prevailing Government of India norms.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 34,
+    "hash": "334acf3b6f9114db01e10fc45ea0e3551d326d6932b44732ac3d739c18368164",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_771bd82d",
+    "text": "Question: What are the bank account details for remitting the college fees?\nAnswer: Fees can be remitted to M/s Mar Baselios College of Engineering & Technology, The South Indian Bank Ltd. (Nalanchira Branch), A/c No: 0483053000009760, IFSC: SIBL0000483.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 38,
+    "hash": "771bd82dbb52682f6045f54a1e31766a9d22f47e7233dcd865f56ee552e552bc",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_47d0a41c",
+    "text": "Question: What B.Tech branches are offered at MBCET?\nAnswer: B.Tech branches include Civil Engineering, Computer Science and Engineering, Electronics and Communication Engineering, Electrical and Electronics Engineering, and Mechanical Engineering.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [
+      "prog_btech_cse"
+    ],
+    "page_range": null,
+    "word_count": 29,
+    "hash": "47d0a41c0a69022255e72358bedf9cb7b1d83ef28733938505032e51f042039e",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_3ab36971",
+    "text": "Question: Are there specialized B.Tech programs like Artificial Intelligence?\nAnswer: Yes, the college offers B.Tech in Computer Science and Engineering (Artificial Intelligence) and B.Tech in Electrical and Computer Engineering.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [
+      "prog_btech_cse",
+      "course_cs1u40a"
+    ],
+    "page_range": null,
+    "word_count": 29,
+    "hash": "3ab36971c287484326e1815f40ffb87458759fdc0fc9b760ed9d15a7b15f215a",
+    "metadata": {
+      "related_faculty_ids": "faculty_dr_jesna_mohan,faculty_dr_jisha_john",
+      "related_faculty_names": "Dr. Jesna Mohan,Dr. Jisha John",
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_8faa1504",
+    "text": "Question: What is the total intake for Computer Science and Engineering?\nAnswer: The total intake for the B.Tech Computer Science and Engineering program is 120 seats.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [
+      "prog_btech_cse"
+    ],
+    "page_range": null,
+    "word_count": 26,
+    "hash": "8faa150419cbabae6459423cae78eb04e2f91642c0ecf6da0d397ab77f4a3d51",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_aa4c3e4b",
+    "text": "Question: How many seats are reserved under the Management quota vs. Government merit?\nAnswer: Generally, 50% of the seats are Government Merit (allotted by CEE) and 50% are Management Quota (which includes 15% NRI seats).",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 35,
+    "hash": "aa4c3e4b3d0cb418f3558d5142b24deed4493bcff1a57504dc0baf39b28dbddc",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_6b4ed3e8",
+    "text": "Question: Is there a community quota for Christians? How do I apply for it?\nAnswer: Yes, candidates belonging to all denominations in the Christian Community are eligible to be considered in the community quota seats under the Management Quota. You must produce a Community Certificate from your Parish Priest.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 49,
+    "hash": "6b4ed3e8fc6d91209ceb93d266cd1de390108338f58ad7c6c24519221106a2c0",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_427dc9af",
+    "text": "Question: What is the procedure for NRI admission? Who should I contact?\nAnswer: For NRI Admission, candidates must fill out the Management-NRI Application form and provide documents like the Sponsor's passport, visa, NRI affidavit, and relationship certificate. You can contact +91 9447211341 for B.Tech NRI admissions.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 46,
+    "hash": "427dc9af361330281c96f4a52ea9bc1d3ab471ef0fbd4bf63a000db8a44c904d",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_047d229b",
+    "text": "Question: Are there spot admissions available if seats are vacant?\nAnswer: Yes, spot admissions are conducted for vacant seats based on merit. Candidates must report at the College Office with original documents.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 32,
+    "hash": "047d229b851d4736646da2e4e422cdec7bf82dda53aadd10f2b06d00b956ffc7",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_21a624ff",
+    "text": "Question: What documents do I need to bring for physical verification for B.Tech admission?\nAnswer: Key documents include the Print out of the Application Form, 10th and 12th original mark lists/certificates, KEAM/JEE Admit Card and Data Sheet, original Transfer Certificate, Conduct Certificate, Medical Fitness Certificate, Passport size photos, and Fee receipt.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 51,
+    "hash": "21a624ff523cc177a6961671918f3f6c9b127b39e38831aed88e505f65c69503",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_d083efd3",
+    "text": "Question: Do I need to submit my original Transfer Certificate (TC) at the time of admission?\nAnswer: Yes, the original Transfer Certificate is compulsory at the time of admission.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 29,
+    "hash": "d083efd36ab9975dada696c6e7b0b9ff685d6c2edc99a0feb7cbd8a5d6367477",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_082bffb7",
+    "text": "Question: What is the format for the Medical Fitness Certificate, and who should sign it?\nAnswer: The format is available on the college website (mbcet.ac.in/wp-content/uploads/2019/02/physical-fitness.pdf). It must be obtained from a Medical Officer in service not below the rank of an Assistant Surgeon.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 43,
+    "hash": "082bffb734e7da4d0183083fe5c1094535032913d3f59e6223cc5622698bf695",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_9886b78b",
+    "text": "Question: Is a Migration Certificate required if I studied in the Kerala State Board?\nAnswer: Yes, a Migration Certificate must be produced at the time of admission.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 27,
+    "hash": "9886b78b5216f903736a9bfc7e41a06612a5cf7d3ba4ac5cff04d7ae11dafc60",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_9be3957b",
+    "text": "Question: What extra documents are needed for NRI quota admissions?\nAnswer: NRI candidates must provide an NRI Affidavit, a relation certificate with the sponsor, a copy of the sponsor's passport, and a copy of the sponsor's visa.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 37,
+    "hash": "9be3957b2474d0b8e617fbad939d000cd522d25816a149358317d39f2ffce3cf",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_8c51fd3d",
+    "text": "Question: Are there separate hostel facilities for boys and girls?\nAnswer: Yes, there are Men's and Ladies' Hostels available. A hostel registration counter operates on the days of verification.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 29,
+    "hash": "8c51fd3d61766de29c1d9d4eadf0d5e7088b20a74d69ffe808c98fc871787512",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_c2f0853d",
+    "text": "Question: Where can we register for the college bus/transport facility?\nAnswer: A College Bus Registration Counter is functional at the admission venue during the days of verification.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 27,
+    "hash": "c2f0853d7a87cc3858dc43055856055475ad5b2e707e9752211326a26e2acd5c",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_64d4b438",
+    "text": "Question: Are uniforms provided by the college, and where is the uniform counter?\nAnswer: Yes, uniforms are provided, and a College Uniform Counter will be functional on the days of document verification.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 32,
+    "hash": "64d4b4383b3bb8e67af8c5644b9c6b689498b8fa48d466b997578f2f1eb73f64",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
+  },
+  {
+    "chunk_id": "text_chatbot_qa_eligibility_qualifications_for_mtech_phd_6636d9c3",
+    "text": "Question: Who can I contact for admission-related technical queries if the application portal fails?\nAnswer: For application-related technical queries, you can directly contact the technical support number: 9447715695.",
+    "source_type": "text",
+    "source_file": "data\\admissions\\chatbot_qa.txt",
+    "section_hierarchy": [
+      "Eligibility & Qualifications",
+      "For M.Tech / Ph.D.:"
+    ],
+    "content_type": "section",
+    "entity_refs": [],
+    "page_range": null,
+    "word_count": 28,
+    "hash": "6636d9c30c965f296ba2663c71882bb0c9e40121a4651a78a673e3ab87235665",
+    "metadata": {
+      "tags": [
+        "admissions",
+        "admissions"
+      ],
+      "qa_type": "admissions_faq"
+    }
   }
 ]
