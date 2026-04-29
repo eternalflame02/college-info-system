@@ -158,6 +158,8 @@ def _default_retrieval_plan(query: str) -> RetrievalPlan:
         mode = "hybrid"
     elif query_type == "advisory":
         mode = "hybrid"
+    elif query_type == "admissions":
+        mode = "hybrid"
     elif query_type == "faculty":
         mode = "vector_only"
     elif query_type == "regulation":
@@ -213,7 +215,7 @@ def _extract_json_block(raw_text: str) -> Optional[Dict]:
 
 def _normalize_planner_output(plan: Dict, original_query: str) -> RetrievalPlan:
     """Normalize raw planner dictionary into validated RetrievalPlan."""
-    valid_query_types = {"teaching", "faculty", "advisory", "course", "timetable", "regulation", "general"}
+    valid_query_types = {"teaching", "faculty", "advisory", "admissions", "course", "timetable", "regulation", "general"}
     valid_modes = {"kg_only", "vector_only", "hybrid", "no_retrieval"}
 
     query_type = str(plan.get("query_type", "")).strip().lower()
@@ -225,7 +227,7 @@ def _normalize_planner_output(plan: Dict, original_query: str) -> RetrievalPlan:
         query_type = classify_query(original_query)
 
     if source_mode not in valid_modes:
-        source_mode = "hybrid" if query_type in {"teaching", "regulation", "advisory"} else "vector_only"
+        source_mode = "hybrid" if query_type in {"teaching", "regulation", "advisory", "admissions"} else "vector_only"
 
     if not rewritten_query:
         rewritten_query = original_query
@@ -240,6 +242,9 @@ def _normalize_planner_output(plan: Dict, original_query: str) -> RetrievalPlan:
 
 def _should_use_llm_planner(query: str, default_query_type: str) -> bool:
     """Use planner selectively to balance latency and quality."""
+    if default_query_type == "admissions":
+        return False
+
     if default_query_type in {"general", "regulation", "teaching", "advisory"}:
         return True
 
@@ -265,7 +270,7 @@ def _plan_retrieval_with_llm(query: str) -> RetrievalPlan:
 
     planner_system_prompt = """You are a retrieval planner for an academic QA system.
 Output ONLY one JSON object with keys:
-- query_type: one of [teaching, faculty, advisory, course, timetable, regulation, general]
+- query_type: one of [teaching, faculty, advisory, admissions, course, timetable, regulation, general]
 - source_mode: one of [kg_only, vector_only, hybrid, no_retrieval]
 - rewritten_query: compact retrieval query preserving key entities
 - rationale: one short sentence
@@ -274,10 +279,11 @@ Classification precedence (top to bottom):
 1) teaching: explicit relation lookup such as 'who teaches/handles/instructor for ...'
 2) faculty: profile/about-person requests (designation, email, qualification, bio)
 3) advisory: recommendation/comparison/choice intent (which should I pick, best for, compare, career-fit)
-4) course: syllabus/module/course outcome/course details/credits/semester course list
-5) timetable: schedule/time/day/slot timing queries
-6) regulation: policy/rules (R2019/R2023, attendance, grading, cgpa, exam rules)
-7) general: department info outside above
+4) admissions: admission process, eligibility, documents, fees, deadlines, application, prospectus, merit list
+5) course: syllabus/module/course outcome/course details/credits/semester course list
+6) timetable: schedule/time/day/slot timing queries
+7) regulation: policy/rules (R2019/R2023, attendance, grading, cgpa, exam rules)
+8) general: department info outside above
 
 Source mode rules:
 - kg_only: only for strict relation lookup (teaching assignment style).
@@ -292,6 +298,7 @@ Rewritten query rules:
 Examples:
 - 'Who teaches Artificial Intelligence (CS1U40A)?' -> teaching, kg_only
 - 'Who is Dr Tessy?' -> faculty, vector_only
+- 'How to apply for B.Tech admission?' -> admissions, hybrid
 - 'Database management systems syllabus' -> course, vector_only
 - 'What are common subjects for cs and ct in S6?' -> advisory, hybrid
 - 'Thanks' -> general, no_retrieval
@@ -607,6 +614,22 @@ def _build_low_confidence_summary(
             f"- Source: {source_name}"
         )
 
+    if query_type == "admissions":
+        admissions_chunks = [
+            c for c in sorted(chunks, key=lambda c: c.distance)
+            if "admissions" in (c.source_file or "").lower()
+        ]
+        candidate = admissions_chunks[0] if admissions_chunks else best
+        source_name = Path(candidate.source_file).stem if candidate.source_file else "unknown"
+        compact = _smart_truncate(candidate.text, max_chars=700, min_chars=320)
+
+        return (
+            "Low-confidence retrieval note: this is the best available admissions match.\n\n"
+            f"- Source: {source_name}\n"
+            f"- Extract:\n{compact}\n\n"
+            "If you need documents, dates, eligibility, or fees, ask a narrower admissions question."
+        )
+
     source_name = Path(best.source_file).stem if best.source_file else "unknown"
     compact = _smart_truncate(best.text, max_chars=500, min_chars=260)
     preface = "Low-confidence retrieval note: presenting the best available match."
@@ -685,6 +708,9 @@ Hard constraints:
 Output style by query type:
 - faculty:
     - Provide: name, designation, qualification, email (only if present).
+- admissions:
+    - Provide the exact admission-related facts present in context: eligibility, dates, documents, fees, application steps, seat counts, and deadlines.
+    - If a requested detail is not present, say it is unavailable rather than guessing.
 - course/timetable:
     - Provide precise fields present in context: course code/name/credits/semester/module/schedule.
     - Do not output fields not seen in context.

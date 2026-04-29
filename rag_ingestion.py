@@ -54,6 +54,7 @@ _QUALITY_BANDS_BASE: Dict[str, float] = {
 _QUALITY_TYPE_ADJUST: Dict[str, float] = {
     "teaching": 0.00,
     "advisory": 0.05,
+    "admissions": 0.05,
     "faculty": 0.10,
     "regulation": 0.15,
 }
@@ -68,6 +69,7 @@ _QUALITY_MARGIN_BY_LABEL: Dict[str, float] = {
 _THRESHOLD_CAP_BY_TYPE: Dict[str, float] = {
     "general": 1.25,
     "advisory": 1.40,
+    "admissions": 1.40,
     "course": 1.35,
     "timetable": 1.35,
     "teaching": 1.35,
@@ -675,7 +677,7 @@ def classify_query_type(query: str) -> str:
         query: User query string.
 
     Returns:
-        Query type: "teaching" | "faculty" | "advisory" | "course" | "timetable" | "regulation" | "general"
+        Query type: "teaching" | "faculty" | "advisory" | "admissions" | "course" | "timetable" | "regulation" | "general"
     """
     query_lower = query.lower()
 
@@ -709,6 +711,17 @@ def classify_query_type(query: str) -> str:
     ]
     if any(kw in query_lower for kw in advisory_keywords):
         return "advisory"
+
+    # Admissions queries
+    admissions_keywords = [
+        "admission", "admissions", "apply", "application", "eligibility",
+        "documents", "fee", "fees", "prospectus", "seat", "selection",
+        "how to take", "how do i take", "join b.tech", "b.tech admission",
+        "documents needed", "required documents", "entrance", "merit list",
+        "cutoff", "last date", "deadline",
+    ]
+    if any(kw in query_lower for kw in admissions_keywords):
+        return "admissions"
 
     # Course/Syllabus queries
     course_keywords = ["course", "subject", "syllabus", "credit", "semester"]
@@ -841,6 +854,17 @@ def _extract_course_code_query_signal(query_text: str) -> List[str]:
     return sorted(set(matches))
 
 
+def _extract_admissions_query_signal(query_text: str) -> bool:
+    """Return True when the query is clearly about admissions content."""
+    query_lower = query_text.lower()
+    admissions_markers = [
+        "admission", "admissions", "apply", "application", "eligibility",
+        "documents", "fee", "fees", "prospectus", "selection", "merit list",
+        "deadline", "last date", "cutoff", "how to take", "required documents",
+    ]
+    return any(marker in query_lower for marker in admissions_markers)
+
+
 def _get_entity_registry_cached():
     """Return a loaded EntityRegistry instance with lightweight process caching."""
     from chunker.entity_registry import EntityRegistry
@@ -931,6 +955,7 @@ def _rerank_with_query_signals(
     semester_signal = _extract_semester_query_signal(query_text)
     syllabus_query = _is_syllabus_like_query(query_text)
     query_codes = _extract_course_code_query_signal(query_text)
+    admissions_signal = _extract_admissions_query_signal(query_text)
     if query_type == "faculty" and faculty_signal is None:
         faculty_signal = _extract_faculty_query_signal(query_text)
 
@@ -964,6 +989,14 @@ def _rerank_with_query_signals(
             if str(meta.get("content_type", "")).lower() == "regulation":
                 score -= 0.12
 
+        if query_type == "admissions" and admissions_signal:
+            source_file = str(meta.get("source_file", "")).lower()
+            tags = str(meta.get("tags", "")).lower()
+            if "admissions" in source_file:
+                score -= 0.14
+            if "admissions" in tags:
+                score -= 0.12
+
         if query_type == "course" and syllabus_query:
             source_file = str(meta.get("source_file", "")).lower()
             source_type = str(meta.get("source_type", "")).lower()
@@ -976,7 +1009,6 @@ def _rerank_with_query_signals(
 
             if any(token in source_file for token in _SYLLABUS_SOURCE_HINTS):
                 score -= 0.14
-
             if any(token in section_hierarchy for token in ["module", "course outcomes", "course outcome"]):
                 score -= 0.05
 
@@ -1296,6 +1328,9 @@ def query_chromadb(
         where_filter = {"content_type": "table"}
         n_results = 10
     elif query_type == "advisory":
+        where_filter = None
+        n_results = 12
+    elif query_type == "admissions":
         where_filter = None
         n_results = 12
     elif query_type == "timetable":
