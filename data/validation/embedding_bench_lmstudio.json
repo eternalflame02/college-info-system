@@ -1,0 +1,81 @@
+{
+  "run_config": {
+    "lmstudio_url": "http://localhost:1234",
+    "q4_model": "text-embedding-embeddinggemma-300m-qat@q4_0",
+    "q8_model": "text-embedding-embeddinggemma-300m-qat@q8_0",
+    "query_count": 75,
+    "top_k": 5,
+    "sample_docs": 500,
+    "batch_docs": 64,
+    "batch_queries": 64,
+    "batch_lmstudio": 32
+  },
+  "baseline_sentence_transformer": {
+    "doc_embedding": {
+      "elapsed_s": 582.3393549999964,
+      "embedding_count": 500,
+      "embedding_dim": 768,
+      "max_vram_mb": 3891
+    },
+    "query_embedding": {
+      "elapsed_s": 8.030284499996924
+    },
+    "retrieval_metrics": {
+      "hit_at_1": 0.22666666666666666,
+      "hit_at_k": 0.4666666666666667,
+      "mrr": 0.3082222222222222,
+      "median_rank": 2.0,
+      "query_count": 75
+    }
+  },
+  "lmstudio_q4": {
+    "doc_embedding": {
+      "batch_count": 16,
+      "batch_latency_mean_s": 37.530189937500836,
+      "batch_latency_max_s": 64.31640309999784,
+      "embedding_count": 500,
+      "embedding_dim": 768,
+      "max_vram_mb": 3872
+    },
+    "query_embedding": {
+      "batch_count": 3,
+      "batch_latency_mean_s": 2.747176233334661,
+      "batch_latency_max_s": 3.317991100004292,
+      "embedding_count": 75,
+      "embedding_dim": 768,
+      "max_vram_mb": 3719
+    },
+    "retrieval_metrics": {
+      "hit_at_1": 0.2,
+      "hit_at_k": 0.37333333333333335,
+      "mrr": 0.2564444444444445,
+      "median_rank": 1.0,
+      "query_count": 75
+    }
+  },
+  "lmstudio_q8": {
+    "doc_embedding": {
+      "batch_count": 16,
+      "batch_latency_mean_s": 26.71526554374941,
+      "batch_latency_max_s": 65.70688199999859,
+      "embedding_count": 500,
+      "embedding_dim": 768,
+      "max_vram_mb": 3767
+    },
+    "query_embedding": {
+      "batch_count": 3,
+      "batch_latency_mean_s": 4.386502866664766,
+      "batch_latency_max_s": 5.125123899997561,
+      "embedding_count": 75,
+      "embedding_dim": 768,
+      "max_vram_mb": 3693
+    },
+    "retrieval_metrics": {
+      "hit_at_1": 0.18666666666666668,
+      "hit_at_k": 0.36,
+      "mrr": 0.24933333333333332,
+      "median_rank": 1.0,
+      "query_count": 75
+    }
+  }
+}
