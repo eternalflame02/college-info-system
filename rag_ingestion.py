@@ -111,7 +111,8 @@ def load_embedding_model(
 
     # Auto-detect device
     if device == "auto":
-        device = "cuda" if torch.cuda.is_available() else "cpu"
+        has_cuda = torch.cuda.is_available() and torch.cuda.device_count() > 0
+        device = "cuda" if has_cuda else "cpu"
 
     print(f"Loading {model_name} on {device}...")
 
@@ -136,7 +137,7 @@ def load_embedding_model(
     model.max_seq_length = 512
     print(f"   Max sequence length: {model.max_seq_length}")
 
-    if device == "cuda":
+    if device == "cuda" and torch.cuda.device_count() > 0:
         vram_mb = torch.cuda.get_device_properties(0).total_memory / (1024 * 1024)
         print(f"   GPU: {torch.cuda.get_device_name(0)}")
         print(f"   VRAM: {vram_mb:.0f} MB")

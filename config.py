@@ -27,6 +27,7 @@ RAW_DIR = DATA_DIR / "raw"
 MARKDOWN_DIR = DATA_DIR / "markdown"
 MARKDOWN_PAGES_DIR = MARKDOWN_DIR / "pages"
 MARKDOWN_PDFS_DIR = MARKDOWN_DIR / "pdfs"
+ADMISSIONS_DIR = DATA_DIR / "admissions"
 ENTITIES_DIR = DATA_DIR / "entities"
 CHUNKS_DIR = DATA_DIR / "chunks"
 GRAPH_DIR = DATA_DIR / "graph"
@@ -168,6 +169,7 @@ def ensure_directories():
         MARKDOWN_DIR,
         MARKDOWN_PAGES_DIR,
         MARKDOWN_PDFS_DIR,
+        ADMISSIONS_DIR,
         ENTITIES_DIR,
         CHUNKS_DIR,
         KNOWLEDGE_GRAPH_DIR,
@@ -177,6 +179,12 @@ def ensure_directories():
     ]
     for directory in directories:
         directory.mkdir(parents=True, exist_ok=True)
+
+
+# Additional Markdown sources outside the scraper pipeline.
+ADDITIONAL_MARKDOWN_SOURCE_DIRS = [
+    ADMISSIONS_DIR,
+]
 
 
 # Create directories on import

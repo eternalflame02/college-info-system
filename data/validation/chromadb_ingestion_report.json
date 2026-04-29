@@ -1,32 +1,32 @@
 {
-  "ingestion_timestamp": "2026-04-23T06:05:13Z",
-  "total_chunks_processed": 2268,
-  "successfully_ingested": 2268,
+  "ingestion_timestamp": "2026-04-29T21:45:04Z",
+  "total_chunks_processed": 2708,
+  "successfully_ingested": 2708,
   "failed_chunks": [],
   "embedding_stats": {
     "model": "google/embeddinggemma-300m",
     "dimensions": 768,
-    "batch_size": 32,
+    "batch_size": 16,
     "total_time_seconds": 0,
     "chunks_per_second": 0,
     "gpu_used": true
   },
   "chromadb_stats": {
     "collection_name": "mbcet_cse_knowledge",
-    "total_documents": 2268,
+    "total_documents": 2708,
     "chunks_by_type": {
-      "table": 1971,
-      "profile": 102,
-      "list": 11,
-      "section": 76,
-      "regulation": 50,
+      "table": 2373,
+      "section": 99,
+      "list": 17,
+      "regulation": 54,
+      "profile": 110,
       "knowledge_graph": 55
     },
     "collection_counts": {
-      "table": 1971,
-      "non_table": 297,
-      "legacy": 2268
+      "table": 2373,
+      "non_table": 335,
+      "legacy": 2708
     }
   },
-  "total_pipeline_time_seconds": 104.26
+  "total_pipeline_time_seconds": 460.39
 }

@@ -809,6 +809,9 @@ class MarkdownChunker:
             source_file = str(filepath)
 
         relational_metadata = self._build_relational_metadata(content_type, entity_refs)
+        source_parts = [part.lower() for part in Path(source_file).parts]
+        if "admissions" in source_parts:
+            relational_metadata.setdefault("tags", []).append("admissions")
         if is_table:
             timetable_meta = self._extract_timetable_metadata(
                 text,
@@ -889,7 +892,7 @@ class SemanticChunkingPipeline:
 
     def find_markdown_files(self) -> List[Path]:
         """Find all Markdown files to process."""
-        files = []
+        files: List[Path] = []
         
         # HTML-derived files
         if config.MARKDOWN_PAGES_DIR.exists():
@@ -898,8 +901,12 @@ class SemanticChunkingPipeline:
         # PDF-derived files
         if config.MARKDOWN_PDFS_DIR.exists():
             files.extend(config.MARKDOWN_PDFS_DIR.glob("**/*.md"))
+
+        for extra_dir in config.ADDITIONAL_MARKDOWN_SOURCE_DIRS:
+            if extra_dir.exists():
+                files.extend(extra_dir.glob("**/*.md"))
         
-        return sorted(files)
+        return sorted(set(files))
 
     def process_file(self, filepath: Path) -> List[Chunk]:
         """Process a single Markdown file."""

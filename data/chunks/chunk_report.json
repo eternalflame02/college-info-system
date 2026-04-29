@@ -1,17 +1,17 @@
 {
-  "total_chunks": 2210,
-  "duplicates_skipped": 298,
+  "total_chunks": 2653,
+  "duplicates_skipped": 316,
   "too_small_skipped": 0,
   "tables_split": 0,
   "chunks_by_type": {
-    "table": 1971,
-    "profile": 102,
-    "list": 11,
-    "section": 76,
-    "regulation": 50
+    "table": 2373,
+    "section": 99,
+    "list": 17,
+    "regulation": 54,
+    "profile": 110
   },
   "chunks_by_source": {
-    "html": 198,
+    "html": 641,
     "pdf": 2012
   }
 }
